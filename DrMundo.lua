@@ -18,7 +18,7 @@ local Icons = {
 
 function DrMundo.LoadSpells()
 
-Q = {delay = 0.250, radius = 250, range = 975, speed = 1750, Collision = false}
+Q = {delay = 0.250, radius = 250, range = 975, speed = 1750, Collision = true}
 W = {delay = 0.250, range = 160}
 E = {delay = 0.250, range = 150}
 R = {delay = 0.250}
