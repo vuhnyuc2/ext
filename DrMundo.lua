@@ -125,16 +125,12 @@ Control.CastSpell(HK_E, position)
 end
 end
 
-function DrMundo:CheckHealth(spellSlot)
-return myHero:GetSpellData(spellSlot).health < myHero.health
-end
-
 function DrMundo:IsReady(spellSlot)
 return myHero:GetSpellData(spellSlot).currentCd == 0 and myHero:GetSpellData(spellSlot).level > 0
 end
 
-function DrMundo:CanCast(spellSlot)
-return self:IsReady(spellSlot) and self:CheckHealth(spellSlot)
+function DrMundo:CanCast (spell)
+	return Game.CanUseSpell(spell) == 0 
 end
 
 function OnLoad()
