@@ -80,6 +80,8 @@ function DrMundo:Combo()
 	local wtarg = _G.SDK.TargetSelector:GetTarget(160)
 		if wtarg and self.Menu.Combo.UseW:Value() and myHero:GetSpellData(_W).toggleState == 1 then
 			Control.CastSpell(HK_W)
+		else myHero:GetSpellData(_W).toggleState == 2 then
+			Control.CastSpell(HK_W)
 		end
 
 	local etarg = _G.SDK.TargetSelector:GetTarget(E.range)
