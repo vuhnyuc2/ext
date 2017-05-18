@@ -1,4 +1,6 @@
 class "DrMundo"
+--to do w off toggle possibly but it might go off and on cd at bad time, jungle clear, last hit with q e, and lane clear
+
 
 function DrMundo:__init()
 	if myHero.charName ~= "DrMundo" then return end
@@ -80,8 +82,6 @@ function DrMundo:Combo()
 	local wtarg = _G.SDK.TargetSelector:GetTarget(160)
 		if wtarg and self.Menu.Combo.UseW:Value() and myHero:GetSpellData(_W).toggleState == 1 then
 			Control.CastSpell(HK_W)
-		else myHero:GetSpellData(_W).toggleState == 2 then
-			Control.CastSpell(HK_W)
 		end
 
 	local etarg = _G.SDK.TargetSelector:GetTarget(E.range)
@@ -89,6 +89,8 @@ function DrMundo:Combo()
 			local castPosition = etarg
 			self:CastE(castPosition)
 		end
+
+		
 end
 
 function DrMundo:Harass()
@@ -110,8 +112,6 @@ function DrMundo:CastQ(target)
 	end
 return false
 end
-
---W toggle
 
 function DrMundo:CastW(target)
 	if target then
