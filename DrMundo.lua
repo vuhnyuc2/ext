@@ -78,7 +78,7 @@ function DrMundo:Combo()
 		end
 
 	local wtarg = _G.SDK.TargetSelector:GetTarget(160)
-		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W)then
+		if wtarg and self.Menu.Combo.UseW:Value() and myHero:GetSpellData(_W).toggleState == 1 then
 			Control.CastSpell(HK_W)
 		end
 
