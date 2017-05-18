@@ -1,7 +1,7 @@
 class "DrMundo"
 
 function DrMundo:__init()
-if myHero.charName ~= "DrMundo" then return end
+	if myHero.charName ~= "DrMundo" then return end
 PrintChat("DrMundo loaded")
 self:LoadSpells()
 self:LoadMenu()
@@ -18,10 +18,10 @@ local Icons = {
 
 function DrMundo.LoadSpells()
 
-Q = {delay = 0.250, radius = 250, range = 975, speed = 1750, Collision = true}
-W = {delay = 0.250, range = 160}
-E = {delay = 0.250, range = 150}
-R = {delay = 0.250}
+	Q = {delay = 0.250, radius = 250, range = 975, speed = 1750, Collision = true}
+	W = {delay = 0.250, radius = 250, range = 160}
+	E = {delay = 0.250, range = 150}
+	R = {delay = 0.250}
 end
 
 function DrMundo:LoadMenu()
@@ -53,76 +53,84 @@ self.Menu.Drawings:MenuElement({id = "drawE", name = "Draw E Range", value = tru
 end
 
 function DrMundo:Tick()
-if myHero.dead then return end
-if _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_COMBO] then
-self:Combo()
-elseif _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_HARASS] then
-self:Harass()
-end
+	if myHero.dead then return end
+		if _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_COMBO] then
+			self:Combo()
+		elseif _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_HARASS] then
+			self:Harass()
+		end
 end
 
 function DrMundo:Draw()
-if myHero.dead then return end
-if(self.Menu.Drawings.drawQ:Value())then
-Draw.Circle(myHero, Q.range, 3, Draw.Color(225, 225, 0, 10))
-end
-if(self.Menu.Drawings.drawE:Value())then
-Draw.Circle(myHero, E.range, 3, Draw.Color(225, 225, 0, 10))
-end
+	if myHero.dead then return end
+	if(self.Menu.Drawings.drawQ:Value())then
+		Draw.Circle(myHero, Q.range, 3, Draw.Color(225, 225, 0, 10))
+	end
+	if(self.Menu.Drawings.drawE:Value())then
+		Draw.Circle(myHero, E.range, 3, Draw.Color(225, 225, 0, 10))
+	end
 end
 
 function DrMundo:Combo()
-local qtarg = _G.SDK.TargetSelector:GetTarget(950)
-if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q)then
-self:CastQ(qtarg)
-end
+	local qtarg = _G.SDK.TargetSelector:GetTarget(950)
+		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q)then
+			self:CastQ(qtarg)
+		end
 
-local wtarg = _G.SDK.TargetSelector:GetTarget(160)
-if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W)then
-Control.CastSpell(HK_W)
-end
+	local wtarg = _G.SDK.TargetSelector:GetTarget(160)
+		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W)then
+			Control.CastSpell(HK_W)
+		end
 
-local etarg = _G.SDK.TargetSelector:GetTarget(E.range)
-if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E)then
-local castPosition = etarg
-self:CastE(castPosition)
-end
+	local etarg = _G.SDK.TargetSelector:GetTarget(E.range)
+		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E)then
+			local castPosition = etarg
+			self:CastE(castPosition)
+		end
 end
 
 function DrMundo:Harass()
-local qtarg = _G.SDK.TargetSelector:GetTarget(950)
-if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q)then
-self:CastQ(qtarg)
-end
+	local qtarg = _G.SDK.TargetSelector:GetTarget(950)
+		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q)then
+			self:CastQ(qtarg)
+		end
 end
 
 
 function DrMundo:CastQ(target)
-if target then
-if not target.dead and not target.isImmune then
-if target.distance<=Q.range then
-local pred=target:GetPrediction(Q.speed,Q.delay)
-Control.CastSpell(HK_Q,pred)
-end
-end
-end
+	if target then
+		if not target.dead and not target.isImmune then
+			if target.distance<=Q.range then
+				local pred=target:GetPrediction(Q.speed,Q.delay)
+				Control.CastSpell(HK_Q,pred)
+			end
+		end
+	end
 return false
 end
 
+--W toggle
+
 function DrMundo:CastW(target)
-	if myHero:GetSpellData(_W).toggleState == 1 and ValidTarget(target, W.Radius) then
-		Control.CastSpell(HK_W)
+	if target then
+		if not target.dead and not target.isImmune then
+			if myHero:GetSpellData(_W).toggleState == 1 and target.distance<=W.range then
+				Control.CastSpell(HK_W)
+			end
+		end
 	end
+return false
+end
 
 function DrMundo:CastE(position)
-if position then
-Control.SetCursorPos(position)
-Control.CastSpell(HK_E, position)
-end
+	if position then
+		Control.SetCursorPos(position)
+		Control.CastSpell(HK_E, position)
+	end
 end
 
 function DrMundo:IsReady(spellSlot)
-return myHero:GetSpellData(spellSlot).currentCd == 0 and myHero:GetSpellData(spellSlot).level > 0
+	return myHero:GetSpellData(spellSlot).currentCd == 0 and myHero:GetSpellData(spellSlot).level > 0
 end
 
 function DrMundo:CanCast (spell)
@@ -130,5 +138,5 @@ function DrMundo:CanCast (spell)
 end
 
 function OnLoad()
-DrMundo()
+	DrMundo()
 end
