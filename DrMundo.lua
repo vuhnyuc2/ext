@@ -45,16 +45,7 @@ self.Menu.Combo:MenuElement({id = "UseE", name = "Use E", value = true})
 self.Menu:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
 self.Menu.Harass:MenuElement({type = SPACE, name = "Q", leftIcon = Icons["Q"]})
 self.Menu.Harass:MenuElement({id = "UseQ", name = "Use Q", value = true})
---[[
---Laneclear Settings Menu
-self.Menu:MenuElement({type = MENU, id = "Laneclear", name = "Laneclear Settings"})
-self.Menu.Laneclear:MenuElement({type = SPACE, name = "Q", leftIcon = Icons["Q"]})
-self.Menu.Laneclear:MenuElement({id = "UseQ", name = "Use Q", value = true})
---Lasthit Settings Menu
-self.Menu:MenuElement({type = MENU, id = "Lasthit", name = "Last Hit Settings"})
-self.Menu.Lasthit:MenuElement({type = SPACE, name = "E", leftIcon = Icons["E"]})
-self.Menu.Lasthit:MenuElement({id = "UseE", name = "Use E", value = true})
---]]
+
 --Drawings Settings Menu
 self.Menu:MenuElement({type = MENU, id = "Drawings", name = "Drawing Settings"})
 self.Menu.Drawings:MenuElement({id = "drawQ", name = "Draw Q Range", value = true})
@@ -117,6 +108,11 @@ end
 end
 return false
 end
+
+function DrMundo:CastW(target)
+	if myHero:GetSpellData(_W).toggleState == 1 and ValidTarget(target, W.Radius) then
+		Control.CastSpell(HK_W)
+	end
 
 function DrMundo:CastE(position)
 if position then
