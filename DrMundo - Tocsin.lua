@@ -1,10 +1,10 @@
 class "DrMundo"
---to do w off toggle possibly but it might go off and on cd at bad time, jungle clear, last hit with q e, and lane clear
+--to do jungle clear, last hit with q, and lane clear
 
 
 function DrMundo:__init()
 	if myHero.charName ~= "DrMundo" then return end
-PrintChat("DrMundo loaded")
+PrintChat("DrMundo - Tocsin loaded")
 self:LoadSpells()
 self:LoadMenu()
 Callback.Add("Tick", function() self:Tick() end)
@@ -61,6 +61,7 @@ function DrMundo:Tick()
 		elseif _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_HARASS] then
 			self:Harass()
 		end
+	
 end
 
 function DrMundo:Draw()
@@ -89,8 +90,11 @@ function DrMundo:Combo()
 			local castPosition = etarg
 			self:CastE(castPosition)
 		end
+	local otarg = _G.SDK.TargetSelector:GetTarget(950)
+		if not otarg and self.Menu.Combo.UseW:Value() and myHero:GetSpellData(_W).toggleState == 2 then
+			Control.CastSpell(HK_W)
+		end
 
-		
 end
 
 function DrMundo:Harass()
@@ -100,6 +104,7 @@ function DrMundo:Harass()
 		end
 end
 
+--add last hit Q for when behind 
 
 function DrMundo:CastQ(target)
 	if target then
