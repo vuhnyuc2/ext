@@ -89,7 +89,7 @@ end
 
 function Amumu:Combo()
 	local qtarg = _G.SDK.TargetSelector:GetTarget(1000)
-		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q)then
+		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
 			self:CastQ(qtarg)
 		end
 
@@ -99,7 +99,7 @@ function Amumu:Combo()
 		end
 
 	local etarg = _G.SDK.TargetSelector:GetTarget(E.range)
-		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E)then
+		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 			local castPosition = etarg
 			self:CastE(castPosition)
 		end
@@ -109,7 +109,8 @@ function Amumu:Combo()
 			Control.CastSpell(HK_W)
 		end
 
-	local  rtarg = _G.SDK.TargetSelector:GetTarget(E.range) and self.Menu.Combo.R:Value() and self:CanCast(_R) then
+	local  rtarg = _G.SDK.TargetSelector:GetTarget(E.range) 
+		if rtarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
     	if self:CountEnemys(450) >= self.Menu.Combo.ER:Value() then
     	Control.CastSpell(HK_R)
       	end
@@ -117,27 +118,33 @@ function Amumu:Combo()
 end
 
 function Amumu:JungleClear()
-  	if self:GetValidMinion(Q.range) == false then return end
+  	if self:GetValidMinion(Q.range) == false then self:JungleW() return end
   	for i = 1, Game.MinionCount() do
 	local minion = Game.Minion(i)
     	if  minion.team == 300 then
 			if self:IsValidTarget(minion,800) and myHero.pos:DistanceTo(minion.pos) < 800 and self.Menu.JungleClear.Q:Value() and (myHero.mana/myHero.maxMana >= self.Menu.JungleClear.Mana:Value() / 100 ) and self:CanCast(_Q) then
 			Control.CastSpell(HK_Q,minion.pos)
 			break
+			end
 			if self:IsValidTarget(minion,300) and myHero.pos:DistanceTo(minion.pos) < 300 and self.Menu.JungleClear.W:Value() and (myHero.mana/myHero.maxMana >= self.Menu.JungleClear.Mana:Value() / 100 ) and myHero:GetSpellData(_W).toggleState == 1 then
 				Control.CastSpell(HK_W)
 			break
+			end
 			if self:IsValidTarget(minion,350) and myHero.pos:DistanceTo(minion.pos) < 350 and self.Menu.JungleClear.E:Value() and (myHero.mana/myHero.maxMana >= self.Menu.JungleClear.Mana:Value() / 100 ) and self:CanCast(_E) then
 			Control.CastSpell(HK_E,minion.pos)
 			break
-			if not self:IsValidTarget(minion,300) and myHero.pos:DistanceTo(minion.pos) > 350 and self.Menu.JungleClear.W:Value() and (myHero.mana/myHero.maxMana >= self.Menu.JungleClear.Mana:Value() / 100 ) and myHero:GetSpellData(_W).toggleState == 2 then
-				Control.CastSpell(HK_W)
-			break
+			end
 		end
 	end
-    end
 end
 
+function Amumu:JungleW()
+  	if self:GetValidMinion(Q.range) == false then
+  		if self.Menu.Combo.UseW:Value() and myHero:GetSpellData(_W).toggleState == 2 then
+			Control.CastSpell(HK_W)
+		end	
+	end
+end		
 --[[
 function Amumu:Harass()
 	local qtarg = _G.SDK.TargetSelector:GetTarget(950)
@@ -157,6 +164,16 @@ function Amumu:HpPred(unit, delay)
 		hp = unit.health
 	end
 	return hp
+end
+
+function Amumu:GetValidMinion(range)
+    	for i = 1,Game.MinionCount() do
+        local minion = Game.Minion(i)
+        if  minion.team ~= myHero.team and minion.valid and minion.pos:DistanceTo(myHero.pos) < Q.range then
+        return true
+        end
+    	end
+    	return false
 end
 
 --[[
