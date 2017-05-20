@@ -1,6 +1,6 @@
 class "DrMundo"
---to do jungle clear, last hit with q, and lane clear
-
+--to do: KS? 
+require = 'DamageLib'
 
 function DrMundo:__init()
 	if myHero.charName ~= "DrMundo" then return end
@@ -30,28 +30,30 @@ function DrMundo:LoadMenu()
 
 --Main Menu
 
-self.Menu = MenuElement({type = MENU, id = "DrMundo", name = "DrMundo", leftIcon = Icons["DrMundoIcon"]})
+	self.Menu = MenuElement({type = MENU, id = "DrMundo", name = "DrMundo", leftIcon = Icons["DrMundoIcon"]})
 
 --Combo Settings Menu
 
-self.Menu:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
-self.Menu.Combo:MenuElement({type = SPACE, name = "Infected Cleaver", leftIcon = Icons["Q"]})
-self.Menu.Combo:MenuElement({id = "UseQ", name = "Use Q", value = true})
-self.Menu.Combo:MenuElement({type = SPACE, name = "Burning Agony", leftIcon = Icons["W"]})
-self.Menu.Combo:MenuElement({id = "UseW", name = "Use W", value = true})
-self.Menu.Combo:MenuElement({type = SPACE, name = "Masochism", leftIcon = Icons["E"]})
-self.Menu.Combo:MenuElement({id = "UseE", name = "Use E", value = true})
+	self.Menu:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
+	self.Menu.Combo:MenuElement({id = "UseQ", name = "Use Q", value = true, leftIcon = Icons.Q})
+	self.Menu.Combo:MenuElement({id = "UseW", name = "Use W", value = true, leftIcon = Icons.W})
+	self.Menu.Combo:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = Icons.E})
 
 --Harass Settings Menu
 
-self.Menu:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
-self.Menu.Harass:MenuElement({type = SPACE, name = "Q", leftIcon = Icons["Q"]})
-self.Menu.Harass:MenuElement({id = "UseQ", name = "Use Q", value = true})
+	self.Menu:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
+	self.Menu.Harass:MenuElement({id = "UseQ", name = "Use Q", value = true, leftIcon = Icons.Q})
+
+--LastHit
+
+	self.Menu:MenuElement({type = MENU, id = "LastHit", name = "Last Hit"})
+	self.Menu.LastHit:MenuElement({id = "UseQ", name = "Use Q", value = true, leftIcon = Icons.Q})
 
 --Drawings Settings Menu
-self.Menu:MenuElement({type = MENU, id = "Drawings", name = "Drawing Settings"})
-self.Menu.Drawings:MenuElement({id = "drawQ", name = "Draw Q Range", value = true})
-self.Menu.Drawings:MenuElement({id = "drawE", name = "Draw E Range", value = true})
+
+	self.Menu:MenuElement({type = MENU, id = "Drawings", name = "Drawing Settings"})
+	self.Menu.Drawings:MenuElement({id = "drawQ", name = "Draw Q Range", value = true})
+	self.Menu.Drawings:MenuElement({id = "drawW", name = "Draw W Range", value = true})
 end
 
 function DrMundo:Tick()
@@ -60,8 +62,10 @@ function DrMundo:Tick()
 			self:Combo()
 		elseif _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_HARASS] then
 			self:Harass()
+		elseif _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_LASTHIT] then
+    		self:LastHit()
 		end
-	
+
 end
 
 function DrMundo:Draw()
@@ -69,8 +73,8 @@ function DrMundo:Draw()
 	if(self.Menu.Drawings.drawQ:Value())then
 		Draw.Circle(myHero, Q.range, 3, Draw.Color(225, 225, 0, 10))
 	end
-	if(self.Menu.Drawings.drawE:Value())then
-		Draw.Circle(myHero, E.range, 3, Draw.Color(225, 225, 0, 10))
+	if(self.Menu.Drawings.drawW:Value())then
+		Draw.Circle(myHero, W.range, 3, Draw.Color(225, 225, 0, 10))
 	end
 end
 
@@ -104,6 +108,36 @@ function DrMundo:Harass()
 		end
 end
 
+function DrMundo:IsValidTarget(unit,range) 
+	return unit ~= nil and unit.valid and unit.visible and not unit.dead and unit.isTargetable and not unit.isImmortal and unit.pos:DistanceTo(myHero.pos) <= 970 
+end
+
+function DrMundo:HpPred(unit, delay)
+	if _G.GOS then
+		hp =  GOS:HP_Pred(unit,delay)
+	else
+		hp = unit.health
+	end
+	return hp
+end
+
+
+function DrMundo:LastHit()
+	if self.Menu.LastHit.UseQ:Value() == false then return end
+	local level = myHero:GetSpellData(_Q).level
+	for i = 1, Game.MinionCount() do
+	local minion = Game.Minion(i)
+		if  minion.team == 200 then
+		local Qdamage = (({80, 130, 180, 230, 280})[level])
+    		if self:IsValidTarget(minion,970) and myHero.pos:DistanceTo(minion.pos) < 970 and minion.isEnemy then
+      			if Qdamage >= self:HpPred(minion, 0.5) and self:CanCast(_Q) then
+					Control.CastSpell(HK_Q,minion.pos)
+				end
+			end
+		end
+	end
+end
+ 
 --add last hit Q for when behind 
 
 function DrMundo:CastQ(target)
@@ -135,6 +169,7 @@ function DrMundo:CastE(position)
 		Control.CastSpell(HK_E, position)
 	end
 end
+
 
 function DrMundo:IsReady(spellSlot)
 	return myHero:GetSpellData(spellSlot).currentCd == 0 and myHero:GetSpellData(spellSlot).level > 0
