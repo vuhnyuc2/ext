@@ -79,7 +79,6 @@ function Fiora:LoadMenu()
 
 	self.Menu:MenuElement({type = MENU, id = "Drawings", name = "Drawing Settings"})
 	self.Menu.Drawings:MenuElement({id = "drawQ", name = "Draw Q Range", value = true})
-	self.Menu.Drawings:MenuElement({id = "drawW", name = "Draw W Range", value = False})
 end
 
 function Fiora:Tick()
@@ -102,9 +101,6 @@ function Fiora:Draw()
 	if myHero.dead then return end
 	if(self.Menu.Drawings.drawQ:Value())then
 		Draw.Circle(myHero, Q.range, 3, Draw.Color(225, 225, 0, 10))
-	end
-	if(self.Menu.Drawings.drawW:Value())then
-		Draw.Circle(myHero, W.range, 3, Draw.Color(225, 225, 0, 10))
 	end
 end
  
