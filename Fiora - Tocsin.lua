@@ -105,26 +105,26 @@ function Fiora:Draw()
 end
  
 function Fiora:Combo()
-	local qtarg = _G.SDK.TargetSelector:GetTarget(400)
+	local  rtarg = _G.SDK.TargetSelector:GetTarget(R.range) 
+		if rtarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
+    		if self:CountEnemys(400) >= self.Menu.Combo.ER:Value() then
+    				self:CastR(rtarg)
+      		end
+    	end
+	local qtarg = _G.SDK.TargetSelector:GetTarget(390)
 		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-			self:CastQ(qtarg)
+			local castPosition = qtarg
+				self:CastQ(castPosition)
 		end
 	local etarg = _G.SDK.TargetSelector:GetTarget(E.range)
 		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
-			local castPosition = etarg
-			Control.CastSpell(HK_E)
+			self.CastE(etarg)
 		end
-	local wtarg = _G.SDK.TargetSelector:GetTarget(170)
+	local wtarg = _G.SDK.TargetSelector:GetTarget(200)
 		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
-			Control.CastSpell(HK_W)
+			local castPosition = wtarg
+				self:CastW(castPosition)
 		end
-	local  rtarg = _G.SDK.TargetSelector:GetTarget(E.range) 
-		if rtarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
-    		if self:CountEnemys(500) >= self.Menu.Combo.ER:Value() then
-    			Control.CastSpell(HK_R)
-      		end
-    	end
- 	
 end
 
 function Fiora:JungleClear()
@@ -151,18 +151,19 @@ end
 	
 
 function Fiora:Harass()
-	local qtarg = _G.SDK.TargetSelector:GetTarget(400)
+	local qtarg = _G.SDK.TargetSelector:GetTarget(390)
 		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-			self:CastQ(qtarg)
+			local castPosition = qtarg
+				self:CastQ(castPosition)
 		end
 	local etarg = _G.SDK.TargetSelector:GetTarget(E.range)
 		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
-			local castPosition = etarg
-			Control.CastSpell(HK_E)
+			self.CastE(etarg)
 		end
-	local wtarg = _G.SDK.TargetSelector:GetTarget(170)
+	local wtarg = _G.SDK.TargetSelector:GetTarget(200)
 		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
-			Control.CastSpell(HK_W)
+			local castPosition = wtarg
+				self:CastW(castPosition)
 		end
 end
 
@@ -199,34 +200,25 @@ function Fiora:CountEnemys(range)
 	local heroesCount = 0
     	for i = 1,Game.HeroCount() do
         local enemy = Game.Hero(i)
-        if  enemy.team ~= myHero.team and enemy.valid and enemy.pos:DistanceTo(myHero.pos) < 400 then
+        if  enemy.team ~= myHero.team and enemy.valid and enemy.pos:DistanceTo(myHero.pos) < 500 then
 			heroesCount = heroesCount + 1
         end
     	end
 		return heroesCount
 end 
 
-function Fiora:CastQ(target)
-		if target then
-		if not target.dead and not target.isImmune then
-			if target.distance<=Q.range then
-				local pred=target:GetPrediction(Q.speed,Q.delay)
-				Control.CastSpell(HK_Q,pred)
-			end
-		end
+function Fiora:CastQ(position)
+	if position then
+		Control.SetCursorPos(position)
+		Control.CastSpell(HK_Q, position)
 	end
-return false
 end
 
-function Fiora:CastW(target)
-	if target then
-		if not target.dead and not target.isImmune then
-			if target.distance<=W.range then
-				Control.CastSpell(HK_W)
-			end
-		end
+function Fiora:CastW(position)
+	if position then
+		Control.SetCursorPos(position)
+		Control.CastSpell(HK_W, position)
 	end
-return false
 end
 
 function Fiora:CastE(target)
@@ -234,6 +226,17 @@ function Fiora:CastE(target)
 		if not target.dead and not target.isImmune then
 			if target.distance<=E.range then
 				Control.CastSpell(HK_E)
+			end
+		end
+	end
+return false
+end
+
+function Fiora:CastR(target)
+	if target then
+		if not target.dead and not target.isImmune then
+			if target.distance<=450 then
+				Control.CastSpell(HK_R)
 			end
 		end
 	end
