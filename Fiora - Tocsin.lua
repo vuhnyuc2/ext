@@ -118,10 +118,10 @@ function Fiora:Combo()
 		end
 	local etarg = _G.SDK.TargetSelector:GetTarget(E.range)
 		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
-			self.CastE(etarg)
+			Control.CastSpell(HK_E)
 		end
 	local wtarg = _G.SDK.TargetSelector:GetTarget(200)
-		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
+		if wtarg and self.Menu.Combo.UseW:Value() and not self:CanCast(_E) and self:CanCast(_W) then
 			local castPosition = wtarg
 				self:CastW(castPosition)
 		end
@@ -158,10 +158,10 @@ function Fiora:Harass()
 		end
 	local etarg = _G.SDK.TargetSelector:GetTarget(E.range)
 		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
-			self.CastE(etarg)
+			Control.CastSpell(HK_E)
 		end
 	local wtarg = _G.SDK.TargetSelector:GetTarget(200)
-		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
+		if wtarg and self.Menu.Combo.UseW:Value() and not self:CanCast(_E) and self:CanCast(_W) then
 			local castPosition = wtarg
 				self:CastW(castPosition)
 		end
