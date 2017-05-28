@@ -111,9 +111,14 @@ function Riven:Combo()
 		end 
 	end
 
-	local etarg = _G.SDK.TargetSelector:GetTarget(400)
+	local etarg = _G.SDK.TargetSelector:GetTarget(320)
 		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 			self:CastE(etarg)
+		end
+
+	local wtarg = _G.SDK.TargetSelector:GetTarget(125)
+		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
+			Control.CastSpell(HK_W)
 		end
 
 	local  rtarg = _G.SDK.TargetSelector:GetTarget(R.range) 
@@ -151,12 +156,7 @@ function Riven:Combo()
 		end 
 	end
 
-	local wtarg = _G.SDK.TargetSelector:GetTarget(W.range)
-		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
-			Control.CastSpell(HK_W)
-		end
-
-	local qtarg = _G.SDK.TargetSelector:GetTarget(Q.range)
+	local qtarg = _G.SDK.TargetSelector:GetTarget(260)
 		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and not self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
 			local castPosition = qtarg
 			self:CastQ(castPosition)
@@ -175,17 +175,17 @@ function Riven:Combo()
 end
 
 function Riven:Harass()
-	local etarg = _G.SDK.TargetSelector:GetTarget(E.range)
+	local etarg = _G.SDK.TargetSelector:GetTarget(320)
 		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) and myHero.attackData.state == STATE_WINDDOWN then
 			self:CastE(etarg)
 		end
 
-	local wtarg = _G.SDK.TargetSelector:GetTarget(W.range)
+	local wtarg = _G.SDK.TargetSelector:GetTarget(125)
 		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
 			Control.CastSpell(HK_W)
 		end
 
-	local qtarg = _G.SDK.TargetSelector:GetTarget(Q.range)
+	local qtarg = _G.SDK.TargetSelector:GetTarget(260)
 		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and not self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
 			local castPosition = qtarg
 			self:CastQ(castPosition)
@@ -266,7 +266,7 @@ function Riven:JungleClear()
 				Control.CastSpell(HK_W)
 			break
 			end
-			if self:IsValidTarget(minion,300) and myHero.pos:DistanceTo(minion.pos) < 300 and self.Menu.JungleClear.E:Value() and self:CanCast(_E) and myHero.attackData.state == STATE_WINDDOWN then
+			if self:IsValidTarget(minion,320) and myHero.pos:DistanceTo(minion.pos) < 300 and self.Menu.JungleClear.E:Value() and self:CanCast(_E) and myHero.attackData.state == STATE_WINDDOWN then
 			Control.CastSpell(HK_E,minion.pos)
 			break
 			end
@@ -317,7 +317,7 @@ end
 function Riven:CastE(target)
 	if target then
 		if not target.dead and not target.isImmune then
-			if target.distance<=400 then
+			if target.distance<=320 then
 				local pred=target:GetPrediction(E.speed,E.delay)
 				Control.CastSpell(HK_E,pred)
 			end
@@ -329,7 +329,7 @@ end
 function Riven:CastW(target)
 	if target then
 		if not target.dead and not target.isImmune then
-			if target.distance<=W.range then
+			if target.distance<=120 then
 				Control.CastSpell(HK_W)
 			end
 		end
