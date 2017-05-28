@@ -258,13 +258,18 @@ function Riven:JungleClear()
 	end
 end
 
-local function GetItemSlot(unit, id)
+function GetItemSlot(unit, id)
   for i = ITEM_1, ITEM_7 do
     if unit:GetItemData(i).itemID == id then
       return i
     end
   end
   return 0 
+end
+
+function GetPercentHP(unit)
+	if type(unit) ~= "userdata" then error("{GetPercentHP}: bad argument #1 (userdata expected, got "..type(unit)..")") end
+		return 100*unit.health/unit.maxHealth
 end
 
 function Riven:GetValidMinion(range)
