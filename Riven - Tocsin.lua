@@ -111,13 +111,13 @@ function Riven:Combo()
 		end 
 	end
 
-	local etarg = _G.SDK.TargetSelector:GetTarget(280)
+	local etarg = _G.SDK.TargetSelector:GetTarget(400)
 		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 			self:CastE(etarg)
 		end
 
 	local  rtarg = _G.SDK.TargetSelector:GetTarget(R.range) 
-		if rtarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
+		if rtarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) and not self:HasBuff(myHero, "rivenwindslashready") then
     		if self:CountEnemys(150) >= self.Menu.Combo.ER:Value() then
     			self:CastR(rtarg)
       		end
@@ -152,7 +152,7 @@ function Riven:Combo()
 	end
 
 	local wtarg = _G.SDK.TargetSelector:GetTarget(W.range)
-		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
+		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
 			Control.CastSpell(HK_W)
 		end
 
@@ -162,7 +162,10 @@ function Riven:Combo()
 			self:CastQ(castPosition)
 		end
 	
-		
+	local  ztarg = _G.SDK.TargetSelector:GetTarget(900) 
+		if ztarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) and self:HasBuff(myHero, "rivenwindslashready") then
+    		self:Wings(ztarg)
+		end	
 
     local xtarg = _G.SDK.TargetSelector:GetTarget(600)
 		if xtarg and self.Menu.Combo.Exhaust:Value() and not self:CanCast(_E) and not self:CanCast(_Q) then
@@ -178,7 +181,7 @@ function Riven:Harass()
 		end
 
 	local wtarg = _G.SDK.TargetSelector:GetTarget(W.range)
-		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
+		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
 			Control.CastSpell(HK_W)
 		end
 
@@ -203,6 +206,19 @@ function Riven:HpPred(unit, delay)
 	return hp
 end
 
+function Riven:Wings(target)
+	if target then
+		if not target.dead and not target.isImmune then
+			if target.distance<=850 and target.health/target.maxHealth <= 0.2 then
+				local pred=target:GetPrediction(R.speed,R.delay)
+				Control.CastSpell(HK_R,pred)
+			end
+		end
+	end
+return false
+end
+
+	
 function Riven:Exhaust(target)
 	if target then 
    		if myHero:GetSpellData(SUMMONER_1).name == "SummonerExhaust" and self:IsReady(SUMMONER_1) then
@@ -258,6 +274,16 @@ function Riven:JungleClear()
 	end
 end
 
+function Riven:HasBuff(unit, buffname)
+for i = 0, unit.buffCount do
+local buff = unit:GetBuff(i)
+if buff.name == buffname and buff.count > 0 then 
+return true
+end
+end
+return false
+end
+
 function GetItemSlot(unit, id)
   for i = ITEM_1, ITEM_7 do
     if unit:GetItemData(i).itemID == id then
@@ -265,11 +291,6 @@ function GetItemSlot(unit, id)
     end
   end
   return 0 
-end
-
-function GetPercentHP(unit)
-	if type(unit) ~= "userdata" then error("{GetPercentHP}: bad argument #1 (userdata expected, got "..type(unit)..")") end
-		return 100*unit.health/unit.maxHealth
 end
 
 function Riven:GetValidMinion(range)
@@ -296,7 +317,7 @@ end
 function Riven:CastE(target)
 	if target then
 		if not target.dead and not target.isImmune then
-			if target.distance<=280 then
+			if target.distance<=400 then
 				local pred=target:GetPrediction(E.speed,E.delay)
 				Control.CastSpell(HK_E,pred)
 			end
