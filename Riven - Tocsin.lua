@@ -209,7 +209,7 @@ end
 function Riven:Wings(target)
 	if target then
 		if not target.dead and not target.isImmune then
-			if target.distance<=850 and target.health/target.maxHealth <= 0.2 then
+			if target.distance<=850 and target.health/target.maxHealth <= 0.23 then
 				local pred=target:GetPrediction(R.speed,R.delay)
 				Control.CastSpell(HK_R,pred)
 			end
