@@ -97,6 +97,20 @@ function Riven:Draw()
 end
 
 function Riven:Combo()
+	local ytarg = _G.SDK.TargetSelector:GetTarget(700)
+	local ItemHotKey = {
+    [ITEM_1] = HK_ITEM_1,
+    [ITEM_2] = HK_ITEM_2,
+    [ITEM_3] = HK_ITEM_3,
+    [ITEM_4] = HK_ITEM_4,
+    [ITEM_5] = HK_ITEM_5,
+    [ITEM_6] = HK_ITEM_6,}
+	if GetItemSlot(myHero, 3142) >= 1 and self:CanCast(_Q) and ytarg then 
+		if self:IsReady(GetItemSlot(myHero, 3142)) then
+			Control.CastSpell(ItemHotKey[GetItemSlot(myHero, 3142)], self)
+		end 
+	end
+
 	local etarg = _G.SDK.TargetSelector:GetTarget(280)
 		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 			self:CastE(etarg)
@@ -123,6 +137,20 @@ function Riven:Combo()
 		end 
 	end
 
+	local starg = _G.SDK.TargetSelector:GetTarget(150)
+	local ItemHotKey = {
+    [ITEM_1] = HK_ITEM_1,
+    [ITEM_2] = HK_ITEM_2,
+    [ITEM_3] = HK_ITEM_3,
+    [ITEM_4] = HK_ITEM_4,
+    [ITEM_5] = HK_ITEM_5,
+    [ITEM_6] = HK_ITEM_6,}
+	if GetItemSlot(myHero, 3077) >= 1 and self:CanCast(_Q) and starg then 
+		if self:IsReady(GetItemSlot(myHero, 3077)) and myHero.attackData.state == STATE_WINDDOWN then
+			Control.CastSpell(ItemHotKey[GetItemSlot(myHero, 3077)], self)
+		end 
+	end
+
 	local wtarg = _G.SDK.TargetSelector:GetTarget(W.range)
 		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
 			Control.CastSpell(HK_W)
@@ -141,39 +169,11 @@ function Riven:Combo()
 			self:Exhaust(xtarg)
 		end
 
-	local starg = _G.SDK.TargetSelector:GetTarget(600)
-	local ItemHotKey = {
-    [ITEM_1] = HK_ITEM_1,
-    [ITEM_2] = HK_ITEM_2,
-    [ITEM_3] = HK_ITEM_3,
-    [ITEM_4] = HK_ITEM_4,
-    [ITEM_5] = HK_ITEM_5,
-    [ITEM_6] = HK_ITEM_6,}
-	if GetItemSlot(myHero, 3142) >= 1 and self:CanCast(_Q) and starg then 
-		if self:IsReady(GetItemSlot(myHero, 3142)) and myHero.attackData.state == STATE_WINDDOWN then
-			Control.CastSpell(ItemHotKey[GetItemSlot(myHero, 3142)], self)
-		end 
-	end
-
-	local starg = _G.SDK.TargetSelector:GetTarget(600)
-	local ItemHotKey = {
-    [ITEM_1] = HK_ITEM_1,
-    [ITEM_2] = HK_ITEM_2,
-    [ITEM_3] = HK_ITEM_3,
-    [ITEM_4] = HK_ITEM_4,
-    [ITEM_5] = HK_ITEM_5,
-    [ITEM_6] = HK_ITEM_6,}
-	if GetItemSlot(myHero, 3077) >= 1 and self:CanCast(_Q) and starg then 
-		if self:IsReady(GetItemSlot(myHero, 3077)) and myHero.attackData.state == STATE_WINDDOWN then
-			Control.CastSpell(ItemHotKey[GetItemSlot(myHero, 3077)], self)
-		end 
-	end
-
 end
 
 function Riven:Harass()
 	local etarg = _G.SDK.TargetSelector:GetTarget(E.range)
-		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
+		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) and myHero.attackData.state == STATE_WINDDOWN then
 			self:CastE(etarg)
 		end
 
