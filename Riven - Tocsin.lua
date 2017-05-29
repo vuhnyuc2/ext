@@ -70,7 +70,7 @@ function Riven:LoadMenu()
 --Drawings Settings Menu
 
 	self.Menu:MenuElement({type = MENU, id = "Drawings", name = "Drawing Settings"})
-	self.Menu.Drawings:MenuElement({id = "drawR", name = "Draw R Range", value = true})
+	self.Menu.Drawings:MenuElement({id = "drawW", name = "Draw W Range", value = true})
 	self.Menu.Drawings:MenuElement({id = "drawQ", name = "Draw Q Range", value = true})
 end
 
@@ -88,11 +88,11 @@ end
 
 function Riven:Draw()
 	if myHero.dead then return end
-	if(self.Menu.Drawings.drawR:Value())then
-		Draw.Circle(myHero, R.range, 3, Draw.Color(225, 225, 0, 10))
+	if(self.Menu.Drawings.drawW:Value())then
+		Draw.Circle(myHero, 260, 3, Draw.Color(225, 225, 0, 10))
 	end
 	if(self.Menu.Drawings.drawQ:Value())then
-		Draw.Circle(myHero, Q.range, 3, Draw.Color(225, 225, 0, 10))
+		Draw.Circle(myHero, 380, 3, Draw.Color(255, 255, 255, 10))
 	end
 end
 
@@ -111,7 +111,7 @@ function Riven:Combo()
 		end 
 	end
 
-	local etarg = _G.SDK.TargetSelector:GetTarget(320)
+	local etarg = _G.SDK.TargetSelector:GetTarget(620)
 		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 			self:CastE(etarg)
 		end
@@ -128,7 +128,7 @@ function Riven:Combo()
       		end
     	end
 
-    local htarg = _G.SDK.TargetSelector:GetTarget(150)
+    local htarg = _G.SDK.TargetSelector:GetTarget(350)
 	local ItemHotKey = {
     [ITEM_1] = HK_ITEM_1,
     [ITEM_2] = HK_ITEM_2,
@@ -142,7 +142,7 @@ function Riven:Combo()
 		end 
 	end
 
-	local starg = _G.SDK.TargetSelector:GetTarget(150)
+	local starg = _G.SDK.TargetSelector:GetTarget(350)
 	local ItemHotKey = {
     [ITEM_1] = HK_ITEM_1,
     [ITEM_2] = HK_ITEM_2,
@@ -151,12 +151,12 @@ function Riven:Combo()
     [ITEM_5] = HK_ITEM_5,
     [ITEM_6] = HK_ITEM_6,}
 	if GetItemSlot(myHero, 3077) >= 1 and self:CanCast(_Q) and starg then 
-		if self:IsReady(GetItemSlot(myHero, 3077)) and myHero.attackData.state == STATE_WINDDOWN then
+		if self:IsReady(GetItemSlot(myHero, 3077)) and myHero.attackData.state == STATE_WINDDOWN and not self:CanCast(_E) then
 			Control.CastSpell(ItemHotKey[GetItemSlot(myHero, 3077)], self)
 		end 
 	end
 
-	local qtarg = _G.SDK.TargetSelector:GetTarget(280)
+	local qtarg = _G.SDK.TargetSelector:GetTarget(440)
 		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
 			local castPosition = qtarg
 			self:CastQ(castPosition)
@@ -175,7 +175,7 @@ function Riven:Combo()
 end
 
 function Riven:Harass()
-	local etarg = _G.SDK.TargetSelector:GetTarget(320)
+	local etarg = _G.SDK.TargetSelector:GetTarget(620)
 		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 			self:CastE(etarg)
 		end
@@ -185,7 +185,7 @@ function Riven:Harass()
 			Control.CastSpell(HK_W)
 		end
 
-	local qtarg = _G.SDK.TargetSelector:GetTarget(280)
+	local qtarg = _G.SDK.TargetSelector:GetTarget(440)
 		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and not self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
 			local castPosition = qtarg
 			self:CastQ(castPosition)
@@ -258,7 +258,7 @@ function Riven:JungleClear()
   	for i = 1, Game.MinionCount() do
 	local minion = Game.Minion(i)
     	if  minion.team == 300 then
-			if self:IsValidTarget(minion,240) and myHero.pos:DistanceTo(minion.pos) < 240 and self.Menu.JungleClear.Q:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
+			if self:IsValidTarget(minion,340) and myHero.pos:DistanceTo(minion.pos) < 240 and self.Menu.JungleClear.Q:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
 			Control.CastSpell(HK_Q,minion.pos)
 			break
 			end
@@ -317,7 +317,7 @@ end
 function Riven:CastE(target)
 	if target then
 		if not target.dead and not target.isImmune then
-			if target.distance<=320 then
+			if target.distance<=620 then
 				local pred=target:GetPrediction(E.speed,E.delay)
 				Control.CastSpell(HK_E,pred)
 			end
