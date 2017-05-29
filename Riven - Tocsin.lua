@@ -70,8 +70,8 @@ function Riven:LoadMenu()
 --Drawings Settings Menu
 
 	self.Menu:MenuElement({type = MENU, id = "Drawings", name = "Drawing Settings"})
-	self.Menu.Drawings:MenuElement({id = "drawE", name = "Draw E Range", value = true})
 	self.Menu.Drawings:MenuElement({id = "drawR", name = "Draw R Range", value = true})
+	self.Menu.Drawings:MenuElement({id = "drawQ", name = "Draw Q Range", value = true})
 end
 
 function Riven:Tick()
@@ -88,11 +88,11 @@ end
 
 function Riven:Draw()
 	if myHero.dead then return end
-	if(self.Menu.Drawings.drawE:Value())then
-		Draw.Circle(myHero, E.range, 3, Draw.Color(225, 225, 0, 10))
-	end
 	if(self.Menu.Drawings.drawR:Value())then
 		Draw.Circle(myHero, R.range, 3, Draw.Color(225, 225, 0, 10))
+	end
+	if(self.Menu.Drawings.drawQ:Value())then
+		Draw.Circle(myHero, Q.range, 3, Draw.Color(225, 225, 0, 10))
 	end
 end
 
@@ -116,14 +116,14 @@ function Riven:Combo()
 			self:CastE(etarg)
 		end
 
-	local wtarg = _G.SDK.TargetSelector:GetTarget(125)
+	local wtarg = _G.SDK.TargetSelector:GetTarget(260)
 		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
 			Control.CastSpell(HK_W)
 		end
 
 	local  rtarg = _G.SDK.TargetSelector:GetTarget(R.range) 
 		if rtarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) and not self:HasBuff(myHero, "rivenwindslashready") then
-    		if self:CountEnemys(150) >= self.Menu.Combo.ER:Value() then
+    		if self:CountEnemys(260) >= self.Menu.Combo.ER:Value() then
     			self:CastR(rtarg)
       		end
     	end
@@ -156,8 +156,8 @@ function Riven:Combo()
 		end 
 	end
 
-	local qtarg = _G.SDK.TargetSelector:GetTarget(260)
-		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and not self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
+	local qtarg = _G.SDK.TargetSelector:GetTarget(280)
+		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
 			local castPosition = qtarg
 			self:CastQ(castPosition)
 		end
@@ -176,16 +176,16 @@ end
 
 function Riven:Harass()
 	local etarg = _G.SDK.TargetSelector:GetTarget(320)
-		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) and myHero.attackData.state == STATE_WINDDOWN then
+		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 			self:CastE(etarg)
 		end
 
-	local wtarg = _G.SDK.TargetSelector:GetTarget(125)
+	local wtarg = _G.SDK.TargetSelector:GetTarget(260)
 		if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
 			Control.CastSpell(HK_W)
 		end
 
-	local qtarg = _G.SDK.TargetSelector:GetTarget(260)
+	local qtarg = _G.SDK.TargetSelector:GetTarget(280)
 		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and not self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
 			local castPosition = qtarg
 			self:CastQ(castPosition)
@@ -329,7 +329,7 @@ end
 function Riven:CastW(target)
 	if target then
 		if not target.dead and not target.isImmune then
-			if target.distance<=120 then
+			if target.distance<=260 then
 				Control.CastSpell(HK_W)
 			end
 		end
