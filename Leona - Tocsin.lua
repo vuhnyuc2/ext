@@ -81,7 +81,7 @@ end
 function Leona:Draw()
 	if myHero.dead then return end
 	if(self.Menu.Drawings.drawE:Value())then
-		Draw.Circle(myHero, E.range, 3, Draw.Color(225, 225, 0, 10))
+		Draw.Circle(myHero, 875, 3, Draw.Color(255, 225, 255, 10))
 	end
 	if(self.Menu.Drawings.drawR:Value())then
 		Draw.Circle(myHero, R.range, 3, Draw.Color(225, 225, 0, 10))
