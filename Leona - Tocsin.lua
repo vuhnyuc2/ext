@@ -107,7 +107,7 @@ function Leona:Combo()
 	
 	local  rtarg = _G.SDK.TargetSelector:GetTarget(R.range) 
 		if rtarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
-    		if self:CountEnemys(250) >= self.Menu.Combo.ER:Value() then
+    		if self:CountEnemys(500) >= self.Menu.Combo.ER:Value() then
     			self:CastR(rtarg)
       		end
     	end	
