@@ -5,6 +5,7 @@ require = 'DamageLib'
 function Riven:__init()
 	if myHero.charName ~= "Riven" then return end
 PrintChat("Riven - Tocsin loaded")
+PrintChat("YOU MUST KEYBIND DANCE TO Y FOR THE CANCELLING TO WORK")
 self:LoadSpells()
 self:LoadMenu()
 Callback.Add("Tick", function() self:Tick() end)
@@ -110,7 +111,6 @@ function Riven:Combo()
 			Control.CastSpell(ItemHotKey[GetItemSlot(myHero, 3142)], self)
 		end 
 	end
-
 	local etarg = _G.SDK.TargetSelector:GetTarget(620)
 		if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 			self:CastE(etarg)
@@ -160,12 +160,15 @@ function Riven:Combo()
 		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
 			local castPosition = qtarg
 			self:CastQ(castPosition)
+			DelayAction(function()
+			Control.CastSpell(string.byte("Y")) -- user change dance to Y
+			end, 0.15)
 		end
 	
 	local  ztarg = _G.SDK.TargetSelector:GetTarget(900) 
 		if ztarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) and self:HasBuff(myHero, "rivenwindslashready") then
     		self:Wings(ztarg)
-		end	
+    	end	
 
     local xtarg = _G.SDK.TargetSelector:GetTarget(600)
 		if xtarg and self.Menu.Combo.Exhaust:Value() and not self:CanCast(_E) and not self:CanCast(_Q) then
@@ -189,6 +192,9 @@ function Riven:Harass()
 		if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and not self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
 			local castPosition = qtarg
 			self:CastQ(castPosition)
+			DelayAction(function()
+			Control.CastSpell(string.byte("Y")) -- user change dance to Y
+			end, 0.15)
 		end
 
 end
@@ -257,9 +263,12 @@ function Riven:JungleClear()
   	if self:GetValidMinion(Q.range) == false then return end
   	for i = 1, Game.MinionCount() do
 	local minion = Game.Minion(i)
-    	if  minion.team == 300 then
+		if  minion.team == 300 or 200 then
 			if self:IsValidTarget(minion,340) and myHero.pos:DistanceTo(minion.pos) < 240 and self.Menu.JungleClear.Q:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
 			Control.CastSpell(HK_Q,minion.pos)
+			DelayAction(function()
+			Control.CastSpell(string.byte("Y")) -- user change dance to Y
+			end, 0.15)
 			break
 			end
 			if self:IsValidTarget(minion,120) and myHero.pos:DistanceTo(minion.pos) < 120 and self.Menu.JungleClear.W:Value() and self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
