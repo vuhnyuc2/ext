@@ -41,7 +41,7 @@ function Thresh:LoadMenu()
 	self.Menu.Combo:MenuElement({id = "UseW", name = "Use W", value = true, leftIcon = Icons.W})
 	self.Menu.Combo:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = Icons.E})
 	self.Menu.Combo:MenuElement({id = "UseR", name = "Use R", value = true, leftIcon = Icons.R})
-	self.Menu.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 2, min = 1, max = 5})
+	self.Menu.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
 	self.Menu.Combo:MenuElement({id = "Exhaust", name = "Use Exhaust", value = true, leftIcon = Icons.EXH})
 --Harass Settings Menu
 
@@ -143,7 +143,7 @@ end
 
 function Thresh:Harass()
 	if _G.SDK.TargetSelector:GetTarget(1150) == nil then return end
-	
+
 	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
 		self:CastW(wtarg)
 	end
@@ -245,7 +245,7 @@ function Thresh:CastQ(pred)
 return false
 end
 
-function Thresh:CastW(target) --need nearest ally
+function Thresh:CastW(target) --nearest ally
 	for i,ally in pairs(self.GetAllyHeroes()) do
 		if self:IsValidTarget(ally,W.range) and myHero.pos:DistanceTo(ally.pos) < 950 then
 			if not ally.isMe then
@@ -271,11 +271,13 @@ function Thresh:CastE(target)
 end
 
 function Thresh:CastR(target)
-	local rtarg = _G.SDK.TargetSelector:GetTarget(200)
+	local rtarg = _G.SDK.TargetSelector:GetTarget(420)
 	if rtarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
-		if not rtarg.dead and not rtarg.isImmune then
-			if rtarg.distance<=200 then
-				Control.CastSpell(HK_R)
+		if self:CountEnemys(420) >= self.Menu.Combo.ER:Value() then
+			if not rtarg.dead and not rtarg.isImmune then
+				if rtarg.distance<=420 then
+					Control.CastSpell(HK_R)
+				end
 			end
 		end
 	end
