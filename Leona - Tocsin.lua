@@ -41,7 +41,7 @@ function Leona:LoadMenu()
 	self.Menu.Combo:MenuElement({id = "UseW", name = "Use W", value = true, leftIcon = Icons.W})
 	self.Menu.Combo:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = Icons.E})
 	self.Menu.Combo:MenuElement({id = "UseR", name = "Use R", value = true, leftIcon = Icons.R})
-	self.Menu.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 2, min = 1, max = 5})
+	self.Menu.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
 	self.Menu.Combo:MenuElement({id = "Exhaust", name = "Use Exhaust", value = true, leftIcon = Icons.EXH})
 --Harass Settings Menu
 
@@ -244,7 +244,7 @@ end
 function Leona:CastE(target)
 	if target then
 		if not target.dead and not target.isImmune then
-			if target.distance<=E.range then
+			if target.distance<=825 then
 				local pred=target:GetPrediction(E.speed,E.delay)
 				Control.CastSpell(HK_E,pred)
 			end
