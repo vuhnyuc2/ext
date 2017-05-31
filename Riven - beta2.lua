@@ -41,8 +41,8 @@ function Riven:LoadMenu()
 	self.Menu.Combo:MenuElement({id = "UseW", name = "Use W", value = true, leftIcon = Icons.W})
 	self.Menu.Combo:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = Icons.E})
 	self.Menu.Combo:MenuElement({id = "UseR", name = "Use R", value = true, leftIcon = Icons.R})
-	self.Menu.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 2, min = 1, max = 5})
-	self.Menu.Combo:MenuElement({id = "Exhaust", name = "Use Exhaust", value = true, leftIcon = Icons.EXH})
+	self.Menu.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
+	self.Menu.Combo:MenuElement({id = "Exhaust", name = "Use Exhaust", value = false, leftIcon = Icons.EXH})
 --Harass Settings Menu
 
 	self.Menu:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
@@ -111,7 +111,7 @@ function Riven:Combo()
 	end
 
 	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-		self:CastQ(pred)
+		self:CastQ(qtarg)
 	end
 	
 	if self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
@@ -137,7 +137,7 @@ function Riven:Harass()
 	end
 
 	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-		self:CastQ(pred)
+		self:CastQ(qtarg)
 	end
 		
 end
@@ -190,13 +190,13 @@ function Riven:Wings(target)
 	local ztarg = _G.SDK.TargetSelector:GetTarget(850)
 	if ztarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
 			if self:HasBuff(myHero, "rivenwindslashready") then
-				if target.distance<=850 and target.health/target.maxHealth <= 0.23 then
-					local pred=target:GetPrediction(R.speed,R.delay)
+				if ztarg.distance<=850 and ztarg.health/ztarg.maxHealth <= 0.23 then
+					local pred=ztarg:GetPrediction(R.speed,R.delay)
 					Control.CastSpell(HK_R,pred)
 				end
 			end
 	end
---return false
+
 end
 
 function Riven:Exhaust(target)
@@ -278,17 +278,6 @@ function Riven:CastQ(target)
     end
 end
 
---[[
-function Riven:CastQ(pred)
-	local qtarg = _G.SDK.TargetSelector:GetTarget(440)
-	if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-			local pred=qtarg:GetPrediction(Q.speed,Q.delay)
-			Control.CastSpell(HK_Q,pred)
-	end
-return false
-end
---]]
-
 function Riven:CastW(target) 
 	local wtarg = _G.SDK.TargetSelector:GetTarget(260)
 	if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
@@ -305,14 +294,14 @@ function Riven:CastE(target)
 	end
 end
 
-LastR = Game.Timer()
+
 function Riven:CastR(target)
     local rtarg = _G.SDK.TargetSelector:GetTarget(620)
     if rtarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) and not self:HasBuff(myHero, "rivenwindslashready") then
-    		if self:CountEnemys(260) >= self.Menu.Combo.ER:Value() then
-    			self:CastR(rtarg)
-      		end
-    	end
+    	if self:CountEnemys(260) >= self.Menu.Combo.ER:Value() then
+    		Control.CastSpell(HK_R)
+      	end
+    end
 end
 
 --KS
