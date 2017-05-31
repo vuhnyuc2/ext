@@ -106,17 +106,18 @@ function Riven:Combo()
 		self:CastE(etarg)
 	end
 
-	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
-		self:CastW(wtarg)
-	end
-
-	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-		self:CastQ(qtarg)
-	end
-	
 	if self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
     	self:CastR(rtarg)
     end
+
+    if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
+		self:CastQ(qtarg)
+	end
+
+	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
+		self:CastW(wtarg)
+	end
+	
  	if self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
     	self:Wings(ztarg)
     end
@@ -132,12 +133,12 @@ function Riven:Harass()
 		self:CastE(etarg)
 	end
 
-	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
-		self:CastW(wtarg)
-	end
-
 	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
 		self:CastQ(qtarg)
+	end
+
+	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
+		self:CastW(wtarg)
 	end
 		
 end
@@ -151,12 +152,12 @@ function Riven:JungleClear()
 				Control.CastSpell(HK_E,minion.pos)
 			break
 			end    		
-			if self:IsValidTarget(minion,260) and myHero.pos:DistanceTo(minion.pos) < 260 and self.Menu.JungleClear.W:Value() and self:CanCast(_W) then
-				Control.CastSpell(HK_W)
-			break
-			end
 			if self:IsValidTarget(minion,440) and myHero.pos:DistanceTo(minion.pos) < 440 and self.Menu.JungleClear.Q:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
 				Control.CastSpell(HK_Q,minion.pos)
+			break
+			end
+			if self:IsValidTarget(minion,260) and myHero.pos:DistanceTo(minion.pos) < 260 and self.Menu.JungleClear.W:Value() and self:CanCast(_W) then
+				Control.CastSpell(HK_W)
 			break
 			end
 		end
