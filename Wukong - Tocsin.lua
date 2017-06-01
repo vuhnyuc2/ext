@@ -124,12 +124,14 @@ function Wukong:Combo()
 		self:CastW(wtarg)
 	end
 
-	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-		self:CastQ(pred)
-	end
-
 	if self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 		self:CastE(etarg)
+		Control.Attack(etarg)
+	end
+
+	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
+		self:CastQ(pred)
+		Control.Attack(qtarg)
 	end
 	
 	if self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
@@ -148,12 +150,14 @@ function Wukong:Harass()
 		self:CastW(wtarg)
 	end
 
-	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-		self:CastQ(pred)
-	end
-
 	if self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 		self:CastE(etarg)
+		Control.Attack(etarg)
+	end
+
+	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
+		self:CastQ(pred)
+		Control.Attack(qtarg)
 	end
 		
 end
