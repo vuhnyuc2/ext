@@ -258,7 +258,7 @@ function Wukong:CastQ(pred)
 	if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
 			local pred=qtarg:GetPrediction(Q.speed,Q.delay)
 			Control.CastSpell(HK_Q,pred)
-			Control.Attack(qtarg)
+			
 	end
 return false
 end
@@ -276,7 +276,6 @@ function Wukong:CastE(target)
 	if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 		local pred=etarg:GetPrediction(E.speed,E.delay)
 		Control.CastSpell(HK_E,pred)
-		Control.Attack(etarg)
 	end
 end
 
