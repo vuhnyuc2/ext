@@ -239,7 +239,7 @@ end
 function Thresh:CastQ(pred)
 	local qtarg = _G.SDK.TargetSelector:GetTarget(1000)
 	if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-			local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
+			local pred=qtarg:GetPrediction(Q.speed,.50 + Game.Latency()/1000)
 			Control.CastSpell(HK_Q,pred)
 	end
 return false
@@ -268,7 +268,7 @@ function Thresh:CastE(target)
 		local pred=etarg:GetPrediction(E.speed,.25 + Game.Latency()/1000)
 		--local pred=etarg:GetPrediction(E.speed,E.delay)
 		Control.CastSpell(HK_E, myHero.pos:Extended(etarg.pos, -100))
-		--Control.CastSpell(HK_E,pred)
+		
 	end
 end
 
