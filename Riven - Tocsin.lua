@@ -4,7 +4,7 @@ require = 'DamageLib'
 
 function Riven:__init()
 	if myHero.charName ~= "Riven" then return end
-PrintChat("Riven - Tocsin loaded")
+PrintChat("Riven - Tocsin loaded v1.8")
 self:LoadSpells()
 self:LoadMenu()
 Callback.Add("Tick", function() self:Tick() end)
