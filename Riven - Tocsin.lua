@@ -63,6 +63,11 @@ function Riven:LoadMenu()
   	self.Menu.JungleClear:MenuElement({id = "W", name = "Use W", value = true, leftIcon = Icons.W})
   	self.Menu.JungleClear:MenuElement({id = "E", name = "Use E", value = true, leftIcon = Icons.E})
  
+--Flee oR Chase
+	self.Menu:MenuElement({type = MENU, id = "Flee", name = "Flee"})
+	self.Menu.Flee:MenuElement({id = "UseQ", name = "Use Q", value = true, leftIcon = Icons.Q})
+	self.Menu.Flee:MenuElement({id = "UseW", name = "Use W", value = false, leftIcon = Icons.W})
+	self.Menu.Flee:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = Icons.E})
 
 --misc
 	self.Menu:MenuElement({type = MENU, id = "Misc", name = "Misc"})
@@ -85,6 +90,8 @@ function Riven:Tick()
 			self:Harass()
 		elseif _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_JUNGLECLEAR] then
 			self:JungleClear()
+		elseif _G.SDK.Orbwalker.Modes[_G.SDK.ORBWALKER_MODE_FLEE] then
+			self:Flee()	
 		end
 	self:Misc()
 end
@@ -129,15 +136,15 @@ end
 function Riven:Harass() 
 	if _G.SDK.TargetSelector:GetTarget(700) == nil then return end
 	
-	if self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
+	if self.Menu.Harass.UseE:Value() and self:CanCast(_E) then
 		self:CastE(etarg)
 	end
 
-	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
+	if self.Menu.Harass.UseQ:Value() and self:CanCast(_Q) then
 		self:CastQ(qtarg)
 	end
 
-	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
+	if self.Menu.Harass.UseW:Value() and self:CanCast(_W) then
 		self:CastW(wtarg)
 	end
 		
@@ -163,6 +170,23 @@ function Riven:JungleClear()
 			end
 		end
 	end
+end
+
+function Riven:Flee()
+	local ftarg = _G.SDK.TargetSelector:GetTarget(1900)
+		--if _G.SDK.TargetSelector:GetTarget(1900) == nil then return end   --this will break just fast lane movement if active.
+	
+		if self.Menu.Flee.UseE:Value() and self:CanCast(_E) then
+		Control.CastSpell(HK_E)
+		end
+
+		if self.Menu.Flee.UseQ:Value() and self:CanCast(_Q) then
+		Control.CastSpell(HK_Q)
+		end
+
+		if self.Menu.Flee.UseW:Value() and self:CanCast(_W) then
+		Control.CastSpell(HK_W)
+		end
 end
 
 function Riven:IsValidTarget(unit,range) 
@@ -203,7 +227,7 @@ function Riven:Wings(target)
 end
 
 function Riven:Exhaust(target)
-	local xtarg = _G.SDK.TargetSelector:GetTarget(350)
+	local xtarg = _G.SDK.TargetSelector:GetTarget(550)
 	if self.Menu.Combo.Exhaust:Value() and not self:CanCast(_E) and not self:CanCast(_Q) then
 	if xtarg then 
    		if myHero:GetSpellData(SUMMONER_1).name == "SummonerExhaust" and self:IsReady(SUMMONER_1) then
@@ -242,7 +266,7 @@ function Riven:CountEnemys(range)
 	local heroesCount = 0
     	for i = 1,Game.HeroCount() do
         local enemy = Game.Hero(i)
-        if  enemy.team ~= myHero.team and enemy.valid and enemy.pos:DistanceTo(myHero.pos) < 260 then
+        if  enemy.team ~= myHero.team and enemy.valid and enemy.pos:DistanceTo(myHero.pos) < 620 then
 			heroesCount = heroesCount + 1
         end
     	end
@@ -251,11 +275,11 @@ end
 
 LastCancel = Game.Timer()
 function Riven:CastQ(target)
-    local qrange = 260 --myHero:GetSpellData(_Q).range
+    local qrange = 400 --myHero:GetSpellData(_Q).range
     local qtarg = _G.SDK.TargetSelector:GetTarget(qrange)
     if qtarg then
         if qtarg.dead or qtarg.isImmune then return end
-        if myHero.pos:DistanceTo(qtarg.pos) < myHero.range then
+        if myHero.pos:DistanceTo(qtarg.pos) < 275 and self:HasBuff(myHero, "rivenwindslashready") then    --myHero.range
             if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
                 local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
                 Control.CastSpell(HK_Q,pred)
@@ -268,7 +292,23 @@ function Riven:CastQ(target)
                     end, (0.25 + Game.Latency()/1000))
                 end
             end
-        --[[else      --chase part of Q disable to better control qq after each Q
+
+        else
+        	if myHero.pos:DistanceTo(qtarg.pos) < 200 and not self:HasBuff(myHero, "rivenwindslashready") then    --Q without buff less range
+            	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
+                	local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
+                	Control.CastSpell(HK_Q,pred)
+                	Control.Attack(qtarg)
+                	if Game.Timer() - LastCancel > 0.15 then
+                	LastCancel = Game.Timer()
+                    	DelayAction(function()
+                    	local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
+                    	Control.Move(Vec)
+                    	end, (0.25 + Game.Latency()/1000))
+                	end
+            	end
+        	end
+        --[[else      --chase part of Q disabled to better control qq after each Q
            if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
             	local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
                 Control.CastSpell(HK_Q,pred)
