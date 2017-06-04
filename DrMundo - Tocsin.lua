@@ -138,7 +138,7 @@ function DrMundo:Harass()
 end
 
 function DrMundo:JungleClear()
-  	if self:GetValidMinion(970) == false then self:JungleW() return end
+  	if self:GetValidMinion(11000) == false then self:JungleW() return end
   	for i = 1, Game.MinionCount() do
 	local minion = Game.Minion(i)
     	if  minion.team == 300 or 200 then
