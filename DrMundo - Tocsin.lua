@@ -4,7 +4,7 @@ require = 'DamageLib'
 
 function DrMundo:__init()
 	if myHero.charName ~= "DrMundo" then return end
-PrintChat("DrMundo - Tocsin loaded v1.0")
+PrintChat("DrMundo - Tocsin loaded v1.1")
 self:LoadSpells()
 self:LoadMenu()
 Callback.Add("Tick", function() self:Tick() end)
@@ -93,7 +93,7 @@ function DrMundo:Draw()
 		Draw.Circle(myHero, W.range, 3, Draw.Color(255, 225, 255, 10))
 	end
 	if(self.Menu.Drawings.drawQ:Value())then
-		Draw.Circle(myHero, 975, 3, Draw.Color(225, 225, 0, 100))
+		Draw.Circle(myHero, 1000, 3, Draw.Color(225, 225, 0, 100))
 	end
 end
 --Combo aka spacebar
@@ -121,7 +121,7 @@ function DrMundo:Combo()
 end
 
 function DrMundo:Harass() 
-	if _G.SDK.TargetSelector:GetTarget(970) == nil then self:JungleW() return end
+	if _G.SDK.TargetSelector:GetTarget(1100) == nil then self:JungleW() return end
 	
 	if self.Menu.Harass.UseQ:Value() and self:CanCast(_Q) then
 		self:CastQ(qtarg)
@@ -238,11 +238,11 @@ function DrMundo:CountEnemys(range)
 end 
 
 function DrMundo:CastQ(target)
-    local qrange = 975 
-    local qtarg = _G.SDK.TargetSelector:GetTarget(qrange)
+    local qrange = 1000 
+    local qtarg = _G.SDK.TargetSelector:GetTarget(1200)
     if qtarg then
         if qtarg.dead or qtarg.isImmune then return end
-        if myHero.pos:DistanceTo(qtarg.pos) < 975 then    
+        if myHero.pos:DistanceTo(qtarg.pos) <= 1000 then    
             if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
                 local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
                 Control.CastSpell(HK_Q,pred)
