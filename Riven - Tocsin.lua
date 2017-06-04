@@ -4,7 +4,7 @@ require = 'DamageLib'
 
 function Riven:__init()
 	if myHero.charName ~= "Riven" then return end
-PrintChat("Riven - Tocsin loaded v1.8")
+PrintChat("Riven - Tocsin loaded v1.9")
 self:LoadSpells()
 self:LoadMenu()
 Callback.Add("Tick", function() self:Tick() end)
@@ -50,13 +50,10 @@ function Riven:LoadMenu()
 	self.Menu.Harass:MenuElement({id = "UseW", name = "Use W", value = true, leftIcon = Icons.W})
 	self.Menu.Harass:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = Icons.E})
 
---[[LastHit 
+--KS
+	self.Menu:MenuElement({type = MENU, id = "Killsteal", name = "Killsteal"})
+	self.Menu.Killsteal:MenuElement({id = "UseR", name = "Use R", value = true, leftIcon = Icons.R})
 
-	self.Menu:MenuElement({type = MENU, id = "LastHit", name = "Last Hit"})
-	self.Menu.LastHit:MenuElement({id = "UseQ", name = "Use Q", value = true, leftIcon = Icons.Q})
-	self.Menu.LastHit:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = Icons.E})
-	
---]]
 --JungleClear
 	self.Menu:MenuElement({type = MENU, id = "JungleClear", name = "Jungle Clear"})
   	self.Menu.JungleClear:MenuElement({id = "Q", name = "Use Q", value = true, leftIcon = Icons.Q})
@@ -94,6 +91,7 @@ function Riven:Tick()
 			self:Flee()	
 		end
 	self:Misc()
+	self:KS()
 end
 
 function Riven:Draw()
@@ -108,7 +106,7 @@ end
 --Combo aka spacebar
 function Riven:Combo()
 	if _G.SDK.TargetSelector:GetTarget(700) == nil then return end
-	
+
 	if self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 		self:CastE(etarg)
 	end
@@ -116,11 +114,15 @@ function Riven:Combo()
 	if self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
     	self:CastR(rtarg)
     end
+	
+--  if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.levelData.lvl <= 2 then --for lvl 1 if Q picked 1st mainly(adjust CastQ instead?)
+--   	self:LowQ(ltarg)
+--	end
 
     if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
     	self:CastQ(qtarg)
     end
-
+    
 	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
 		self:CastW(wtarg)
 	end
@@ -128,6 +130,7 @@ function Riven:Combo()
  	if self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
     	self:Wings(ztarg)
     end
+
     if self.Menu.Combo.Exhaust:Value() and not self:CanCast(_E) and not self:CanCast(_Q) then
 		self:Exhaust(xtarg)
 	end
@@ -212,12 +215,30 @@ function Riven:HpPred(unit, delay)
 	return hp
 end
 
+function Riven:KS()
+	if _G.SDK.TargetSelector:GetTarget(900) == nil then return end
+    	local EKS = _G.SDK.TargetSelector:GetTarget(900)
+			if EKS and self:CanCast(_R) and self:HasBuff(myHero, "rivenwindslashready") then
+				local lvl = myHero:GetSpellData(_R).level
+				local RRdmg = (({100, 150, 200})[lvl] + 2.0 * myHero.bonusDamage)  
+				local EEdmg = (({100, 150, 200})[lvl] + 1.73 * myHero.bonusDamage)
+				local DDdmg = (({100, 150, 200})[lvl] + 1.46 * myHero.bonusDamage)
+				local pred=EKS:GetPrediction(R.speed, .25 + Game.Latency()/1000)
+				if DDdmg >= EKS.health + EKS.shieldAD and self.Menu.Killsteal.UseR:Value() then
+					Control.CastSpell(HK_R,pred)	
+				elseif EEdmg >= EKS.health + EKS.shieldAD and self.Menu.Killsteal.UseR:Value() then
+					Control.CastSpell(HK_R,pred)
+				elseif RRdmg >= EKS.health + EKS.shieldAD and self.Menu.Killsteal.UseR:Value() then
+					Control.CastSpell(HK_R,pred)
+				end
+			end
+end
 
 function Riven:Wings(target)
 	local ztarg = _G.SDK.TargetSelector:GetTarget(850)
 	if ztarg and self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
 			if self:HasBuff(myHero, "rivenwindslashready") then
-				if ztarg.distance<=850 and ztarg.health/ztarg.maxHealth <= 0.22 then
+				if ztarg.distance<=900 and ztarg.health/ztarg.maxHealth <= 0.15 then
 					local pred=ztarg:GetPrediction(R.speed, .25 + Game.Latency()/1000)
 					Control.CastSpell(HK_R,pred)
 				end
@@ -227,7 +248,7 @@ function Riven:Wings(target)
 end
 
 function Riven:Exhaust(target)
-	local xtarg = _G.SDK.TargetSelector:GetTarget(550)
+	local xtarg = _G.SDK.TargetSelector:GetTarget(950)
 	if self.Menu.Combo.Exhaust:Value() and not self:CanCast(_E) and not self:CanCast(_Q) then
 	if xtarg then 
    		if myHero:GetSpellData(SUMMONER_1).name == "SummonerExhaust" and self:IsReady(SUMMONER_1) then
@@ -243,7 +264,7 @@ function Riven:Exhaust(target)
 end
 end
 
-local function GetItemSlot(unit, id)
+function Riven:GetItemSlot(unit, id)
   for i = ITEM_1, ITEM_7 do
     if unit:GetItemData(i).itemID == id then
       return i
@@ -279,12 +300,12 @@ function Riven:CastQ(target)
     local qtarg = _G.SDK.TargetSelector:GetTarget(qrange)
     if qtarg then
         if qtarg.dead or qtarg.isImmune then return end
-        if myHero.pos:DistanceTo(qtarg.pos) < 275 and self:HasBuff(myHero, "rivenwindslashready") then    --myHero.range
+        if myHero.pos:DistanceTo(qtarg.pos) < 375 and self:HasBuff(myHero, "rivenwindslashready") then    --myHero.range
             if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
                 local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
                 Control.CastSpell(HK_Q,pred)
                 Control.Attack(qtarg)
-                if Game.Timer() - LastCancel > 0.15 then
+                if Game.Timer() - LastCancel > 0.08 then
                 LastCancel = Game.Timer()
                     DelayAction(function()
                     local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
@@ -294,12 +315,12 @@ function Riven:CastQ(target)
             end
 
         else
-        	if myHero.pos:DistanceTo(qtarg.pos) < 200 and not self:HasBuff(myHero, "rivenwindslashready") then    --Q without buff less range
+        	if myHero.pos:DistanceTo(qtarg.pos) < 275 and not self:HasBuff(myHero, "rivenwindslashready") then    --Q without buff less range wont chase with q but aa more reliable
             	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
                 	local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
                 	Control.CastSpell(HK_Q,pred)
                 	Control.Attack(qtarg)
-                	if Game.Timer() - LastCancel > 0.15 then
+                	if Game.Timer() - LastCancel > 0.08 then
                 	LastCancel = Game.Timer()
                     	DelayAction(function()
                     	local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
@@ -328,22 +349,36 @@ end
 function Riven:CastW(target) 
 	local wtarg = _G.SDK.TargetSelector:GetTarget(260)
 	if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
-		--if myHero.pos:DistanceTo(wtarg.pos) < myHero.range then
+		if myHero.pos:DistanceTo(wtarg.pos) < 145 then
 			Control.CastSpell(HK_W)
 			Control.Attack(wtarg)
-		--end
+			if Game.Timer() - LastCancel > 0.15 then
+                LastCancel = Game.Timer()
+                    DelayAction(function()
+                    local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
+                    Control.Move(Vec)
+                    end, (0.25 + Game.Latency()/1000))
+            end
+		end
 	end
 end
 				
 
 function Riven:CastE(target)
-	local etarg = _G.SDK.TargetSelector:GetTarget(420)
+	local etarg = _G.SDK.TargetSelector:GetTarget(620)
 	if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
-		--if myHero.pos:DistanceTo(etarg.pos) < myHero.range then
+		if myHero.pos:DistanceTo(etarg.pos) < 420 then
 			local pred=etarg:GetPrediction(E.speed,.25 + Game.Latency()/1000)
 			Control.CastSpell(HK_E,pred)
 			Control.Attack(etarg)
-		--end
+			if Game.Timer() - LastCancel > 0.08 then
+                LastCancel = Game.Timer()
+                    DelayAction(function()
+                    local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
+                    Control.Move(Vec)
+                    end, (0.25 + Game.Latency()/1000))
+            end
+		end
 	end
 end
 
