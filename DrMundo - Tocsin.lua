@@ -1,7 +1,9 @@
 class "DrMundo"
  
-require = 'DamageLib'
-
+require 'DamageLib'
+require 'Collision'
+local QSpell = Collision:SetSpell(1000, 1500, .25, 75, true)
+--local name_as_you_wish = Collision:SetSpell(range, speed, delay, width, hitBox)
 function DrMundo:__init()
 	if myHero.charName ~= "DrMundo" then return end
 PrintChat("DrMundo - Tocsin loaded v1.1")
@@ -10,6 +12,7 @@ self:LoadMenu()
 Callback.Add("Tick", function() self:Tick() end)
 Callback.Add("Draw", function() self:Draw() end)
 end
+
 
 local Icons = {
 ["DrMundoIcon"] = "https://vignette3.wikia.nocookie.net/leagueoflegends/images/9/93/Dr._Mundo_OriginalLoading.jpg",
@@ -244,8 +247,9 @@ function DrMundo:CastQ(target)
         if qtarg.dead or qtarg.isImmune then return end
         if myHero.pos:DistanceTo(qtarg.pos) <= 1000 then    
             if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
+				if QSpell:__GetMinionCollision(myHero, qtarg, 3, qtarg) then return end
                 local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
-                Control.CastSpell(HK_Q,pred)
+                Control.CastSpell(HK_Q, pred)
             end
         end
     end
