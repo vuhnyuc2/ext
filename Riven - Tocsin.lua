@@ -49,6 +49,8 @@ function Riven:LoadMenu()
 	self.Menu.Harass:MenuElement({id = "UseQ", name = "Use Q", value = true, leftIcon = Icons.Q})
 	self.Menu.Harass:MenuElement({id = "UseW", name = "Use W", value = true, leftIcon = Icons.W})
 	self.Menu.Harass:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = Icons.E})
+	self.Menu.Harass:MenuElement({id = "UseR", name = "Use R", value = true, leftIcon = Icons.R})
+	self.Menu.Harass:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
 
 --KS
 	self.Menu:MenuElement({type = MENU, id = "Killsteal", name = "Killsteal"})
@@ -138,17 +140,17 @@ end
 
 function Riven:Harass() 
 	if _G.SDK.TargetSelector:GetTarget(700) == nil then return end
-	
+
+	if self.Menu.Harass.UseW:Value() and self:CanCast(_W) then
+		self:CastW(wtarg)
+	end
+
 	if self.Menu.Harass.UseE:Value() and self:CanCast(_E) then
 		self:CastE(etarg)
 	end
 
 	if self.Menu.Harass.UseQ:Value() and self:CanCast(_Q) then
 		self:CastQ(qtarg)
-	end
-
-	if self.Menu.Harass.UseW:Value() and self:CanCast(_W) then
-		self:CastW(wtarg)
 	end
 		
 end
@@ -348,16 +350,16 @@ end
 
 function Riven:CastW(target) 
 	local wtarg = _G.SDK.TargetSelector:GetTarget(260)
-	if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) and myHero.attackData.state == STATE_WINDDOWN then
-		if myHero.pos:DistanceTo(wtarg.pos) < 145 then
+	if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) and not self:CanCast(_Q) then
+		if myHero.pos:DistanceTo(wtarg.pos) < 155 then
 			Control.CastSpell(HK_W)
 			Control.Attack(wtarg)
-			if Game.Timer() - LastCancel > 0.15 then
+			if Game.Timer() - LastCancel > 0.08 then
                 LastCancel = Game.Timer()
-                    DelayAction(function()
-                    local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
-                    Control.Move(Vec)
-                    end, (0.25 + Game.Latency()/1000))
+                DelayAction(function()
+                local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
+                Control.Move(Vec)
+                end, (0.25 + Game.Latency()/1000))
             end
 		end
 	end
