@@ -1,6 +1,8 @@
 class "Amumu"
  
-require = 'DamageLib'
+require 'DamageLib'
+require 'Collision'
+local Qcollision = Collision:SetSpell(1100, 2000, .25, 75, true)
 
 function Amumu:__init()
 	if myHero.charName ~= "Amumu" then return end
@@ -209,8 +211,11 @@ function Amumu:CastQ(target)
 	if target then
 		if not target.dead and not target.isImmune then
 			if target.distance<=Q.range then
+				if Qcollision:__GetMinionCollision(myHero, target, 3, target) then return end
 				local pred=target:GetPrediction(Q.speed,Q.delay)
+				DisableOrb()
 				Control.CastSpell(HK_Q,pred)
+				EnableOrb()
 			end
 		end
 	end
@@ -235,6 +240,19 @@ function Amumu:CastE(position)
 	end
 end
 
+function DisableOrb()
+	if _G.SDK.TargetSelector:GetTarget(1100) then
+		_G.SDK.Orbwalker:SetMovement(false)
+		_G.SDK.Orbwalker:SetAttack(false)
+	end
+end
+
+function EnableOrb()
+	if _G.SDK.TargetSelector:GetTarget(1100) then
+		_G.SDK.Orbwalker:SetMovement(true)
+		_G.SDK.Orbwalker:SetAttack(true)
+	end
+end
 
 function Amumu:IsReady(spellSlot)
 	return myHero:GetSpellData(spellSlot).currentCd == 0 and myHero:GetSpellData(spellSlot).level > 0
