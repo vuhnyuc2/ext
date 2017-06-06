@@ -249,7 +249,9 @@ function DrMundo:CastQ(target)
             if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
 				if QSpell:__GetMinionCollision(myHero, qtarg, 3, qtarg) then return end
                 local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
+                DisableOrb()
                 Control.CastSpell(HK_Q, pred)
+                EnableOrb()
             end
         end
     end
@@ -329,6 +331,20 @@ function DrMundo:Misc()
                 end
             end
         end
+end
+
+function DisableOrb()
+	if _G.SDK.TargetSelector:GetTarget(1000) then
+		_G.SDK.Orbwalker:SetMovement(false)
+		_G.SDK.Orbwalker:SetAttack(false)
+	end
+end
+
+function EnableOrb()
+	if _G.SDK.TargetSelector:GetTarget(1000) then
+		_G.SDK.Orbwalker:SetMovement(true)
+		_G.SDK.Orbwalker:SetAttack(true)
+	end
 end
 
 function DrMundo:GetAllyHeroes()
