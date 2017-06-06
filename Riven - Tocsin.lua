@@ -4,7 +4,7 @@ require = 'DamageLib'
 
 function Riven:__init()
 	if myHero.charName ~= "Riven" then return end
-PrintChat("Riven - Tocsin loaded v1.9")
+PrintChat("Riven - Tocsin loaded v1.9a")
 self:LoadSpells()
 self:LoadMenu()
 Callback.Add("Tick", function() self:Tick() end)
@@ -227,11 +227,17 @@ function Riven:KS()
 				local DDdmg = (({100, 150, 200})[lvl] + 1.46 * myHero.bonusDamage)
 				local pred=EKS:GetPrediction(R.speed, .25 + Game.Latency()/1000)
 				if DDdmg >= EKS.health + EKS.shieldAD and self.Menu.Killsteal.UseR:Value() then
-					Control.CastSpell(HK_R,pred)	
+					DisableOrb()
+					Control.CastSpell(HK_R,pred)
+					EnableOrb()	
 				elseif EEdmg >= EKS.health + EKS.shieldAD and self.Menu.Killsteal.UseR:Value() then
+					DisableOrb()
 					Control.CastSpell(HK_R,pred)
+					EnableOrb()
 				elseif RRdmg >= EKS.health + EKS.shieldAD and self.Menu.Killsteal.UseR:Value() then
+					DisableOrb()
 					Control.CastSpell(HK_R,pred)
+					EnableOrb()
 				end
 			end
 end
@@ -242,7 +248,9 @@ function Riven:Wings(target)
 			if self:HasBuff(myHero, "rivenwindslashready") then
 				if ztarg.distance<=900 and ztarg.health/ztarg.maxHealth <= 0.15 then
 					local pred=ztarg:GetPrediction(R.speed, .25 + Game.Latency()/1000)
+					DisableOrb()
 					Control.CastSpell(HK_R,pred)
+					EnableOrb()
 				end
 			end
 	end
@@ -351,7 +359,7 @@ end
 function Riven:CastW(target) 
 	local wtarg = _G.SDK.TargetSelector:GetTarget(260)
 	if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) and not self:CanCast(_Q) then
-		if myHero.pos:DistanceTo(wtarg.pos) < 155 then
+		if myHero.pos:DistanceTo(wtarg.pos) < 165 then
 			Control.CastSpell(HK_W)
 			Control.Attack(wtarg)
 			if Game.Timer() - LastCancel > 0.08 then
@@ -413,6 +421,20 @@ function Riven:Misc()
                 end
             end
         end
+end
+
+function DisableOrb()
+	if _G.SDK.TargetSelector:GetTarget(900) then
+		_G.SDK.Orbwalker:SetMovement(false)
+		_G.SDK.Orbwalker:SetAttack(false)
+	end
+end
+
+function EnableOrb()
+	if _G.SDK.TargetSelector:GetTarget(900) then
+		_G.SDK.Orbwalker:SetMovement(true)
+		_G.SDK.Orbwalker:SetAttack(true)
+	end
 end
 
 function Riven:GetAllyHeroes()
