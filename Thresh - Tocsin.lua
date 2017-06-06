@@ -1,6 +1,11 @@
 class "Thresh"
  
-require = 'DamageLib'
+require 'DamageLib'
+require 'Collision'
+require 'Eternal Prediction'
+local Qcollision = Collision:SetSpell(1075, 1200, .50, 75, true)
+local qSpellData = {speed = 1200, delay = 0.50, range = 1075}
+local qSpell = Prediction:SetSpell(qSpellData, TYPE_LINE, true)
 
 function Thresh:__init()
 	if myHero.charName ~= "Thresh" then return end
@@ -89,7 +94,7 @@ function Thresh:Draw()
 end
 --Combo aka spacebar
 function Thresh:Combo()
-	if _G.SDK.TargetSelector:GetTarget(1150) == nil then return end
+	if _G.SDK.TargetSelector:GetTarget(1450) == nil then return end
 
 	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
 		self:CastW(wtarg)
@@ -142,7 +147,7 @@ function Thresh:Combo()
 end
 
 function Thresh:Harass()
-	if _G.SDK.TargetSelector:GetTarget(1150) == nil then return end
+	if _G.SDK.TargetSelector:GetTarget(1450) == nil then return end
 
 	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
 		self:CastW(wtarg)
@@ -237,12 +242,17 @@ function Thresh:CountEnemys(range)
 end 
 
 function Thresh:CastQ(pred)
-	local qtarg = _G.SDK.TargetSelector:GetTarget(1000)
-	if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-			local pred=qtarg:GetPrediction(Q.speed,.50 + Game.Latency()/1000)
-			Control.CastSpell(HK_Q,pred)
-	end
-return false
+	local target = _G.SDK.TargetSelector:GetTarget(qSpellData.range)
+        if target then
+        	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
+			local pred = qSpell:GetPrediction(target, myHero.pos)
+				if pred and pred.hitChance >= 0.25 and pred:mCollision() == 0 and pred:hCollision() == 0 then
+					DisableOrb()
+					Control.CastSpell(HK_Q, pred.castPos)
+					EnableOrb()
+				end
+			end
+        end
 end
 
 function Thresh:CastW(target) --nearest ally
@@ -284,6 +294,20 @@ function Thresh:CastR(target)
 		end
 	end
 return false
+end
+
+function DisableOrb()
+	if _G.SDK.TargetSelector:GetTarget(qSpellData.range) then
+		_G.SDK.Orbwalker:SetMovement(false)
+		_G.SDK.Orbwalker:SetAttack(false)
+	end
+end
+
+function EnableOrb()
+	if _G.SDK.TargetSelector:GetTarget(qSpellData.range) then
+		_G.SDK.Orbwalker:SetMovement(true)
+		_G.SDK.Orbwalker:SetAttack(true)
+	end
 end
 
 function Thresh:GetAllyHeroes()
