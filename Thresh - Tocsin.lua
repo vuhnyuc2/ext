@@ -2,10 +2,8 @@ class "Thresh"
  
 require 'DamageLib'
 require 'Collision'
-require 'Eternal Prediction'
-local Qcollision = Collision:SetSpell(1075, 1200, .50, 75, true)
-local qSpellData = {speed = 1200, delay = 0.50, range = 1075}
-local qSpell = Prediction:SetSpell(qSpellData, TYPE_LINE, true)
+local Qcollision = Collision:SetSpell(1100, 1900, .50, 75, true)
+
 
 function Thresh:__init()
 	if myHero.charName ~= "Thresh" then return end
@@ -242,16 +240,13 @@ function Thresh:CountEnemys(range)
 end 
 
 function Thresh:CastQ(pred)
-	local target = _G.SDK.TargetSelector:GetTarget(qSpellData.range)
+	local target = _G.SDK.TargetSelector:GetTarget(1200)
         if target then
-        	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-			local pred = qSpell:GetPrediction(target, myHero.pos)
-				if pred and pred.hitChance >= 0.25 and pred:mCollision() == 0 and pred:hCollision() == 0 then
-					DisableOrb()
-					Control.CastSpell(HK_Q, pred.castPos)
-					EnableOrb()
-				end
-			end
+        	if Qcollision:__GetMinionCollision(myHero, target, 3, target) then return end
+			local pred=target:GetPrediction(1900,0.50)
+			DisableOrb()
+			Control.CastSpell(HK_Q,pred)
+			EnableOrb()
         end
 end
 
@@ -262,8 +257,10 @@ function Thresh:CastW(target) --nearest ally
 				for i = 1, Game.HeroCount() do
 				local hero = Game.Hero(i)
 					if hero.team == myHero.team and not hero.isMe then
-						if self.Menu.Combo.UseW:Value() and self:CanCast(_W) and not ally.isMe then
+						if self.Menu.Combo.UseW:Value() and self:CanCast(_W) and not self:CanCast(_Q) and not ally.isMe then
+							DisableOrb()
 							Control.CastSpell(HK_W,ally)
+							EnableOrb()
 						end
 					end
 				end
@@ -276,7 +273,6 @@ function Thresh:CastE(target)
 	local etarg = _G.SDK.TargetSelector:GetTarget(400)
 	if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 		local pred=etarg:GetPrediction(E.speed,.25 + Game.Latency()/1000)
-		--local pred=etarg:GetPrediction(E.speed,E.delay)
 		Control.CastSpell(HK_E, myHero.pos:Extended(etarg.pos, -100))
 		
 	end
@@ -297,14 +293,14 @@ return false
 end
 
 function DisableOrb()
-	if _G.SDK.TargetSelector:GetTarget(qSpellData.range) then
+	if _G.SDK.TargetSelector:GetTarget(1100) then
 		_G.SDK.Orbwalker:SetMovement(false)
 		_G.SDK.Orbwalker:SetAttack(false)
 	end
 end
 
 function EnableOrb()
-	if _G.SDK.TargetSelector:GetTarget(qSpellData.range) then
+	if _G.SDK.TargetSelector:GetTarget(1100) then
 		_G.SDK.Orbwalker:SetMovement(true)
 		_G.SDK.Orbwalker:SetAttack(true)
 	end
