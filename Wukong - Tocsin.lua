@@ -255,10 +255,9 @@ end
 
 function Wukong:CastQ(pred)
 	local qtarg = _G.SDK.TargetSelector:GetTarget(280)
-	if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
+	if qtarg and self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
 			local pred=qtarg:GetPrediction(Q.speed,Q.delay)
 			Control.CastSpell(HK_Q,pred)
-			
 	end
 return false
 end
