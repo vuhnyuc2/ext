@@ -94,18 +94,18 @@ end
 function Thresh:Combo()
 	if _G.SDK.TargetSelector:GetTarget(1450) == nil then return end
 
-	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
-		self:CastW(wtarg)
+	if self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
+		self:CastE(etarg)
 	end
 
 	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
 		self:CastQ(pred)
 	end
-
-	if self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
-		self:CastE(etarg)
-	end
 	
+	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
+		self:CastW(wtarg)
+	end
+
 	if self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
     	self:CastR(rtarg)
     end
@@ -244,13 +244,13 @@ function Thresh:CastQ(pred)
         if target then
         	if Qcollision:__GetMinionCollision(myHero, target, 3, target) then return end
 			local pred=target:GetPrediction(1900,0.50)
-			DisableOrb()
+			EnableOrb(false)
 			Control.CastSpell(HK_Q,pred)
-			EnableOrb()
+			EnableOrb(true)
         end
 end
 
-function Thresh:CastW(target) --nearest ally
+function Thresh:CastW(target) 
 	for i,ally in pairs(self.GetAllyHeroes()) do
 		if self:IsValidTarget(ally,W.range) and myHero.pos:DistanceTo(ally.pos) < 950 then
 			if not ally.isMe then
@@ -258,9 +258,9 @@ function Thresh:CastW(target) --nearest ally
 				local hero = Game.Hero(i)
 					if hero.team == myHero.team and not hero.isMe then
 						if self.Menu.Combo.UseW:Value() and self:CanCast(_W) and not self:CanCast(_Q) and not ally.isMe then
-							DisableOrb()
+							EnableOrb(false)
 							Control.CastSpell(HK_W,ally)
-							EnableOrb()
+							EnableOrb(true)
 						end
 					end
 				end
@@ -273,8 +273,9 @@ function Thresh:CastE(target)
 	local etarg = _G.SDK.TargetSelector:GetTarget(400)
 	if etarg and self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
 		local pred=etarg:GetPrediction(E.speed,.25 + Game.Latency()/1000)
+		EnableOrb(false)
 		Control.CastSpell(HK_E, myHero.pos:Extended(etarg.pos, -100))
-		
+		EnableOrb(true)
 	end
 end
 
@@ -292,17 +293,10 @@ function Thresh:CastR(target)
 return false
 end
 
-function DisableOrb()
-	if _G.SDK.TargetSelector:GetTarget(1100) then
-		_G.SDK.Orbwalker:SetMovement(false)
-		_G.SDK.Orbwalker:SetAttack(false)
-	end
-end
-
-function EnableOrb()
-	if _G.SDK.TargetSelector:GetTarget(1100) then
-		_G.SDK.Orbwalker:SetMovement(true)
-		_G.SDK.Orbwalker:SetAttack(true)
+function EnableOrb(bool)
+	if  _G.SDK.TargetSelector:GetTarget(1300) then
+		_G.SDK.Orbwalker:SetMovement(bool)
+		_G.SDK.Orbwalker:SetAttack(bool)
 	end
 end
 
