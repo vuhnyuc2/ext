@@ -2,7 +2,7 @@ class "Thresh"
  
 require 'DamageLib'
 require 'Collision'
-local Qcollision = Collision:SetSpell(1100, 1900, .50, 75, true)
+local Qcollision = Collision:SetSpell(1000, 1900, .50, 75, true)
 
 
 function Thresh:__init()
@@ -240,7 +240,7 @@ function Thresh:CountEnemys(range)
 end 
 
 function Thresh:CastQ(pred)
-	local target = _G.SDK.TargetSelector:GetTarget(1200)
+	local target = _G.SDK.TargetSelector:GetTarget(1000)
         if target then
         	if Qcollision:__GetMinionCollision(myHero, target, 3, target) then return end
 			local pred=target:GetPrediction(1900,0.50)
@@ -256,7 +256,7 @@ function Thresh:CastW(target)
 			if not ally.isMe then
 				for i = 1, Game.HeroCount() do
 				local hero = Game.Hero(i)
-					if hero.team == myHero.team and not hero.isMe then
+					if hero.team == myHero.team and not hero.isMe and myHero.attackData.state == STATE_WINDDOWN then
 						if self.Menu.Combo.UseW:Value() and self:CanCast(_W) and not self:CanCast(_Q) and not ally.isMe then
 							EnableOrb(false)
 							Control.CastSpell(HK_W,ally)
