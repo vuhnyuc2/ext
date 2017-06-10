@@ -357,9 +357,9 @@ function Riven:CastQ(target)
 end
 
 function Riven:CastW(target) 
-	local wtarg = _G.SDK.TargetSelector:GetTarget(260)
-	if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) and not self:CanCast(_Q) then
-		if myHero.pos:DistanceTo(wtarg.pos) < 165 then
+	local wtarg = _G.SDK.TargetSelector:GetTarget(460)
+	if wtarg and self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
+		if myHero.pos:DistanceTo(wtarg.pos) < 260 then
 			Control.CastSpell(HK_W)
 			Control.Attack(wtarg)
 			if Game.Timer() - LastCancel > 0.08 then
