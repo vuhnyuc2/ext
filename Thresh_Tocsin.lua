@@ -167,15 +167,13 @@ function Thresh:Tick()
 		self:Combo()
 	elseif Mode == "Harass" then
 		self:Harass()
-	elseif Mode == "Clear" then
-		self:Clear()
 	end
 end
 
 function Thresh:Combo()
 	local target = GetTarget(1450)
 	if not target then return end
-	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
+	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1050 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
 		self:CastQ(target)
 	end
 	if Tocsin.Combo.W:Value() and Ready(_W) then
@@ -191,14 +189,14 @@ end
 
 function Thresh:Harass()
 	local target = GetTarget(1450)
-	if Tocsin.Harass.Key:Value() == false then return end
-	if myHero.mana/myHero.maxMana < Tocsin.Harass.Mana:Value() then return end
+	--if Tocsin.Harass.Key:Value() == false then return end
+	--if myHero.mana/myHero.maxMana < Tocsin.Harass.Mana:Value() then return end
 	if not target then return end
-	if Tocsin.Harass.Q:Value() and Ready(_Q)and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
+	if Tocsin.Harass.Q:Value() and Ready(_Q)and myHero.pos:DistanceTo(target.pos) < 1050 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
 		self:CastQ(target)
 	end
 	if Tocsin.Harass.E:Value() and Ready(_E)and myHero.pos:DistanceTo(target.pos) < 400 then
-		self:CastW(target)
+		self:CastE(target)
 	end
 end
 --[[
@@ -219,20 +217,20 @@ function Thresh:Clear()
 end
 --]]
 function Thresh:CastQ(target)
-	local Qdata = {speed = 1200, delay = 0.50,range = 1000 }
+	local Qdata = {speed = 1200, delay = 0.50,range = 1050 }
 	local Qspell = Prediction:SetSpell(Qdata, TYPE_LINEAR, true)
 	local pred = Qspell:GetPrediction(target,myHero.pos)
-	if  myHero.pos:DistanceTo(target.pos) < 1000 then
+	if  myHero.pos:DistanceTo(target.pos) < 1050 then
 		if myHero.attackData.state == STATE_WINDDOWN then
-			if pred and pred.hitChance >= 0.20 and pred:mCollision() == 0 and pred:hCollision() == 0 then
+			if pred and pred.hitChance >= 0.10 and pred:mCollision() == 0 and pred:hCollision() == 0 then
 				EnableOrb(false)
 				Control.CastSpell(HK_Q, pred.castPos)
 				EnableOrb(true)
 			end
 		end
 	end
-	if  myHero.pos:DistanceTo(target.pos) < 1000 then
-		if pred and pred.hitChance >= 0.20 and pred:mCollision() == 0 and pred:hCollision() == 0 then
+	if  myHero.pos:DistanceTo(target.pos) < 1050 then
+		if pred and pred.hitChance >= 0.10 and pred:mCollision() == 0 and pred:hCollision() == 0 then
 			EnableOrb(false)
 			Control.CastSpell(HK_Q, pred.castPos)
 			EnableOrb(true)
@@ -316,7 +314,7 @@ function Thresh:IsValidTarget(unit,range)
 end
 
 function Thresh:Draw()
-	if Tocsin.Draw.Q:Value() and Ready(_Q) then Draw.Circle(myHero.pos, 1100, 3,  Draw.Color(255,255, 162, 000)) end
+	if Tocsin.Draw.Q:Value() and Ready(_Q) then Draw.Circle(myHero.pos, 1000, 3,  Draw.Color(255,255, 162, 000)) end
 	if Tocsin.Draw.Push:Value() then
 		local textPos = myHero.pos:To2D()
 		if Tocsin.Combo.Key:Value() then
