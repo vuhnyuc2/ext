@@ -151,7 +151,9 @@ function DrMundo:JungleClear()
 			break
 			end    		
 			if self:IsValidTarget(minion,970) and myHero.pos:DistanceTo(minion.pos) < 970 and self.Menu.JungleClear.Q:Value() and self:CanCast(_Q) then
-				Control.CastSpell(HK_Q,minion.pos)
+				EnableOrb(false)
+                Control.CastSpell(HK_Q, minion.pos)
+                EnableOrb(true)
 			break
 			end
 			if self:IsValidTarget(minion,260) and myHero.pos:DistanceTo(minion.pos) < 260 and self.Menu.JungleClear.W:Value() and self:CanCast(_W) and myHero:GetSpellData(_W).toggleState == 1 then
@@ -159,6 +161,13 @@ function DrMundo:JungleClear()
 			break
 			end
 		end
+	end
+end
+
+function EnableOrb(bool)
+	if  _G.SDK.TargetSelector:GetTarget(1300) then
+		_G.SDK.Orbwalker:SetMovement(bool)
+		_G.SDK.Orbwalker:SetAttack(bool)
 	end
 end
 
@@ -249,9 +258,9 @@ function DrMundo:CastQ(target)
             if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
 				if QSpell:__GetMinionCollision(myHero, qtarg, 3, qtarg) then return end
                 local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
-                DisableOrb()
+                EnableOrb(false)
                 Control.CastSpell(HK_Q, pred)
-                EnableOrb()
+                EnableOrb(true)
             end
         end
     end
@@ -331,20 +340,6 @@ function DrMundo:Misc()
                 end
             end
         end
-end
-
-function DisableOrb()
-	if _G.SDK.TargetSelector:GetTarget(1000) then
-		_G.SDK.Orbwalker:SetMovement(false)
-		_G.SDK.Orbwalker:SetAttack(false)
-	end
-end
-
-function EnableOrb()
-	if _G.SDK.TargetSelector:GetTarget(1000) then
-		_G.SDK.Orbwalker:SetMovement(true)
-		_G.SDK.Orbwalker:SetAttack(true)
-	end
 end
 
 function DrMundo:GetAllyHeroes()
