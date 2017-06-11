@@ -314,7 +314,9 @@ function DrMundo:LastHit()
 		local Qdamage = (({80, 130, 180, 230, 280})[level])
     		if self:IsValidTarget(minion,970) and myHero.pos:DistanceTo(minion.pos) < 970 and minion.isEnemy then
       			if Qdamage >= self:HpPred(minion, 0.5) and self:CanCast(_Q) then
+					EnableOrb(false)
 					Control.CastSpell(HK_Q,minion.pos)
+					EnableOrb(true)
 				end
 			end
 		end
