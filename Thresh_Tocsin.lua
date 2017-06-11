@@ -118,7 +118,7 @@ end
 function Thresh:LoadMenu()
 	Tocsin = MenuElement({type = MENU, id = "Tocsin", name = "Tocsin Thresh"})
 
-	--- Version ---
+
 
 	Tocsin:MenuElement({name = "Thresh", drop = {ScriptVersion}, leftIcon = "https://vignette3.wikia.nocookie.net/leagueoflegends/images/b/b5/Thresh_OriginalLoading.jpg"})
 	
@@ -128,17 +128,18 @@ function Thresh:LoadMenu()
 	Tocsin.Combo:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
 	Tocsin.Combo:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = W.icon})
 	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
+	Tocsin.Combo:MenuElement({id = "Key", name = "Toggle: E Push-Pull Key", key = string.byte("T"), toggle = true})
 	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true, leftIcon = R.icon})
 	Tocsin.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
 	
 	--- Clear ---
-
+--[[
 	Tocsin:MenuElement({type = MENU, id = "Clear", name = "Clear Settings"})
 	Tocsin.Clear:MenuElement({id = "Key", name = "Toggle: Key", key = string.byte("A"), toggle = true})
 	Tocsin.Clear:MenuElement({id = "Q", name = "Use [Q]", value = false, leftIcon = Q.icon})
 	Tocsin.Clear:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
 	Tocsin.Clear:MenuElement({id = "Mana", name = "Min Mana to Clear [%]", value = 0, min = 0, max = 100})
-	
+--]]
 	--- Harass ---
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
@@ -149,13 +150,15 @@ function Thresh:LoadMenu()
 
 	--- Misc ---
 
-	Tocsin:MenuElement({type = MENU, id = "Misc", name = "Misc Settings"})
-	Tocsin.Misc:MenuElement({id = "Ekey", name = "Push back [E] Key [?]", key = string.byte("T"), tooltip = "Push dive target back"})
+	--Tocsin:MenuElement({type = MENU, id = "Misc", name = "Misc Settings"})
+	--Tocsin.Misc:MenuElement({id = "Ekey", name = "Push back [E] Key [?]", key = string.byte("T"), tooltip = "Push dive target back"})
 	
 	--- Draw ---
 
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
 	Tocsin.Draw:MenuElement({id = "Q", name = "Draw [Q] Range", value = true, leftIcon = Q.icon})
+	Tocsin.Draw:MenuElement({id = "Push", name = "Push Toggle", value = true})
+	Tocsin.Draw:MenuElement({id = "HT", name = "Harass Toggle", value = true})
 end
 
 function Thresh:Tick()
@@ -167,7 +170,6 @@ function Thresh:Tick()
 	elseif Mode == "Clear" then
 		self:Clear()
 	end
-		self:Misc()
 end
 
 function Thresh:Combo()
@@ -199,7 +201,7 @@ function Thresh:Harass()
 		self:CastW(target)
 	end
 end
-
+--[[
 function Thresh:Clear()
 	if Tocsin.Clear.Key:Value() == false then return end
 	if myHero.mana/myHero.maxMana < Tocsin.Clear.Mana:Value() then return end
@@ -215,15 +217,7 @@ function Thresh:Clear()
 		end
 	end
 end
-
-function Thresh:Misc()
-	local target = GetTarget(420)
-	if not target then return end
-	if Tocsin.Misc.Ekey:Value() and Ready(_E) then
-		self:CastP(target)
-	end
-end
-
+--]]
 function Thresh:CastQ(target)
 	local Qdata = {speed = 1200, delay = 0.50,range = 1000 }
 	local Qspell = Prediction:SetSpell(Qdata, TYPE_LINEAR, true)
@@ -266,17 +260,19 @@ function Thresh:CastW(target)
 end
 
 function Thresh:CastE(target)
-	if  myHero.pos:DistanceTo(target.pos) < myHero.range then
-		if myHero.attackData.state == STATE_WINDDOWN then
+	if  myHero.pos:DistanceTo(target.pos) < 420 then
+		if Tocsin.Combo.Key:Value() == false then
 				EnableOrb(false)
 				Control.CastSpell(HK_E, myHero.pos:Extended(target.pos, -100))
 				EnableOrb(true)
 		end
 	end
-	if  myHero.pos:DistanceTo(target.pos) > myHero.range then
+	if  myHero.pos:DistanceTo(target.pos) < 420 then
+		if Tocsin.Combo.Key:Value() == true then
 			EnableOrb(false)
-			Control.CastSpell(HK_E, myHero.pos:Extended(target.pos, -100))
+			Control.CastSpell(HK_E, target.pos)
 			EnableOrb(true)
+		end
 	end
 end
 
@@ -288,22 +284,6 @@ function Thresh:CastR(target)
 				Control.CastSpell(HK_R)
 			end
 		end
-	end
-end
-
-function Thresh:CastP(target)
-	local target = GetTarget(420)
-	if  myHero.pos:DistanceTo(target.pos) < myHero.range then
-		if myHero.attackData.state == STATE_WINDDOWN then
-				EnableOrb(false)
-				Control.CastSpell(HK_E, target.pos)
-				EnableOrb(true)
-		end
-	end
-	if  myHero.pos:DistanceTo(target.pos) > myHero.range then
-			EnableOrb(false)
-			Control.CastSpell(HK_E, target.pos)
-			EnableOrb(true)
 	end
 end
 
@@ -337,6 +317,22 @@ end
 
 function Thresh:Draw()
 	if Tocsin.Draw.Q:Value() and Ready(_Q) then Draw.Circle(myHero.pos, 1100, 3,  Draw.Color(255,255, 162, 000)) end
+	if Tocsin.Draw.Push:Value() then
+		local textPos = myHero.pos:To2D()
+		if Tocsin.Combo.Key:Value() then
+			Draw.Text("Push: On", 20, textPos.x - 33, textPos.y + 60, Draw.Color(255, 000, 255, 000)) 
+		else
+			Draw.Text("Push: Off", 20, textPos.x - 33, textPos.y + 60, Draw.Color(255, 225, 000, 000)) 
+		end
+	end
+	if Tocsin.Draw.HT:Value() then
+		local textPos = myHero.pos:To2D()
+		if Tocsin.Harass.Key:Value() then
+			Draw.Text("Harass: On", 20, textPos.x - 40, textPos.y + 80, Draw.Color(255, 000, 255, 000)) 
+		else
+			Draw.Text("Harass: Off", 20, textPos.x - 40, textPos.y + 80, Draw.Color(255, 255, 000, 000)) 
+		end
+	end
 end
 
 Callback.Add("Load", function()
