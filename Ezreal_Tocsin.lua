@@ -127,7 +127,7 @@ function Ezreal:LoadMenu()
 	Tocsin:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
 	Tocsin.Combo:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
 	Tocsin.Combo:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = W.icon})
-	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = false, leftIcon = E.icon})
+	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
 	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true, leftIcon = R.icon})
 	
 	--- Clear ---
@@ -281,15 +281,15 @@ function Ezreal:CastE(target)
 	local Edata = {speed = 2000, delay = 0.25,range = 1075 }
 	if  myHero.pos:DistanceTo(target.pos) < myHero.range then
 		if myHero.attackData.state == STATE_WINDDOWN then
-				EnableOrb(false)
-				Control.CastSpell(HK_E, target)
-				EnableOrb(true)
+				--EnableOrb(false)
+				Control.CastSpell(HK_E)
+				--EnableOrb(true)
 		end
 	end
 	if  myHero.pos:DistanceTo(target.pos) > myHero.range then
-			EnableOrb(false)
-			Control.CastSpell(HK_E, target)
-			EnableOrb(true)
+			--EnableOrb(false)
+			Control.CastSpell(HK_E)
+			--EnableOrb(true)
 	end
 end
 
