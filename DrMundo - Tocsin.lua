@@ -141,7 +141,7 @@ function DrMundo:Harass()
 end
 
 function DrMundo:JungleClear()
-  	if self:GetValidMinion(11000) == false then self:JungleW() return end
+  	if self:GetValidMinion(1100) == false then self:JungleW() return end
   	for i = 1, Game.MinionCount() do
 	local minion = Game.Minion(i)
     	if  minion.team == 300 or 200 then
@@ -151,8 +151,10 @@ function DrMundo:JungleClear()
 			break
 			end    		
 			if self:IsValidTarget(minion,970) and myHero.pos:DistanceTo(minion.pos) < 970 and self.Menu.JungleClear.Q:Value() and self:CanCast(_Q) then
+				if QSpell:__GetMinionCollision(myHero, minion, 3, minion) then return end
+                local pred=minion:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
 				EnableOrb(false)
-                Control.CastSpell(HK_Q, minion.pos)
+                Control.CastSpell(HK_Q, pred)
                 EnableOrb(true)
 			break
 			end
