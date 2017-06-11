@@ -178,6 +178,13 @@ function Amumu:GetValidMinion(range)
     	return false
 end
 
+function EnableOrb(bool)
+	if  _G.SDK.TargetSelector:GetTarget(1300) then
+		_G.SDK.Orbwalker:SetMovement(bool)
+		_G.SDK.Orbwalker:SetAttack(bool)
+	end
+end
+
 --[[
 function Amumu:LastHit()
 	if self.Menu.LastHit.UseQ:Value() == false then return end
@@ -213,9 +220,9 @@ function Amumu:CastQ(target)
 			if target.distance<=Q.range then
 				if Qcollision:__GetMinionCollision(myHero, target, 3, target) then return end
 				local pred=target:GetPrediction(Q.speed,Q.delay)
-				DisableOrb()
+				EnableOrb(false)
 				Control.CastSpell(HK_Q,pred)
-				EnableOrb()
+				EnableOrb(true)
 			end
 		end
 	end
@@ -237,20 +244,6 @@ function Amumu:CastE(position)
 	if position then
 		Control.SetCursorPos(position)
 		Control.CastSpell(HK_E, position)
-	end
-end
-
-function DisableOrb()
-	if _G.SDK.TargetSelector:GetTarget(1100) then
-		_G.SDK.Orbwalker:SetMovement(false)
-		_G.SDK.Orbwalker:SetAttack(false)
-	end
-end
-
-function EnableOrb()
-	if _G.SDK.TargetSelector:GetTarget(1100) then
-		_G.SDK.Orbwalker:SetMovement(true)
-		_G.SDK.Orbwalker:SetAttack(true)
 	end
 end
 
