@@ -129,6 +129,7 @@ function Thresh:LoadMenu()
 	Tocsin.Combo:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = W.icon})
 	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
 	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true, leftIcon = R.icon})
+	Tocsin.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
 	
 	--- Clear ---
 
@@ -145,6 +146,11 @@ function Thresh:LoadMenu()
 	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
 	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
 	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0, min = 0, max = 100})
+
+	--- Misc ---
+
+	Tocsin:MenuElement({type = MENU, id = "Misc", name = "Misc Settings"})
+	Tocsin.Misc:MenuElement({id = "Ekey", name = "Push back [E] Key [?]", key = string.byte("T"), tooltip = "Push dive target back"})
 	
 	--- Draw ---
 
@@ -161,6 +167,7 @@ function Thresh:Tick()
 	elseif Mode == "Clear" then
 		self:Clear()
 	end
+		self:Misc()
 end
 
 function Thresh:Combo()
@@ -172,8 +179,11 @@ function Thresh:Combo()
 	if Tocsin.Combo.W:Value() and Ready(_W) then
 		self:CastW(target)
 	end
-	if Tocsin.Combo.E:Value() and Ready(_E)and myHero.pos:DistanceTo(target.pos) < 400 then
+	if Tocsin.Combo.E:Value() and Ready(_E) and myHero.pos:DistanceTo(target.pos) < 400 then
 		self:CastE(target)
+	end
+	if Tocsin.Combo.R:Value() and Ready(_R) and myHero.pos:DistanceTo(target.pos) < 420 then
+		self:CastR(target)
 	end
 end
 
@@ -203,6 +213,14 @@ function Thresh:Clear()
 				self:CastE(minion)
 			end
 		end
+	end
+end
+
+function Thresh:Misc()
+	local target = GetTarget(420)
+	if not target then return end
+	if Tocsin.Misc.Ekey:Value() and Ready(_E) then
+		self:CastP(target)
 	end
 end
 
@@ -257,22 +275,36 @@ function Thresh:CastE(target)
 	end
 	if  myHero.pos:DistanceTo(target.pos) > myHero.range then
 			EnableOrb(false)
-			Control.CastSpell(HK_E, myHero.pos:Extended(etarg.pos, -100))
+			Control.CastSpell(HK_E, myHero.pos:Extended(target.pos, -100))
 			EnableOrb(true)
 	end
 end
 
 function Thresh:CastR(target)
-	if self:CountEnemys(420) >= self.Menu.Combo.ER:Value() then
-		if not rtarg.dead and not rtarg.isImmune then
-			if rtarg.distance<=420 then
+	local target = GetTarget(420)
+	if self:CountEnemys(420) >= Tocsin.Combo.ER:Value() then
+		if not target.dead and not target.isImmune then
+			if target.distance <= 420 then
 				Control.CastSpell(HK_R)
 			end
 		end
 	end
+end
+
+function Thresh:CastP(target)
+	local target = GetTarget(420)
+	if  myHero.pos:DistanceTo(target.pos) < myHero.range then
+		if myHero.attackData.state == STATE_WINDDOWN then
+				EnableOrb(false)
+				Control.CastSpell(HK_E, target.pos)
+				EnableOrb(true)
+		end
+	end
+	if  myHero.pos:DistanceTo(target.pos) > myHero.range then
 			EnableOrb(false)
-			Control.CastSpell(HK_R, pred.castPos)
+			Control.CastSpell(HK_E, target.pos)
 			EnableOrb(true)
+	end
 end
 
 function Thresh:CountEnemys(range)
