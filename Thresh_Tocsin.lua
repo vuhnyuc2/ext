@@ -144,7 +144,7 @@ function Thresh:LoadMenu()
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
 	Tocsin.Harass:MenuElement({id = "Key", name = "Toggle: Key", key = string.byte("S"), toggle = true})
-	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
+	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = false, leftIcon = Q.icon})
 	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
 	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0, min = 0, max = 100})
 
@@ -155,7 +155,7 @@ function Thresh:LoadMenu()
 
 	--Eternal Prediction
 	Tocsin:MenuElement({type = MENU, id = "Pred", name = "Prediction Settings"})
-	Tocsin.Pred:MenuElement({id = "Chance", name = "Prediction Hitchance", value = 0.2, min = 0.05, max = 1, step = 0.025})
+	Tocsin.Pred:MenuElement({id = "Chance", name = "Prediction Hitchance", value = 0.125, min = 0.05, max = 1, step = 0.025})
 	
 	--Draw
 
