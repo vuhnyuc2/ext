@@ -122,7 +122,7 @@ function Ezreal:LoadMenu()
 
 	Tocsin:MenuElement({name = "Ezreal", drop = {ScriptVersion}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/e/ec/Ezreal_OriginalLoading.jpg"})
 	
-	--- Combo ---
+	--Combo
 
 	Tocsin:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
 	Tocsin.Combo:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
@@ -130,7 +130,7 @@ function Ezreal:LoadMenu()
 	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
 	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true, leftIcon = R.icon})
 	
-	--- Clear ---
+	--Clear
 
 	Tocsin:MenuElement({type = MENU, id = "Clear", name = "Clear Settings"})
 	Tocsin.Clear:MenuElement({id = "Key", name = "Toggle: Key", key = string.byte("A"), toggle = true})
@@ -138,7 +138,7 @@ function Ezreal:LoadMenu()
 	Tocsin.Clear:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
 	Tocsin.Clear:MenuElement({id = "Mana", name = "Min Mana to Clear [%]", value = 0, min = 0, max = 100})
 	
-	--- Harass ---
+	--Harass
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
 	Tocsin.Harass:MenuElement({id = "Key", name = "Toggle: Key", key = string.byte("S"), toggle = true})
@@ -146,7 +146,7 @@ function Ezreal:LoadMenu()
 	Tocsin.Harass:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = W.icon})
 	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0, min = 0, max = 100})
 	
-	--- Misc ---
+	--Misc
 
 	Tocsin:MenuElement({type = MENU, id = "Misc", name = "Misc Settings"})
 	Tocsin.Misc:MenuElement({id = "Qks", name = "Killsecure [Q]", value = true, leftIcon = Q.icon})
@@ -154,7 +154,14 @@ function Ezreal:LoadMenu()
 	Tocsin.Misc:MenuElement({id = "Rks", name = "Killsecure [R]", value = true, leftIcon = R.icon})
 	Tocsin.Misc:MenuElement({id = "Rkey", name = "Semi-Manual [R] Key [?]", key = string.byte("T"), tooltip = "Select manually your target before pressing the key"})
 	
-	--- Draw ---
+
+ 	--Eternal Prediction
+
+	Tocsin:MenuElement({type = MENU, id = "Pred", name = "Prediction Settings"})
+	Tocsin.Pred:MenuElement({type = SPACE, id = "Pred Info", name = "If you go too high it wont fire"})
+	Tocsin.Pred:MenuElement({id = "Chance", name = "Prediction Hitchance", value = 0.15, min = 0.05, max = 1, step = 0.025})
+	
+	--Draw
 
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
 	Tocsin.Draw:MenuElement({id = "Q", name = "Draw [Q] Range", value = true, leftIcon = W.icon})
@@ -176,7 +183,7 @@ function Ezreal:Tick()
 end
 
 function Ezreal:Combo()
-	local target = GetTarget(1200)
+	local target = GetTarget(1300)
 	if not target then return end
 	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
 		self:CastQ(target)
@@ -184,7 +191,7 @@ function Ezreal:Combo()
 	if Tocsin.Combo.W:Value() and Ready(_W)and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(W.width,W.speed,W.delay) == 0 then
 		self:CastW(target)
 	end
-	if Tocsin.Combo.E:Value() and Ready(_E)and myHero.pos:DistanceTo(target.pos) < 1000 then
+	if Tocsin.Combo.E:Value() and Ready(_E)and myHero.pos:DistanceTo(target.pos) < 1100 then
 		self:CastE(target)
 	end
 end
@@ -204,7 +211,7 @@ end
 
 function Ezreal:Clear()
 	if Tocsin.Clear.Key:Value() == false then return end
-	if myHero.mana/myHero.maxMana < Tocsin.Clear.Mana:Value() then return end
+	--if myHero.mana/myHero.maxMana < Tocsin.Clear.Mana:Value() then return end
 	for i = 1, Game.MinionCount() do
 		local minion = Game.Minion(i)
 		if  minion.team ~= myHero.team then
@@ -239,7 +246,7 @@ function Ezreal:CastQ(target)
 	local pred = Qspell:GetPrediction(target,myHero.pos)
 	if  myHero.pos:DistanceTo(target.pos) < 1000 then
 		if myHero.attackData.state == STATE_WINDDOWN then
-			if pred and pred.hitChance >= 0.25 and pred:mCollision() == 0 and pred:hCollision() == 0 then
+			if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 				EnableOrb(false)
 				Control.CastSpell(HK_Q, pred.castPos)
 				EnableOrb(true)
@@ -247,7 +254,7 @@ function Ezreal:CastQ(target)
 		end
 	end
 	if  myHero.pos:DistanceTo(target.pos) > 1000 then
-		if pred and pred.hitChance >= 0.25 and pred:mCollision() == 0 and pred:hCollision() == 0 then
+		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 			EnableOrb(false)
 			Control.CastSpell(HK_Q, pred.castPos)
 			EnableOrb(true)
@@ -261,7 +268,7 @@ function Ezreal:CastW(target)
 	local pred = Wspell:GetPrediction(target,myHero.pos)
 	if  myHero.pos:DistanceTo(target.pos) < myHero.range then
 		if myHero.attackData.state == STATE_WINDDOWN then
-			if pred and pred.hitChance >= 0.25 and pred:hCollision() == 0 then
+			if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:hCollision() == 0 then
 				EnableOrb(false)
 				Control.CastSpell(HK_W, pred.castPos)
 				EnableOrb(true)
@@ -269,7 +276,7 @@ function Ezreal:CastW(target)
 		end
 	end
 	if  myHero.pos:DistanceTo(target.pos) > myHero.range then
-		if pred and pred.hitChance >= 0.25 and pred:hCollision() == 0 then
+		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:hCollision() == 0 then
 			EnableOrb(false)
 			Control.CastSpell(HK_W, pred.castPos)
 			EnableOrb(true)
@@ -298,14 +305,14 @@ function Ezreal:CastR(target)
 	local Rspell = Prediction:SetSpell(Rdata, TYPE_LINE, true)
 	local pred = Rspell:GetPrediction(target,myHero.pos)
 	if OnScreen(target) then
-		if pred and pred.hitChance >= 0.25 then
+		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() then
 			EnableOrb(false)
 			Control.CastSpell(HK_R, pred.castPos)
 			EnableOrb(true)
 		end
 	end 
 	if not OnScreen(target) then
-		if pred and pred.hitChance >= 0.25 then
+		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() then
 			EnableOrb(false)
 			Control.SetCursorPos(pred.castPos:ToMM().x,pred.castPos:ToMM().y)
 			Control.KeyDown(HK_R)
