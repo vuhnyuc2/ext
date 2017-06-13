@@ -1,4 +1,4 @@
-require 'DamageLib'
+--require 'DamageLib'
 require 'Eternal Prediction'
 
 local ScriptVersion = "v1.0"
@@ -146,7 +146,7 @@ function Thresh:LoadMenu()
 	Tocsin.Harass:MenuElement({id = "Key", name = "Toggle: Key", key = string.byte("S"), toggle = true})
 	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = false, leftIcon = Q.icon})
 	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
-	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0, min = 0, max = 100})
+	--Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0, min = 0, max = 100})
 
 	--Misc
 
@@ -194,7 +194,7 @@ end
 function Thresh:Harass()
 	local target = GetTarget(1450)
 	if Tocsin.Harass.Key:Value() == false then return end
-	if myHero.mana/myHero.maxMana < Tocsin.Harass.Mana:Value() then return end
+	--if myHero.mana/myHero.maxMana < Tocsin.Harass.Mana:Value() then return end
 	if not target then return end
 	if Tocsin.Harass.Q:Value() and Ready(_Q)and myHero.pos:DistanceTo(target.pos) < 1050 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
 		self:CastQ(target)
