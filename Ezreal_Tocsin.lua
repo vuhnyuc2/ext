@@ -133,18 +133,16 @@ function Ezreal:LoadMenu()
 	--Clear
 
 	Tocsin:MenuElement({type = MENU, id = "Clear", name = "Clear Settings"})
-	Tocsin.Clear:MenuElement({id = "Key", name = "Toggle: Key", key = string.byte("A"), toggle = true})
 	Tocsin.Clear:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
 	Tocsin.Clear:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
-	Tocsin.Clear:MenuElement({id = "Mana", name = "Min Mana to Clear [%]", value = 0, min = 0, max = 100})
+	Tocsin.Clear:MenuElement({id = "Mana", name = "Min Mana to Clear [%]", value = 0.30, min = 0.05, max = 1, step = 0.01})
 	
 	--Harass
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
-	Tocsin.Harass:MenuElement({id = "Key", name = "Toggle: Key", key = string.byte("S"), toggle = true})
 	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
 	Tocsin.Harass:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = W.icon})
-	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0, min = 0, max = 100})
+	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0.30, min = 0.05, max = 1, step = 0.01})
 	
 	--Misc
 
@@ -152,7 +150,7 @@ function Ezreal:LoadMenu()
 	Tocsin.Misc:MenuElement({id = "Qks", name = "Killsecure [Q]", value = true, leftIcon = Q.icon})
 	Tocsin.Misc:MenuElement({id = "Wks", name = "Killsecure [W]", value = true, leftIcon = W.icon})
 	Tocsin.Misc:MenuElement({id = "Rks", name = "Killsecure [R]", value = true, leftIcon = R.icon})
-	Tocsin.Misc:MenuElement({id = "Rkey", name = "Semi-Manual [R] Key [?]", key = string.byte("T"), tooltip = "Select manually your target before pressing the key"})
+	Tocsin.Misc:MenuElement({id = "Rkey", name = "Semi-Manual [R] Key [?]", key = string.byte("T"), tooltip = "Manually select your target before pressing the key"})
 	
 
  	--Eternal Prediction
@@ -165,8 +163,6 @@ function Ezreal:LoadMenu()
 
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
 	Tocsin.Draw:MenuElement({id = "Q", name = "Draw [Q] Range", value = true, leftIcon = W.icon})
-	Tocsin.Draw:MenuElement({id = "CT", name = "Clear Toggle", value = true})
-	Tocsin.Draw:MenuElement({id = "HT", name = "Harass Toggle", value = true})
 	Tocsin.Draw:MenuElement({id = "DMG", name = "Draw Combo Damage", value = true})
 end
 
@@ -198,7 +194,6 @@ end
 
 function Ezreal:Harass()
 	local target = GetTarget(1200)
-	if Tocsin.Harass.Key:Value() == false then return end
 	if myHero.mana/myHero.maxMana < Tocsin.Harass.Mana:Value() then return end
 	if not target then return end
 	if Tocsin.Harass.Q:Value() and Ready(_Q)and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
@@ -210,8 +205,7 @@ function Ezreal:Harass()
 end
 
 function Ezreal:Clear()
-	if Tocsin.Clear.Key:Value() == false then return end
-	--if myHero.mana/myHero.maxMana < Tocsin.Clear.Mana:Value() then return end
+	if myHero.mana/myHero.maxMana < Tocsin.Clear.Mana:Value() then return end
 	for i = 1, Game.MinionCount() do
 		local minion = Game.Minion(i)
 		if  minion.team ~= myHero.team then
@@ -241,10 +235,10 @@ function Ezreal:Misc()
 end
 
 function Ezreal:CastQ(target)
-	local Qdata = {speed = 2000, delay = 0.25,range = 1000 }
+	local Qdata = {speed = 2000, delay = 0.25,range = 1150 }
 	local Qspell = Prediction:SetSpell(Qdata, TYPE_LINEAR, true)
 	local pred = Qspell:GetPrediction(target,myHero.pos)
-	if  myHero.pos:DistanceTo(target.pos) < 1000 then
+	if  myHero.pos:DistanceTo(target.pos) < 1150 then
 		if myHero.attackData.state == STATE_WINDDOWN then
 			if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 				EnableOrb(false)
@@ -253,7 +247,7 @@ function Ezreal:CastQ(target)
 			end
 		end
 	end
-	if  myHero.pos:DistanceTo(target.pos) > 1000 then
+	if  myHero.pos:DistanceTo(target.pos) > 1150 then
 		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 			EnableOrb(false)
 			Control.CastSpell(HK_Q, pred.castPos)
@@ -288,15 +282,11 @@ function Ezreal:CastE(target)
 	local Edata = {speed = 2000, delay = 0.25,range = 1075 }
 	if  myHero.pos:DistanceTo(target.pos) < myHero.range then
 		if myHero.attackData.state == STATE_WINDDOWN then
-				--EnableOrb(false)
 				Control.CastSpell(HK_E)
-				--EnableOrb(true)
 		end
 	end
 	if  myHero.pos:DistanceTo(target.pos) > myHero.range then
-			--EnableOrb(false)
 			Control.CastSpell(HK_E)
-			--EnableOrb(true)
 	end
 end
 
@@ -343,23 +333,7 @@ function Ezreal:GetComboDamage(unit)
 end
 
 function Ezreal:Draw()
-	if Tocsin.Draw.Q:Value() and Ready(_Q) then Draw.Circle(myHero.pos, 1100, 3,  Draw.Color(255,255, 162, 000)) end
-	if Tocsin.Draw.CT:Value() then
-		local textPos = myHero.pos:To2D()
-		if Tocsin.Clear.Key:Value() then
-			Draw.Text("Clear: On", 20, textPos.x - 33, textPos.y + 60, Draw.Color(255, 000, 255, 000)) 
-		else
-			Draw.Text("Clear: Off", 20, textPos.x - 33, textPos.y + 60, Draw.Color(255, 225, 000, 000)) 
-		end
-	end
-	if Tocsin.Draw.HT:Value() then
-		local textPos = myHero.pos:To2D()
-		if Tocsin.Harass.Key:Value() then
-			Draw.Text("Harass: On", 20, textPos.x - 40, textPos.y + 80, Draw.Color(255, 000, 255, 000)) 
-		else
-			Draw.Text("Harass: Off", 20, textPos.x - 40, textPos.y + 80, Draw.Color(255, 255, 000, 000)) 
-		end
-	end
+	if Tocsin.Draw.Q:Value() and Ready(_Q) then Draw.Circle(myHero.pos, 1150, 3,  Draw.Color(255,255, 162, 000)) end
 	if Tocsin.Draw.DMG:Value() then
 		for i = 1, Game.HeroCount() do
 			local enemy = Game.Hero(i)
