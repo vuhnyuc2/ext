@@ -306,16 +306,16 @@ end
 
 LastCancel = Game.Timer()
 function Riven:CastQ(target)
-    local qrange = 400 --myHero:GetSpellData(_Q).range
+    local qrange = 420 --myHero:GetSpellData(_Q).range
     local qtarg = _G.SDK.TargetSelector:GetTarget(qrange)
     if qtarg then
         if qtarg.dead or qtarg.isImmune then return end
-        if myHero.pos:DistanceTo(qtarg.pos) < 375 and self:HasBuff(myHero, "rivenwindslashready") then    --myHero.range
+        if myHero.pos:DistanceTo(qtarg.pos) < 420 and self:HasBuff(myHero, "rivenwindslashready") then    --myHero.range
             if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
                 local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
-                Control.CastSpell(HK_Q,pred)
+                Control.CastSpell(HK_Q,qtarg)
                 Control.Attack(qtarg)
-                if Game.Timer() - LastCancel > 0.08 then
+                if Game.Timer() - LastCancel > 0.15 then
                 LastCancel = Game.Timer()
                     DelayAction(function()
                     local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
@@ -328,9 +328,9 @@ function Riven:CastQ(target)
         	if myHero.pos:DistanceTo(qtarg.pos) < 275 and not self:HasBuff(myHero, "rivenwindslashready") then    --Q without buff less range wont chase with q but aa more reliable
             	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
                 	local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
-                	Control.CastSpell(HK_Q,pred)
+                	Control.CastSpell(HK_Q,qtarg)
                 	Control.Attack(qtarg)
-                	if Game.Timer() - LastCancel > 0.08 then
+                	if Game.Timer() - LastCancel > 0.15 then
                 	LastCancel = Game.Timer()
                     	DelayAction(function()
                     	local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
