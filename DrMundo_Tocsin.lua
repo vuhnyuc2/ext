@@ -218,7 +218,7 @@ function DrMundo:Clear()
 			if  Tocsin.Clear.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(minion.pos) < 1000 then
 				EnableOrb(false)
 				Control.CastSpell(HK_Q, pred.castPos)
-				EnableOrb(true)
+				DelayAction(function() EnableOrb(true) end, 0.3)
 			end
 			if  Tocsin.Clear.E:Value() and Ready(_E) and myHero.pos:DistanceTo(minion.pos) < 150 then
 				self:CastE(minion)
@@ -257,7 +257,7 @@ function DrMundo:CastQ(target)
 		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 			EnableOrb(false)
 			Control.CastSpell(HK_Q, pred.castPos)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb(true) end, 0.3)
 		end
 	end
 end
@@ -318,7 +318,7 @@ function DrMundo:LastHit()
       			if Qdamage >= self:HpPred(minion, 0.5) then
 					EnableOrb(false)
 					Control.CastSpell(HK_Q, pred.castPos)
-					EnableOrb(true)
+					DelayAction(function() EnableOrb(true) end, 0.3)
 				end
 			end
 		end
@@ -339,6 +339,7 @@ function DrMundo:Draw()
 end
 
 Callback.Add("Load", function()
+	if myHero.charName ~= "DrMundo" then return end
 	if not _G.Prediction_Loaded then return end
 	if _G[myHero.charName] then
 		_G[myHero.charName]()
