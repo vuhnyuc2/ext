@@ -243,7 +243,7 @@ function Ezreal:CastQ(target)
 			if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 				EnableOrb(false)
 				Control.CastSpell(HK_Q, pred.castPos)
-				EnableOrb(true)
+				DelayAction(function() EnableOrb(true) end, 0.3)
 			end
 		end
 	end
@@ -251,7 +251,7 @@ function Ezreal:CastQ(target)
 		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 			EnableOrb(false)
 			Control.CastSpell(HK_Q, pred.castPos)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb(true) end, 0.3)
 		end
 	end
 end
@@ -298,7 +298,7 @@ function Ezreal:CastR(target)
 		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() then
 			EnableOrb(false)
 			Control.CastSpell(HK_R, pred.castPos)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb(true) end, 0.3)
 		end
 	end 
 	if not OnScreen(target) then
@@ -307,7 +307,7 @@ function Ezreal:CastR(target)
 			Control.SetCursorPos(pred.castPos:ToMM().x,pred.castPos:ToMM().y)
 			Control.KeyDown(HK_R)
 			Control.KeyUp(HK_R)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb(true) end, 0.3)
 		end
 	end
 end
@@ -352,6 +352,7 @@ function Ezreal:Draw()
 end
 
 Callback.Add("Load", function()
+	if myHero.charName ~= "Ezreal" then return end
 	if not _G.Prediction_Loaded then return end
 	if _G[myHero.charName] then
 		_G[myHero.charName]()
