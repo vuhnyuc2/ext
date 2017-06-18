@@ -1,7 +1,7 @@
---require 'DamageLib'
+
 require 'Eternal Prediction'
 
-local ScriptVersion = "v1.0"
+local ScriptVersion = "v1.1"
 
 local function Ready(spell)
 	return myHero:GetSpellData(spell).currentCd == 0 and myHero:GetSpellData(spell).level > 0 and myHero:GetSpellData(spell).mana <= myHero.mana and Game.CanUseSpell(spell) == 0 
@@ -131,7 +131,6 @@ function Thresh:LoadMenu()
 	--Harass
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
-	Tocsin.Harass:MenuElement({id = "Key", name = "Toggle: Key", key = string.byte("S"), toggle = true})
 	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = false, leftIcon = Q.icon})
 	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
 	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0.30, min = 0.05, max = 1, step = 0.01})
@@ -150,7 +149,6 @@ function Thresh:LoadMenu()
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
 	Tocsin.Draw:MenuElement({id = "Q", name = "Draw [Q] Range", value = true, leftIcon = Q.icon})
 	Tocsin.Draw:MenuElement({id = "Push", name = "Push Toggle", value = true})
-	Tocsin.Draw:MenuElement({id = "HT", name = "Harass Toggle", value = true})
 end
 
 function Thresh:Tick()
@@ -181,7 +179,6 @@ end
 
 function Thresh:Harass()
 	local target = GetTarget(1450)
-	if Tocsin.Harass.Key:Value() == false then return end
 	if myHero.mana/myHero.maxMana < Tocsin.Harass.Mana:Value() then return end
 	if not target then return end
 	if Tocsin.Harass.Q:Value() and Ready(_Q)and myHero.pos:DistanceTo(target.pos) < 1050 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
@@ -191,7 +188,7 @@ function Thresh:Harass()
 		self:CastE(target)
 	end
 end
---[[
+--[[  support, nah we Gucci
 function Thresh:Clear()
 	if Tocsin.Clear.Key:Value() == false then return end
 	if myHero.mana/myHero.maxMana < Tocsin.Clear.Mana:Value() then return end
@@ -209,23 +206,23 @@ function Thresh:Clear()
 end
 --]]
 function Thresh:CastQ(target)
-	local Qdata = {speed = 1200, delay = 0.50,range = 1050 }
+	local Qdata = {speed = 1200, delay = 0.50,range = 1100 }
 	local Qspell = Prediction:SetSpell(Qdata, TYPE_LINEAR, true)
 	local pred = Qspell:GetPrediction(target,myHero.pos)
-	if  myHero.pos:DistanceTo(target.pos) < 1050 then
-		if myHero.attackData.state == STATE_WINDDOWN then
+	if  myHero.pos:DistanceTo(target.pos) < 1100 then
+		--if myHero.attackData.state == STATE_WINDDOWN then
 			if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 				EnableOrb(false)
 				Control.CastSpell(HK_Q, pred.castPos)
-				EnableOrb(true)
+				DelayAction(function() EnableOrb(true) end, 0.2)
 			end
-		end
+		--end
 	end
-	if  myHero.pos:DistanceTo(target.pos) < 1050 then
+	if  myHero.pos:DistanceTo(target.pos) > myHero.range then
 		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 			EnableOrb(false)
 			Control.CastSpell(HK_Q, pred.castPos)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb(true) end, 0.2)
 		end
 	end
 end
@@ -315,17 +312,10 @@ function Thresh:Draw()
 			Draw.Text("Push: Off", 20, textPos.x - 33, textPos.y + 60, Draw.Color(255, 225, 000, 000)) 
 		end
 	end
-	if Tocsin.Draw.HT:Value() then
-		local textPos = myHero.pos:To2D()
-		if Tocsin.Harass.Key:Value() then
-			Draw.Text("Harass: On", 20, textPos.x - 40, textPos.y + 80, Draw.Color(255, 000, 255, 000)) 
-		else
-			Draw.Text("Harass: Off", 20, textPos.x - 40, textPos.y + 80, Draw.Color(255, 255, 000, 000)) 
-		end
-	end
 end
 
 Callback.Add("Load", function()
+	if myHero.charName ~= "Thresh" then return end
 	if not _G.Prediction_Loaded then return end
 	if _G[myHero.charName] then
 		_G[myHero.charName]()
