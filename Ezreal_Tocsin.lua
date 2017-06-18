@@ -247,7 +247,7 @@ function Ezreal:CastQ(target)
 			end
 		end
 	end
-	if  myHero.pos:DistanceTo(target.pos) > 1150 then
+	if  myHero.pos:DistanceTo(target.pos) > myHero.range then
 		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 			EnableOrb(false)
 			Control.CastSpell(HK_Q, pred.castPos)
