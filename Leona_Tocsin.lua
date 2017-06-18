@@ -130,11 +130,10 @@ function Leona:LoadMenu()
 	--Harass
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
-	Tocsin.Harass:MenuElement({id = "Key", name = "Toggle: Key", key = string.byte("S"), toggle = true})
 	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
     Tocsin.Harass:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = W.icon})
 	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
-	--Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 30, min = 0, max = 100})
+	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0.30, min = 0.05, max = 1, step = 0.01})
 
 	--Misc
 
@@ -149,7 +148,6 @@ function Leona:LoadMenu()
 
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
 	Tocsin.Draw:MenuElement({id = "E", name = "Draw [E] Range", value = true, leftIcon = E.icon})
-	Tocsin.Draw:MenuElement({id = "HT", name = "Harass Toggle", value = true})
 end
 
 function Leona:Tick()
@@ -180,8 +178,7 @@ end
 
 function Leona:Harass()
 	local target = GetTarget(1100)
-	if Tocsin.Harass.Key:Value() == false then return end
-	--if myHero.mana/myHero.maxMana < Tocsin.Harass.Mana:Value() then return end
+	if myHero.mana/myHero.maxMana < Tocsin.Harass.Mana:Value() then return end
 	if not target then return end
 	if Tocsin.Combo.E:Value() and Ready(_E) and myHero.pos:DistanceTo(target.pos) < 875 then
 		self:CastE(target)
@@ -204,7 +201,7 @@ function Leona:CastE(target)
 			if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:hCollision() == 0 then
 				EnableOrb(false)
 				Control.CastSpell(HK_E, pred.castPos)
-				EnableOrb(true)
+				DelayAction(function() EnableOrb(true) end, 0.3)
 			end
 		end
 	end
@@ -212,7 +209,7 @@ function Leona:CastE(target)
 		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:hCollision() == 0 then
 			EnableOrb(false)
 			Control.CastSpell(HK_E, pred.castPos)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb(true) end, 0.3)
 		end
 	end
 end
@@ -300,17 +297,10 @@ end
 
 function Leona:Draw()
 	if Tocsin.Draw.E:Value() and Ready(_E) then Draw.Circle(myHero.pos, 1000, 3,  Draw.Color(255,255, 162, 000)) end
-	if Tocsin.Draw.HT:Value() then
-		local textPos = myHero.pos:To2D()
-		if Tocsin.Harass.Key:Value() then
-			Draw.Text("Harass: On", 20, textPos.x - 40, textPos.y + 80, Draw.Color(255, 000, 255, 000)) 
-		else
-			Draw.Text("Harass: Off", 20, textPos.x - 40, textPos.y + 80, Draw.Color(255, 255, 000, 000)) 
-		end
-	end
 end
 
 Callback.Add("Load", function()
+	if myHero.charName ~= "Leona" then return end
 	if not _G.Prediction_Loaded then return end
 	if _G[myHero.charName] then
 		_G[myHero.charName]()
