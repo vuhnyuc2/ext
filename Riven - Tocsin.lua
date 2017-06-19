@@ -4,7 +4,7 @@ require = 'DamageLib'
 
 function Riven:__init()
 	if myHero.charName ~= "Riven" then return end
-PrintChat("Riven - Tocsin loaded v1.9a")
+PrintChat("Riven - Tocsin loaded v2.1")
 self:LoadSpells()
 self:LoadMenu()
 Callback.Add("Tick", function() self:Tick() end)
@@ -108,25 +108,21 @@ end
 --Combo aka spacebar
 function Riven:Combo()
 	if _G.SDK.TargetSelector:GetTarget(700) == nil then return end
-
-	if self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
-		self:CastE(etarg)
-	end
-
-	if self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
+	
+    if self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
     	self:CastR(rtarg)
     end
-	
---  if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.levelData.lvl <= 2 then --for lvl 1 if Q picked 1st mainly(adjust CastQ instead?)
---   	self:LowQ(ltarg)
---	end
 
     if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
     	self:CastQ(qtarg)
     end
-    
+
 	if self.Menu.Combo.UseW:Value() and self:CanCast(_W) then
 		self:CastW(wtarg)
+	end
+	
+	if self.Menu.Combo.UseE:Value() and self:CanCast(_E) then
+		self:CastE(etarg)
 	end
 	
  	if self.Menu.Combo.UseR:Value() and self:CanCast(_R) then
@@ -144,13 +140,12 @@ function Riven:Harass()
 	if self.Menu.Harass.UseW:Value() and self:CanCast(_W) then
 		self:CastW(wtarg)
 	end
+	if self.Menu.Harass.UseQ:Value() and self:CanCast(_Q) then
+		self:CastQ(qtarg)
+	end
 
 	if self.Menu.Harass.UseE:Value() and self:CanCast(_E) then
 		self:CastE(etarg)
-	end
-
-	if self.Menu.Harass.UseQ:Value() and self:CanCast(_Q) then
-		self:CastQ(qtarg)
 	end
 		
 end
@@ -250,7 +245,7 @@ function Riven:Wings(target)
 					local pred=ztarg:GetPrediction(R.speed, .25 + Game.Latency()/1000)
 					DisableOrb()
 					Control.CastSpell(HK_R,pred)
-					EnableOrb()
+					DelayAction(function() EnableOrb(true) end, 0.3)
 				end
 			end
 	end
@@ -320,7 +315,7 @@ function Riven:CastQ(target)
                     DelayAction(function()
                     local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
                     Control.Move(Vec)
-                    end, (0.25 + Game.Latency()/1000))
+                    end, (0.05 + Game.Latency()/1000))
                 end
             end
 
@@ -335,7 +330,7 @@ function Riven:CastQ(target)
                     	DelayAction(function()
                     	local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
                     	Control.Move(Vec)
-                    	end, (0.25 + Game.Latency()/1000))
+                    	end, (0.05 + Game.Latency()/1000))
                 	end
             	end
         	end
@@ -367,7 +362,7 @@ function Riven:CastW(target)
                 DelayAction(function()
                 local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
                 Control.Move(Vec)
-                end, (0.25 + Game.Latency()/1000))
+                end, (0.05 + Game.Latency()/1000))
             end
 		end
 	end
@@ -386,7 +381,7 @@ function Riven:CastE(target)
                     DelayAction(function()
                     local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
                     Control.Move(Vec)
-                    end, (0.25 + Game.Latency()/1000))
+                    end, (0.05 + Game.Latency()/1000))
             end
 		end
 	end
