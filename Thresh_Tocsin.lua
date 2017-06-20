@@ -1,7 +1,7 @@
 
 require 'Eternal Prediction'
 
-local ScriptVersion = "v1.1"
+local ScriptVersion = "v1.3"
 
 local function Ready(spell)
 	return myHero:GetSpellData(spell).currentCd == 0 and myHero:GetSpellData(spell).level > 0 and myHero:GetSpellData(spell).mana <= myHero.mana and Game.CanUseSpell(spell) == 0 
@@ -119,15 +119,7 @@ function Thresh:LoadMenu()
 	Tocsin.Combo:MenuElement({id = "Key", name = "Toggle: E Push-Pull Key", key = string.byte("T"), toggle = true})
 	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true, leftIcon = R.icon})
 	Tocsin.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
-	
-	--Clear support, nah we Gucci
---[[
-	Tocsin:MenuElement({type = MENU, id = "Clear", name = "Clear Settings"})
-	Tocsin.Clear:MenuElement({id = "Key", name = "Toggle: Key", key = string.byte("A"), toggle = true})
-	Tocsin.Clear:MenuElement({id = "Q", name = "Use [Q]", value = false, leftIcon = Q.icon})
-	Tocsin.Clear:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
-	Tocsin.Clear:MenuElement({id = "Mana", name = "Min Mana to Clear [%]", value = 0, min = 0, max = 100})
---]]
+
 	--Harass
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
@@ -142,7 +134,7 @@ function Thresh:LoadMenu()
 
 	--Eternal Prediction
 	Tocsin:MenuElement({type = MENU, id = "Pred", name = "Prediction Settings"})
-	Tocsin.Pred:MenuElement({id = "Chance", name = "Prediction Hitchance", value = 0.125, min = 0.05, max = 1, step = 0.025})
+	Tocsin.Pred:MenuElement({id = "Chance", name = "Prediction Hitchance", value = 0.200, min = 0.05, max = 1, step = 0.025})
 	
 	--Draw
 
@@ -188,28 +180,12 @@ function Thresh:Harass()
 		self:CastE(target)
 	end
 end
---[[  support, nah we Gucci
-function Thresh:Clear()
-	if Tocsin.Clear.Key:Value() == false then return end
-	if myHero.mana/myHero.maxMana < Tocsin.Clear.Mana:Value() then return end
-	for i = 1, Game.MinionCount() do
-		local minion = Game.Minion(i)
-		if  minion.team ~= myHero.team then
-			if  Tocsin.Clear.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(minion.pos) < 1000 then
-				self:CastQ(minion)
-			end
-			if  Tocsin.Clear.E:Value() and Ready(_E) and myHero.pos:DistanceTo(minion.pos) < 400 then
-				self:CastE(minion)
-			end
-		end
-	end
-end
---]]
+
 function Thresh:CastQ(target)
-	local Qdata = {speed = 1200, delay = 0.50,range = 1100 }
+	local Qdata = {speed = 1900, delay = 0.50, range = 1100 }
 	local Qspell = Prediction:SetSpell(Qdata, TYPE_LINEAR, true)
 	local pred = Qspell:GetPrediction(target,myHero.pos)
-	if  myHero.pos:DistanceTo(target.pos) < 1100 then
+	if  myHero.pos:DistanceTo(target.pos) < 1050 then
 		--if myHero.attackData.state == STATE_WINDDOWN then
 			if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 				EnableOrb(false)
@@ -303,7 +279,7 @@ function Thresh:IsValidTarget(unit,range)
 end
 
 function Thresh:Draw()
-	if Tocsin.Draw.Q:Value() and Ready(_Q) then Draw.Circle(myHero.pos, 1000, 3,  Draw.Color(255,255, 162, 000)) end
+	if Tocsin.Draw.Q:Value() and Ready(_Q) then Draw.Circle(myHero.pos, 1050, 3,  Draw.Color(255,255, 162, 000)) end
 	if Tocsin.Draw.Push:Value() then
 		local textPos = myHero.pos:To2D()
 		if Tocsin.Combo.Key:Value() then
