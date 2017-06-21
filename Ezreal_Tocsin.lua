@@ -199,7 +199,7 @@ function Ezreal:Harass()
 	if Tocsin.Harass.Q:Value() and Ready(_Q)and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
 		self:CastQ(target)
 	end
-	if Tocsin.Harass.W:Value() and Ready(_W)and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(W.width,W.speed,W.delay) == 0  then
+	if Tocsin.Harass.W:Value() and Ready(_W)and myHero.pos:DistanceTo(target.pos) < 1000 then
 		self:CastW(target)
 	end
 end
