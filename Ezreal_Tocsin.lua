@@ -128,7 +128,6 @@ function Ezreal:LoadMenu()
 	Tocsin.Combo:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
 	Tocsin.Combo:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = W.icon})
 	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
-	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true, leftIcon = R.icon})
 	
 	--Clear
 
@@ -157,7 +156,7 @@ function Ezreal:LoadMenu()
 
 	Tocsin:MenuElement({type = MENU, id = "Pred", name = "Prediction Settings"})
 	Tocsin.Pred:MenuElement({type = SPACE, id = "Pred Info", name = "If you go too high it wont fire"})
-	Tocsin.Pred:MenuElement({id = "Chance", name = "Prediction Hitchance", value = 0.15, min = 0.05, max = 1, step = 0.025})
+	Tocsin.Pred:MenuElement({id = "Chance", name = "Prediction Hitchance", value = 0.175, min = 0.05, max = 1, step = 0.025})
 	
 	--Draw
 
@@ -184,12 +183,13 @@ function Ezreal:Combo()
 	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
 		self:CastQ(target)
 	end
-	if Tocsin.Combo.W:Value() and Ready(_W)and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(W.width,W.speed,W.delay) == 0 then
+	if Tocsin.Combo.W:Value() and Ready(_W)and myHero.pos:DistanceTo(target.pos) < 1000 then
 		self:CastW(target)
 	end
 	if Tocsin.Combo.E:Value() and Ready(_E)and myHero.pos:DistanceTo(target.pos) < 1100 then
 		self:CastE(target)
 	end
+
 end
 
 function Ezreal:Harass()
@@ -222,10 +222,10 @@ end
 function Ezreal:Misc()
 	local target = GetTarget(20000)
 	if not target then return end
-		if Tocsin.Combo.R:Value() and Ready(_R) and OnScreen(target) then
+		if Tocsin.Misc.Rks:Value() and Ready(_R) and OnScreen(target) then
 			local lvl = myHero:GetSpellData(_R).level
-			local Rdmg = (({350, 500, 650})[lvl] + myHero.bonusDamage)
-			if  Rdmg > target.health then
+			local Rdmg = (({350, 500, 650})[lvl] )
+			if  Rdmg > target.health + target.shieldAP then
 				self:CastR(target)
 			end
 		end
@@ -235,7 +235,7 @@ function Ezreal:Misc()
 end
 
 function Ezreal:CastQ(target)
-	local Qdata = {speed = 2000, delay = 0.25,range = 1150 }
+	local Qdata = {speed = 2000, delay = 0.25, range = 1150, width = 60}
 	local Qspell = Prediction:SetSpell(Qdata, TYPE_LINEAR, true)
 	local pred = Qspell:GetPrediction(target,myHero.pos)
 	if  myHero.pos:DistanceTo(target.pos) < 1150 then
@@ -257,29 +257,29 @@ function Ezreal:CastQ(target)
 end
 
 function Ezreal:CastW(target)
-	local Wdata = {speed = 1550, delay = 0.25,range = 1000 }
+	local Wdata = {speed = 1600, delay = 0.25, range = 950, width = 80}
 	local Wspell = Prediction:SetSpell(Wdata, TYPE_LINEAR, true)
 	local pred = Wspell:GetPrediction(target,myHero.pos)
 	if  myHero.pos:DistanceTo(target.pos) < myHero.range then
 		if myHero.attackData.state == STATE_WINDDOWN then
-			if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:hCollision() == 0 then
+			if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() then
 				EnableOrb(false)
 				Control.CastSpell(HK_W, pred.castPos)
-				EnableOrb(true)
+				DelayAction(function() EnableOrb(true) end, 0.3)
 			end
 		end
 	end
 	if  myHero.pos:DistanceTo(target.pos) > myHero.range then
-		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:hCollision() == 0 then
+		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() then
 			EnableOrb(false)
 			Control.CastSpell(HK_W, pred.castPos)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb(true) end, 0.3)
 		end
 	end
 end
 
 function Ezreal:CastE(target)
-	local Edata = {speed = 2000, delay = 0.25,range = 1075 }
+	local Edata = {speed = 2000, delay = 0.25,range = 450 }
 	if  myHero.pos:DistanceTo(target.pos) < myHero.range then
 		if myHero.attackData.state == STATE_WINDDOWN then
 				Control.CastSpell(HK_E)
@@ -291,7 +291,7 @@ function Ezreal:CastE(target)
 end
 
 function Ezreal:CastR(target)
-	local Rdata = {speed = 2000, delay = 1.00,range = 20000 }
+	local Rdata = {speed = 2000, delay = 1.05, range = 20000, width = 160 }
 	local Rspell = Prediction:SetSpell(Rdata, TYPE_LINE, true)
 	local pred = Rspell:GetPrediction(target,myHero.pos)
 	if OnScreen(target) then
