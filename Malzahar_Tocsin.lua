@@ -144,7 +144,7 @@ function Malzahar:LoadMenu()
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
 	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = false, leftIcon = Q.icon})
-	Tocsin.Harass:MenuElement({id = "Q", name = "Use [W]", value = false, leftIcon = W.icon})
+	Tocsin.Harass:MenuElement({id = "W", name = "Use [W]", value = false, leftIcon = W.icon})
 	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
 	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0.35, min = 0.05, max = 1, step = 0.01})
 
@@ -171,7 +171,7 @@ function Malzahar:LoadMenu()
 
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
 	Tocsin.Draw:MenuElement({id = "Q", name = "Draw [Q] Range", value = true, leftIcon = Q.icon})
-
+	Tocsin.Draw:MenuElement({id = "E", name = "Draw [E] Range", value = true, leftIcon = E.icon})
 
 end
 
@@ -205,7 +205,7 @@ function Malzahar:Combo()
 		self:CastR(target)
 	end
 
-	if Tocsin.Combo.W:Value() and Ready(_W) and myHero.pos:DistanceTo(target.pos) < 150 then
+	if Tocsin.Combo.W:Value() and Ready(_W) and myHero.pos:DistanceTo(target.pos) < 550 then
 		self:CastW(target)
 	end
 
@@ -223,7 +223,7 @@ function Malzahar:Harass()
 		self:CastQ(target)
 	end
 
-	if Tocsin.Combo.W:Value() and Ready(_W) and myHero.pos:DistanceTo(target.pos) < 150 then
+	if Tocsin.Combo.W:Value() and Ready(_W) and myHero.pos:DistanceTo(target.pos) < 650 then
 		self:CastW(target)
 	end
 end
@@ -239,7 +239,7 @@ function Malzahar:Clear()
             if  Tocsin.Clear.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(minion.pos) < 870 then
 				self:CastQ(minion)
 			end
-            if  Tocsin.Clear.W:Value() and Ready(_W) and myHero.pos:DistanceTo(minion.pos) < 150 then
+            if  Tocsin.Clear.W:Value() and Ready(_W) and myHero.pos:DistanceTo(minion.pos) < 650 then
 				self:CastW(minion)
 			end
 		end
@@ -300,7 +300,7 @@ end
 
 function Malzahar:CastW(target)
 	if myHero.activeSpell.isChanneling == true then return end
-	if  myHero.pos:DistanceTo(target.pos) < 150 then
+	if  myHero.pos:DistanceTo(target.pos) < 550 then
 		Control.CastSpell(HK_W)
 	end
 end
@@ -354,8 +354,8 @@ function Malzahar:IsValidTarget(unit,range)
 end
 
 function Malzahar:Draw()
-	if Tocsin.Draw.Q:Value() and Ready(_Q) then Draw.Circle(myHero.pos, 1050, 3,  Draw.Color(255,255, 162, 000)) end
-
+	if Tocsin.Draw.Q:Value() and Ready(_Q) then Draw.Circle(myHero.pos, 1050, 3,  Draw.Color(255,255, 000, 000)) end
+	if Tocsin.Draw.E:Value() and Ready(_E) then Draw.Circle(myHero.pos, 630, 3,  Draw.Color(255,255, 255, 100)) end
 end
 
 Callback.Add("Load", function()
