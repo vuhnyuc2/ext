@@ -255,6 +255,7 @@ function Malzahar:LoadMenu()
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
 	Tocsin.Draw:MenuElement({id = "Q", name = "Draw [Q] Range", value = true, leftIcon = Q.icon})
 	Tocsin.Draw:MenuElement({id = "E", name = "Draw [E] Range", value = true, leftIcon = E.icon})
+	Tocsin.Draw:MenuElement({id = "R", name = "Draw [R] Range", value = true, leftIcon = R.icon})
 
 end
 
@@ -449,6 +450,7 @@ end
 function Malzahar:Draw()
 	if Tocsin.Draw.Q:Value() and Ready(_Q) then Draw.Circle(myHero.pos, 870, 3,  Draw.Color(255,255, 000, 000)) end
 	if Tocsin.Draw.E:Value() and Ready(_E) then Draw.Circle(myHero.pos, 630, 3,  Draw.Color(255,255, 255, 100)) end
+	if Tocsin.Draw.R:Value() and Ready(_R) then Draw.Circle(myHero.pos, 680, 3,  Draw.Color(255,255, 155, 255)) end
 end
 
 Callback.Add("Load", function()
