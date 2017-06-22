@@ -320,8 +320,6 @@ function Malzahar:CastR(target)
 			EnableOrb(false)
 			Control.CastSpell(HK_R, target)
 			Grasp = true
-			EnableOrb(false)
-			Control.CastSpell(HK_R, target)
 			DelayAction(function() Grasp = false EnableOrb(true) end, 2.6)
 		end
 	end
