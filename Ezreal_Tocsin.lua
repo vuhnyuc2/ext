@@ -1,7 +1,7 @@
 require 'DamageLib'
 require 'Eternal Prediction'
 
-local ScriptVersion = "v1.1a"
+local ScriptVersion = "v1.2"
 
 local function Ready(spell)
 	return myHero:GetSpellData(spell).currentCd == 0 and myHero:GetSpellData(spell).level > 0 and myHero:GetSpellData(spell).mana <= myHero.mana and Game.CanUseSpell(spell) == 0 
@@ -223,10 +223,12 @@ function Ezreal:Misc()
 	local target = GetTarget(20000)
 	if not target then return end
 		if Tocsin.Misc.Rks:Value() and Ready(_R) and OnScreen(target) then
+			if  myHero.pos:DistanceTo(target.pos) > 700 then
 			local lvl = myHero:GetSpellData(_R).level
 			local Rdmg = (({350, 500, 650})[lvl] )
-			if  Rdmg > target.health + target.shieldAP then
-				self:CastR(target)
+				if  Rdmg > target.health *1.1 + target.shieldAP then
+					self:CastR(target)
+				end
 			end
 		end
 		if Tocsin.Misc.Rkey:Value() and Ready(_R) then
