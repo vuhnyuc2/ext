@@ -1,7 +1,7 @@
 require 'DamageLib'
 require 'Eternal Prediction'
 
-local ScriptVersion = "v1.2"
+local ScriptVersion = "v1.3"
 
 local function Ready(spell)
 	return myHero:GetSpellData(spell).currentCd == 0 and myHero:GetSpellData(spell).level > 0 and myHero:GetSpellData(spell).mana <= myHero.mana and Game.CanUseSpell(spell) == 0 
@@ -116,7 +116,7 @@ function Ezreal:LoadSpells()
 end
 
 function Ezreal:LoadMenu()
-	Tocsin = MenuElement({type = MENU, id = "Tocsin", name = "Tocsin Ezreal"})
+	Tocsin = MenuElement({type = MENU, id = "Ezreal_Tocsin", name = "Ezreal_Tocsin"})
 
 
 
@@ -128,6 +128,7 @@ function Ezreal:LoadMenu()
 	Tocsin.Combo:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
 	Tocsin.Combo:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = W.icon})
 	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
+	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true, leftIcon = R.icon})
 	
 	--Clear
 
@@ -189,6 +190,15 @@ function Ezreal:Combo()
 	if Tocsin.Combo.E:Value() and Ready(_E)and myHero.pos:DistanceTo(target.pos) < 1100 then
 		self:CastE(target)
 	end
+	if Tocsin.Combo.R:Value() and Ready(_R) then--and OnScreen(target) then
+		if  myHero.pos:DistanceTo(target.pos) > 800 then
+			local lvl = myHero:GetSpellData(_R).level
+			local Rdmg = (({350, 500, 650})[lvl] )
+			if  Rdmg > target.health *1.1 + target.shieldAP then
+				self:CastR(target)
+			end
+		end
+	end
 
 end
 
@@ -222,15 +232,6 @@ end
 function Ezreal:Misc()
 	local target = GetTarget(20000)
 	if not target then return end
-		if Tocsin.Misc.Rks:Value() and Ready(_R) and OnScreen(target) then
-			if  myHero.pos:DistanceTo(target.pos) > 700 then
-			local lvl = myHero:GetSpellData(_R).level
-			local Rdmg = (({350, 500, 650})[lvl] )
-				if  Rdmg > target.health *1.1 + target.shieldAP then
-					self:CastR(target)
-				end
-			end
-		end
 		if Tocsin.Misc.Rkey:Value() and Ready(_R) then
 		self:CastR(target)
 	end
@@ -300,7 +301,7 @@ function Ezreal:CastR(target)
 		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() then
 			EnableOrb(false)
 			Control.CastSpell(HK_R, pred.castPos)
-			DelayAction(function() EnableOrb(true) end, 0.3)
+			DelayAction(function() EnableOrb(true) end, 0.8)
 		end
 	end 
 	if not OnScreen(target) then
@@ -309,7 +310,7 @@ function Ezreal:CastR(target)
 			Control.SetCursorPos(pred.castPos:ToMM().x,pred.castPos:ToMM().y)
 			Control.KeyDown(HK_R)
 			Control.KeyUp(HK_R)
-			DelayAction(function() EnableOrb(true) end, 0.3)
+			DelayAction(function() EnableOrb(true) end, 0.8)
 		end
 	end
 end
