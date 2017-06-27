@@ -182,10 +182,10 @@ end
 function Ezreal:Combo()
 	local target = GetTarget(1300)
 	if not target then return end
-	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
+	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1150 then
 		self:CastQ(target)
 	end
-	if Tocsin.Combo.W:Value() and Ready(_W)and myHero.pos:DistanceTo(target.pos) < 1000 then
+	if Tocsin.Combo.W:Value() and Ready(_W)and myHero.pos:DistanceTo(target.pos) < 950 then
 		self:CastW(target)
 	end
 	if Tocsin.Combo.E:Value() and Ready(_E)and myHero.pos:DistanceTo(target.pos) < 1100 then
@@ -207,10 +207,10 @@ function Ezreal:Harass()
 	local target = GetTarget(1200)
 	if myHero.mana/myHero.maxMana < Tocsin.Harass.Mana:Value() then return end
 	if not target then return end
-	if Tocsin.Harass.Q:Value() and Ready(_Q)and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
+	if Tocsin.Harass.Q:Value() and Ready(_Q)and myHero.pos:DistanceTo(target.pos) < 1150 then
 		self:CastQ(target)
 	end
-	if Tocsin.Harass.W:Value() and Ready(_W)and myHero.pos:DistanceTo(target.pos) < 1000 then
+	if Tocsin.Harass.W:Value() and Ready(_W)and myHero.pos:DistanceTo(target.pos) < 950 then
 		self:CastW(target)
 	end
 end
@@ -220,10 +220,10 @@ function Ezreal:Clear()
 	for i = 1, Game.MinionCount() do
 		local minion = Game.Minion(i)
 		if  minion.team ~= myHero.team then
-			if  Tocsin.Clear.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(minion.pos) < 1000 then
+			if  Tocsin.Clear.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(minion.pos) < 1150 then
 				self:CastQ(minion)
 			end
-			if  Tocsin.Clear.E:Value() and Ready(_E) and myHero.pos:DistanceTo(minion.pos) < 1000 then
+			if  Tocsin.Clear.E:Value() and Ready(_E) and myHero.pos:DistanceTo(minion.pos) < 1100 then
 				self:CastE(minion)
 			end
 		end
