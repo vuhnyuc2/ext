@@ -104,7 +104,7 @@ function Leona:LoadSpells()
 end
 
 function Leona:LoadMenu()
-	Tocsin = MenuElement({type = MENU, id = "Tocsin", name = "Tocsin Leona"})
+	Tocsin = MenuElement({type = MENU, id = "Leona_Tocsin", name = "Leona_Tocsin"})
 
 
 
@@ -165,10 +165,10 @@ function Leona:Combo()
 	if Tocsin.Combo.E:Value() and Ready(_E) and myHero.pos:DistanceTo(target.pos) < 875 then
 		self:CastE(target)
 	end
-	if Tocsin.Combo.W:Value() and Ready(_W) and myHero.pos:DistanceTo(target.pos) < 275 then
+	if Tocsin.Combo.W:Value() and Ready(_W) and myHero.pos:DistanceTo(target.pos) < 375 then
 		self:CastW(target)
 	end
-	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 175 then
+	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 375 then
 		self:CastQ(target)
 	end
 	if Tocsin.Combo.R:Value() and Ready(_R) and myHero.pos:DistanceTo(target.pos) < 500 then
@@ -183,17 +183,17 @@ function Leona:Harass()
 	if Tocsin.Combo.E:Value() and Ready(_E) and myHero.pos:DistanceTo(target.pos) < 875 then
 		self:CastE(target)
 	end
-	if Tocsin.Combo.W:Value() and Ready(_W) and myHero.pos:DistanceTo(target.pos) < 275 then
+	if Tocsin.Combo.W:Value() and Ready(_W) and myHero.pos:DistanceTo(target.pos) < 375 then
 		self:CastW(target)
 	end
-	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 175 then
+	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 375 then
 		self:CastQ(target)
 	end
 end
 
 function Leona:CastE(target)
     if not Ready(_E) then return end
-	local Edata = {speed = 1200, delay = 0.25,range = 875 }
+	local Edata = {speed = 1200, delay = 0.25,range = 875, width = 75}
 	local Espell = Prediction:SetSpell(Edata, TYPE_LINEAR, true)
 	local pred = Espell:GetPrediction(target,myHero.pos)
 	if  myHero.pos:DistanceTo(target.pos) < 850 then
@@ -224,13 +224,13 @@ function Leona:CastW(target)
 	    end
     end
 	    if  myHero.pos:DistanceTo(target.pos) > myHero.range then
-			Control.CastSpell(HK_E)
+			Control.CastSpell(HK_W)
 	    end
 end
 
 function Leona:CastQ(target)
     if not Ready(_Q) then return end
-	if  myHero.pos:DistanceTo(target.pos) < 170 then
+	if  myHero.pos:DistanceTo(target.pos) < 270 then
 		if  myHero.pos:DistanceTo(target.pos) < myHero.range then
 		    if myHero.attackData.state == STATE_WINDDOWN then
 				Control.CastSpell(HK_Q)
