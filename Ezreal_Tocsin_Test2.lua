@@ -264,7 +264,7 @@ end
 
 function Ezreal:CastW(target)
 	local Wdata = {speed = 1200, delay = 0.25, range = 950, width = 80}
-	local Wspell = Prediction:SetSpell(Wdata, TYPE_LINEAR, true)
+	local Wspell = Prediction:SetSpell(Wdata, TYPE_LINEAR, false)
 	local pred = Wspell:GetPrediction(target,myHero.pos)
 	if  myHero.pos:DistanceTo(target.pos) < myHero.range then
 		if myHero.attackData.state == STATE_WINDDOWN then
