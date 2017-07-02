@@ -1,7 +1,70 @@
+--                                                                                           r                                      
+--                                                                                          ,@                                      
+--                                                                    ,x                    nBc                                     
+--                                                                     ;Br  ,g8S:;B;        B@B                                     
+--                                                                      XB5t@B@0  ;Bn,      @@@H                                    
+--                                                                    iUB@B@B@BB  ,@r       ;@B@r                                   
+--                                                                . tC.#@B@B@B@B@P@B,        B@B@                                   
+--                                                               @B  .:BB@B@B@B8@@B@B        x@@B@                                  
+--                                                               @@ .rSB@B@B#b@    .          @B@F                                  
+--                                                             rrO@@B@B@B@B@c,Bc Fr      ,    B@@5 X                                
+--                                                            0B@B@B@@@B@B@@@B@@@Bj:  ;;x;:;iB@B@B@Bd       .;:                     
+--                                                           ..,Bc   jUD6Z0@8@B@B@2F   P@b0@B@B@B@B@B@       . ;Oc                 ;
+--                                                                    rLFccBE@@B@B@B@s.B@@Bjj#@B@@@B@B@        .                 5@;
+--                                                                X@B@B@@@@E    B@BBx@B@@6B@6rrbB@B@B@Bg  HrS#@@B@             UB@B 
+--                                                               B@B@B@B@B@O  .;EB@scB@B@BBB@BPrTb@B@B@#  sB@B@B@B7         ;D@@@@, 
+--                                                             iB@B@B@B@B@DE    r@@@B;c@b@ EB@B@O7E@B@Bc  i@@@B@B@;       n@B@D@B   
+--                                                        .rcjCd@B@B@B@Bc  :T6@B@B@B@ ,BH ;B@@@B@B@B@B@Bt8@@@B@@@c    b, i@BBB@5    
+--                                                          :20@B@B@B@B@PdB@B@@@B@B@@@@@Bb:@B@@@B@B@B@B@B@B@B@B@X:,rc@B@B;t@BU      
+--                                                        .@@B@B@B@@@B@B@B@B@B@B@B@B@D@#@@8B@U@B@B@B@B@@@B@B@B@B:6@B@B@B@B@B        
+--                                                       UBg .B#b@B@B@B@B@n#B@B@B@BB@,Cn .:@@BB@B@B@B@B@B@@@@OE@s 6@B@B@@@@i        
+--                                                     r@@  E@j.B@@B@@@Bb  i@B@B@BZ ,;.B;rH#0XXnUZBB@B@B@B@B@B@8. CXHB@@@B@B@B@B@.  
+--                                                    ,C; S@H.;F8@B@B@B@6xB@B@B@B@.    @B@B@dddb#BB@B@B@B@@@F ,s.ZBnTSO@B@B@B@@@7   
+--                                                       ;T   ic@B@B@ ,B@B@B@B@B#          B@B@B@@@B@B@B@B@BU ;j2;BB@rb@@@@6j,      
+--                                                           dB@B@U  ;B@@@B@B@B@B          xB@B@B@B@@@B@B@@BO@B@B@sUB@B@B           
+--                                                         i@@@B@r  ;B@@@B@@@B@B@B          @B@B@B@B@B@@@B@B@B066B@8@B@@:           
+--                                                      ;X@@@@B@H  rB@B@B@@@B@t ;@r         6@@@B@B@B@B@B@B@B@B8Z@B@B@B@,           
+--                                                   :rF@B@@@@@Bt  B@B@B@B@@@Bji.c@7         B@B@B@B@B@B@B@B@B@B@B@B@B@B@C          
+--                                                    ;HB@B@@@B@  d@B@B@B@B@:sB@BsB@D       b@B@B@B@B@B@B@B@B@B@B@@@B; gB@B         
+--                                                F .Z@@@B@B@B@,  @@@B@Xj@@BP#@@@@@@@@    L@@2BB@B@B@@@B@B@B@B@B@B@8     S@:        
+--                                               :g;d@B@@@85:    SB@B@@8D@B@B@B@B@B@B@n   .    @B@B@B@@@B@B@B@B@B@Bs                
+--                                           B@@@B  @B@B@        B@B@B@B@B@B@B@B@B@B@B@         EB@B@B@B@B@B@B@B@B@B                
+--                                         . L@@B   g@B@.       r@B@B@B@B@B@@#g@B@B@@@B@        c@@@B@B@B@B@B@B@  @@.               
+--                                       :Pr U@B#i8@@r          @B@B@B@B@B@@@#XB@B@B@@@B#      E@B@B@B@B@B@B@BO   jBr               
+--                                     r6P;rB@B@B@B@B,          B@B@B@B@@@B@B@B@B@B@B@@@Bs    B@B@B@B@B@B@B@B@     ;                
+--                                   cPSi5@@@B@B#B@..r          8@@B@B@B@B@B@BS@@B@@@B@B@B  TB@brB@B@B@B@B@B@B:                     
+--                                 S#576B@@@B@r #@.             0@B@@@B@B@B@@@  B@B@B@B@B  @B0   @B@B@B@B@B@B@n                     
+--                              .E@Bn8@B@B@@;   @,              2@@@@B@B@B@B@r   B@B@@@B@t@X    OB@B@@@@@B@@@B@                     
+--                            ;B@@B@B@B@O@i     .              @B@B@@@B@B@B@c    .B@B@B@B@      B@B@B@B@B@BX @B                     
+--                          jB@B@B@B@B@rx                      B@B@B@B@@@B@       rB@B@B@B     :@B@B@B@B@B@n .@,                    
+--                       .U@B@B@B@B@Bs                         @@@@@B@B@B@         #@@B@B@2    0B@B@B@@@B@BE  BE                    
+--                     ;BB@B@B@B@B@r                           B@@@B@B@ 6           @@@B@Bx.   B@@@B@B@B8B@8  .8                    
+--                   jB@B@B@B@@@B;                             @B@@@B@@             BOB@B@n0E S@B@@@B@Brr@B@   ,                    
+--                .Z@B@B@@@B@BO.                               0@B@B@@B             r  @@B@B@6@B@B@B@B@ rB@B:                       
+--              ;BB@B@B@B@B@X                                  ;B@B@@@;                OB@B@B@B@B@B@B@; r@B@H                       
+--            jB@B@B@B@s.;.                                    B@B@B@BO                s@B@B@B@B@B@B@B  ;B@@@r                      
+--         .E@B@B@B@#;                                        ;@B@B@B@g                ;B@B@B@@@B@B@B;   @@@B@                      
+--       ;@B@@b@@87                                           xB@B@B@B,                 @B@B@@@B@B@@@    @@B@c                      
+--     i@@Bd.,r;                                              B@B@B@BO                  B@B@B@@@B@B@;    ;B@#                       
+--  .X@B@r                                                   ;@B@B@BU                    B@B@B@B@B@B      @B                        
+--.sB@i                                                      @B@B@Bc                      B@B@B@B@B;      Ts                        
+--..                                                        ,B@B@BT                        @@B@B@B@                                 
+--                                                          i@B@B@                         @B@@@B@:                                 
+--                                                          @B@B@@#                       rB@B@B@B.                                 
+--                                                         @B@B@B@@s                      g@B@B@B@8                                 
+--                                                        @B@B@B@@@@                      .B@@@B@B@c                                
+--                                                       BB@B@B@BbB,                       @B@B@B@B@                                
+--                                                     .@@@B@Bj C                          B@c@B@@@Br                               
+--                                                    r@@@B@B                              Zs ;@B@B@B                               
+--                                                   c@@@0j,                                   c0B@B@B                              
+--                                                   r:                                          @@@B@;                             
+--                                                                                               2@@@B@                             
+--                                                                                                6@B@B,                            
+--
 
 require 'Eternal Prediction'
 
-local ScriptVersion = "v1.3"
+local ScriptVersion = "v1.4"
 
 local function Ready(spell)
 	return myHero:GetSpellData(spell).currentCd == 0 and myHero:GetSpellData(spell).level > 0 and myHero:GetSpellData(spell).mana <= myHero.mana and Game.CanUseSpell(spell) == 0 
@@ -17,7 +80,7 @@ local function EnemiesAround(pos, range, team)
 	end
 	return Count
 end
-
+local Grasp = false
 local function AlliesAround(pos, range, team)
 	local Count = 0
 	for i = 1, Game.HeroCount() do
@@ -105,9 +168,6 @@ end
 
 function Leona:LoadMenu()
 	Tocsin = MenuElement({type = MENU, id = "Leona_Tocsin", name = "Leona_Tocsin"})
-
-
-
 	Tocsin:MenuElement({name = "Leona", drop = {ScriptVersion}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/7/74/Leona_OriginalLoading.jpg"})
 	
 	--Combo
@@ -119,14 +179,6 @@ function Leona:LoadMenu()
 	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true, leftIcon = R.icon})
 	Tocsin.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
 	
-	--Clear support, nah we Gucci
---[[
-	Tocsin:MenuElement({type = MENU, id = "Clear", name = "Clear Settings"})
-	Tocsin.Clear:MenuElement({id = "Key", name = "Toggle: Key", key = string.byte("A"), toggle = true})
-	Tocsin.Clear:MenuElement({id = "Q", name = "Use [Q]", value = false, leftIcon = Q.icon})
-	Tocsin.Clear:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
-	Tocsin.Clear:MenuElement({id = "Mana", name = "Min Mana to Clear [%]", value = 0, min = 0, max = 100})
---]]
 	--Harass
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
@@ -135,22 +187,20 @@ function Leona:LoadMenu()
 	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
 	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0.30, min = 0.05, max = 1, step = 0.01})
 
-	--Misc
-
-	--Tocsin:MenuElement({type = MENU, id = "Misc", name = "Misc Settings"})
-	
-
 	--Eternal Prediction
 	Tocsin:MenuElement({type = MENU, id = "Pred", name = "Prediction Settings"})
-	Tocsin.Pred:MenuElement({id = "Chance", name = "Prediction Hitchance", value = 0.125, min = 0.05, max = 1, step = 0.025})
+	Tocsin.Pred:MenuElement({id = "EChance", name = "E Prediction Hitchance", value = 0.20, min = 0.05, max = 1, step = 0.01})
+	Tocsin.Pred:MenuElement({id = "RChance", name = "R Prediction Hitchance", value = 0.25, min = 0.05, max = 1, step = 0.01})
 	
 	--Draw
 
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
 	Tocsin.Draw:MenuElement({id = "E", name = "Draw [E] Range", value = true, leftIcon = E.icon})
+
 end
 
 function Leona:Tick()
+	if myHero.dead or Grasp == true then return end
 	local Mode = GetMode()
 	if Mode == "Combo" then
 		self:Combo()
@@ -160,7 +210,7 @@ function Leona:Tick()
 end
 
 function Leona:Combo()
-	local target = GetTarget(1100)
+	local target = GetTarget(1100, "AD")
 	if not target then return end
 	if Tocsin.Combo.E:Value() and Ready(_E) and myHero.pos:DistanceTo(target.pos) < 875 then
 		self:CastE(target)
@@ -168,7 +218,7 @@ function Leona:Combo()
 	if Tocsin.Combo.W:Value() and Ready(_W) and myHero.pos:DistanceTo(target.pos) < 375 then
 		self:CastW(target)
 	end
-	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 375 then
+	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 275 then
 		self:CastQ(target)
 	end
 	if Tocsin.Combo.R:Value() and Ready(_R) and myHero.pos:DistanceTo(target.pos) < 500 then
@@ -186,7 +236,7 @@ function Leona:Harass()
 	if Tocsin.Combo.W:Value() and Ready(_W) and myHero.pos:DistanceTo(target.pos) < 375 then
 		self:CastW(target)
 	end
-	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 375 then
+	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 275 then
 		self:CastQ(target)
 	end
 end
@@ -194,22 +244,24 @@ end
 function Leona:CastE(target)
     if not Ready(_E) then return end
 	local Edata = {speed = 1200, delay = 0.25,range = 875, width = 75}
-	local Espell = Prediction:SetSpell(Edata, TYPE_LINEAR, true)
+	local Espell = Prediction:SetSpell(Edata, TYPE_LINE, true)
 	local pred = Espell:GetPrediction(target,myHero.pos)
 	if  myHero.pos:DistanceTo(target.pos) < 850 then
 		if myHero.attackData.state == STATE_WINDDOWN then
-			if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:hCollision() == 0 then
+			if pred and pred.hitChance >= Tocsin.Pred.EChance:Value() and pred:hCollision() == 0 then
 				EnableOrb(false)
 				Control.CastSpell(HK_E, pred.castPos)
-				DelayAction(function() EnableOrb(true) end, 0.3)
+				Grasp = true
+				DelayAction(function() Grasp = false EnableOrb(true) end, 0.2)
 			end
 		end
 	end
 	if  myHero.pos:DistanceTo(target.pos) < 850 then
-		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:hCollision() == 0 then
+		if pred and pred.hitChance >= Tocsin.Pred.EChance:Value() and pred:hCollision() == 0 then
 			EnableOrb(false)
 			Control.CastSpell(HK_E, pred.castPos)
-			DelayAction(function() EnableOrb(true) end, 0.3)
+			Grasp = true
+				DelayAction(function() Grasp = false EnableOrb(true) end, 0.2)
 		end
 	end
 end
@@ -251,15 +303,16 @@ function Leona:CastR(target)
 	local pred = Rspell:GetPrediction(target,myHero.pos)
 	if  myHero.pos:DistanceTo(target.pos) < 850 and not Ready(_E) and not Ready(_Q) then
 		if myHero.attackData.state == STATE_WINDDOWN then
-			if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() then
+			if pred and pred.hitChance >= Tocsin.Pred.RChance:Value() then
 				EnableOrb(false)
 				Control.CastSpell(HK_R, pred.castPos)
-				EnableOrb(true)
+				Grasp = true
+				DelayAction(function() Grasp = false EnableOrb(true) end, 0.2)
 			end
 		end
 	end
 	if  myHero.pos:DistanceTo(target.pos) < 850 and not Ready(_E) and not Ready(_Q) then
-		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() then
+		if pred and pred.hitChance >= Tocsin.Pred.RChance:Value() then
 			EnableOrb(false)
 			Control.CastSpell(HK_R, pred.castPos)
 			EnableOrb(true)
@@ -305,6 +358,6 @@ Callback.Add("Load", function()
 	if _G[myHero.charName] then
 		_G[myHero.charName]()
 		print("Tocsin "..myHero.charName.." "..ScriptVersion.." Loaded")
-	else print ("Tocsin doens't support "..myHero.charName.." shutting down...") return
+	else print ("Tocsin doesn't support "..myHero.charName.." shutting down...") return
 	end
 end)
