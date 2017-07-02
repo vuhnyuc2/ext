@@ -1,33 +1,80 @@
-require 'DamageLib'
+--                                                                                                                                                  
+--                                                                                                                                                  
+--                                                                                                                                                  
+--                                                                     ,c  ,;r .r                                                                   
+--                                                                   ;;;r:;,i; cr  ;,                                                               
+--                                                           .,     r;  ;   i,rr..;c.                                                               
+--                                                           :r,,::;.         :   T;                                                                
+--                                                            ;                 .;;.                                                                
+--                                             .,:::..        i;              ,;.    .,                                                             
+--                                 ,;:;::,,.:::..    .:,.  .::;i ,;     ::. .7;;c;:::;;.                                                            
+--                               ,;;       ;;,.,        :r;:   :L sZ;;;sjrr ;.   :;: ; .,::;;   ,;,,                                                
+--                        ,.,,;;;:        ;;.         .::.    ,C7 :,5 ;c, ,:;      : ;:     ,rr;;..,;;,                                             
+--                     .;r;...;;         ;;  .:;,,  .i         L    .  .   gc      ; :.       c:      ,;;;,,..                                      
+--                    .c;             .  ;.,:.  .,:,:;.        :r ;: ,   c.rr      ; ;         ;;        ...,,;;,                                   
+--                   :T;         :;;:,, :;.   :;,.    .,:; ,;  .rn@@Z@csB@;        ; :..,,,.    r,            .,;:                                  
+--                 .;,:         ,:      :     .          r;,:: ;SdDB@BH0@BO  .,    ;, ;.  .,;,   r.:;:,        ;.;                                  
+--                .; :         .;                        ; ,,.::   .   ;#@@;  ,;.  i. ;.     ;;  :,  .:;;.      ;:;                                 
+--               .;  ;         r      .;,               ;; .::  :.     .@B@;.. ,, ;7 ;                  ,.      :,;                                 
+--               ;   ;       .r,        ,;             ;;..i,  ;.  sB@#@7 ,:, :,:.;: ;                 ,        ,,T.                                
+--              ,:   .     ,;r::,         ,,        :;;,  ;       ;;6r Zs :r;... ;;,.:;       .;:      r        ; rr                                
+--              ;,       ;;:    ,:.      .,;:; ..,,,.    :;     ,r;;.  .;r:.     ;,::.       ::        r        ; .i.                               
+--              ;      ,r.       .i:;;;;;,.  ;c;;..       ;,:,;:.    ;          ;:.7.     .,;;  .      .r      r, .r:                               
+--              ;.     ,         ;           .r,   ..,,      .       ;        .:;  ;.,,:.:s: ,;;.     ,;,;     i, .r,                               
+--              ;.        .   .,;.            ;.;                    ;       ,::. ;      r. ::.    .;;;  .r    .; ,;                                
+--              ;.       ;. ,;,,              .; ,:                 .;      :.,,  ;     ;,    ,;:rr.      :,   .:  ;                                
+--              r        ; ;,                  .;  ,,               ;     ,, ,,  ,.   .r;         7.           ;, ;;                                
+--             .;        ;,i                     ::. :,. ;;,      .;:   .;:.:.  .r  .;;:           rr;         ,  ;r                                
+--             ;.         ,:r.                   :;:r ;,.:;;,.,,:,..;.;,. r:  ... ;.:.               ;s:          :r                                
+--             ;;            r                   ;. .; .         . ;r,, ..    ..  ;;;.                 x.         .;;,                              
+--             ;:            ;                 ;r:...,7,,:;;;,.;r;;... ..  ..,:;r;.rr.                r           ;  ;;                             
+--             r      ,,     ;.              ;T; .r   ,.     ,,.  .c:..:,,.,.;;;::,.,;r,            ,r         .;  ;  ,;.                           
+--            ;.     .r;,.    r              r  ,;,:: i,;     ;.,. .      :,;:.        r;          ;;           r   . ;.r                           
+--           ,;    ::;t;.;:   ;.              :;.     , :  .  r;.  ..,.,,:.;.           ;,        .r             ;   : i:                           
+--           .r       ,;, :;,,.             ;;.      r  ; ,T .r  ..                      r.        ;,   ;7.      ,:  ;;.                            
+--            .::::;.     :                ;.         r .;.:...      ;  ::           ;;;  ;         ;;  ;,.r;.   :: :;:                             
+--                  :;:.,;,               r       :,  ;rr:  ,;.     :,  r     ,;        ;;;          r  r ;i . .:  ; ;                              
+--                     ,.                ;.       ;    .;;:;.c      ;  ,:    :;    ..    ;t.         ;, :; .  .;  r;.:                              
+--                                       ;        ;      ;;:.:.     ;  ,:   ;,    ;;,,;,,.. i.        ...,;:. r:.;,                                 
+--                                       ;       ;.      .;;,.;;:,. :;  ;  :,   .r.   ,   ::;.             .,:.                                     
+--                                       r      ,,         ,,  .;;r,,r, ;  ;  ;:r.          :s                                                      
+--                                      ;:                 ;.;;,.     .,r; ; ;.        .    :,7                                                     
+--                                     :; ,r;:;::.        ;r.            r:; ;;     ,;;;:;;, :;:.                                                   
+--                                     ;  ..     .::.   .;:               .;;  ;   ,;: .;;  ,; .rr,.                                                
+--                                     ,;; :,.,.    .,;:i,                  .:  :;.   .;.  ;:  r: ,:;:.                                             
+--                                     ,sr. :  ,:;,:..   r                   :;   ,:,,.   ;.   .      ;:                                            
+--                                     ;  ;; ., ;  :;;    r                  ;:.;,...               r;.r                                            
+--                                    ;,,   .;;Ljr;,     ;;.                ;                    .   r;;                                            
+--                                    r;.;      ..    ;;,;,                 ; ;          ,:     ;;:,  ;                                             
+--                                    .  ;;  .:    .  :. t                  ;;.;    ;;  ;;.;;,  .; .:,;                                             
+--                                        :; ;; ::;.,::;..;.                ;: ;   ;.; :;    ,; ::   ;.                                             
+--                                          ,r:. .  .;r,,. r                  .;  r, .r, ,.:. ;r;                                                   
+--                                             i, ,;;,    ;,                  ,;.;.;   .;;:;: ..r                                                   
+--                                           ::,         ,:                    .j. ;;           r,                                                  
+--                                         .;..;   :     ;,                        .;            r                                                  
+--                                       .r .;   r, :.  ,:                        ;:  ::     r  .;:                                                
+--                                     .i;:.         r.  ::                       .;   ;.  ;  .;   ;;                                               
+--                                     ;;cr;;, ,   .    .r                       ::        ;:  .    ;,                                              
+--                                       ;:jr:s;.::,, ::;                       :;     :    .. .;.   r;                                             
+--                                           .r;r :; ;;                          ;  ,:.;     i   ,.;rrr;                                            
+--                                              ::..:;                           ;.    r...   r  ;r.;r,                                             
+--                                                                               i ;;r :; 5..,c;.ic:                                                
+--                                                                               ,;..  :. ,;ir;,,.                                                  
+--                                                                                 ,,,.                                                             
+--                                                                                                                                                  
+--                                                                                                                                                  
+--                                                                                                                                                  
+                                                                                                                                                      
+
+
+
+
 require 'Eternal Prediction'
 
-local ScriptVersion = "v1.5"
+local ScriptVersion = "v1.6"
 
 local function Ready(spell)
 	return myHero:GetSpellData(spell).currentCd == 0 and myHero:GetSpellData(spell).level > 0 and myHero:GetSpellData(spell).mana <= myHero.mana and Game.CanUseSpell(spell) == 0 
-end
-
-local function AlliesAround(pos, range, team)
-	local Count = 0
-	for i = 1, Game.HeroCount() do
-		local m = Game.Hero(i)
-		if m and m.team == 100 and not m.dead and m.pos:DistanceTo(pos, m.pos) < 600 then
-			Count = Count + 1
-		end
-	end
-	return Count
-end
-
-local function GetDistance(p1,p2)
-return  math.sqrt(math.pow((p2.x - p1.x),2) + math.pow((p2.y - p1.y),2) + math.pow((p2.z - p1.z),2))
-end
-
-local function GetDistance2D(p1,p2)
-return  math.sqrt(math.pow((p2.x - p1.x),2) + math.pow((p2.y - p1.y),2))
-end
-
-local function OnScreen(unit)
-	return unit.pos:To2D().onScreen;
 end
 
 local function GetTarget(range)
@@ -70,6 +117,8 @@ local function GetMode()
 	end
 end
 
+local Grasp = false
+
 local function EnableOrb(bool)
 	if Orb == 1 then
 		EOW:SetMovements(bool)
@@ -105,10 +154,7 @@ function DrMundo:LoadSpells()
 end
 
 function DrMundo:LoadMenu()
-	Tocsin = MenuElement({type = MENU, id = "Tocsin", name = "Tocsin DrMundo"})
-
-
-
+	Tocsin = MenuElement({type = MENU, id = "DrMundo_Tocsin", name = "DrMundo_Tocsin"})
 	Tocsin:MenuElement({name = "DrMundo", drop = {ScriptVersion}, leftIcon = "https://vignette3.wikia.nocookie.net/leagueoflegends/images/9/93/Dr._Mundo_OriginalLoading.jpg"})
 	
 	--Combo
@@ -150,7 +196,7 @@ function DrMundo:LoadMenu()
 
 	Tocsin:MenuElement({type = MENU, id = "Pred", name = "Prediction Settings"})
 	Tocsin.Pred:MenuElement({type = SPACE, id = "Pred Info", name = "If you go too high it wont fire"})
-	Tocsin.Pred:MenuElement({id = "Chance", name = "Prediction Hitchance", value = 0.15, min = 0.05, max = 1, step = 0.025})
+	Tocsin.Pred:MenuElement({id = "QQChance", name = "Q Prediction Hitchance", value = 0.20, min = 0.05, max = 1, step = 0.01})
 	
 	--Draw
 
@@ -160,6 +206,7 @@ function DrMundo:LoadMenu()
 end
 
 function DrMundo:Tick()
+	if myHero.dead or Grasp == true then return end
 	local Mode = GetMode()
 	if Mode == "Combo" then
 		self:Combo()
@@ -177,7 +224,7 @@ end
 function DrMundo:Combo()
 	local target = GetTarget(1500)
 	if not target then return end
-	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
+	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1000 then
 		self:CastQ(target)
 	end
 	if Tocsin.Combo.W:Value() and Ready(_W)and myHero.pos:DistanceTo(target.pos) < 400 and myHero:GetSpellData(_W).toggleState == 1 then
@@ -196,7 +243,7 @@ end
 function DrMundo:Harass()
 	local target = GetTarget(1100)
 	if not target then return end
-	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1000 and target:GetCollision(Q.width,Q.speed,Q.delay) == 0 then
+	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1000 then
 		self:CastQ(target)
 	end
 	if Tocsin.Combo.W:Value() and Ready(_W)and myHero.pos:DistanceTo(target.pos) < 170 and myHero:GetSpellData(_W).toggleState == 1 then
@@ -211,14 +258,15 @@ function DrMundo:Clear()
 	for i = 1, Game.MinionCount() do
 		local minion = Game.Minion(i)
 		if not minion then return end
-		local Qdata = {speed = 1500, delay = 0.25, range = 975 }
+		local Qdata = {speed = 1500, delay = 0.25, range = 975, width = 85 }
 		local Qspell = Prediction:SetSpell(Qdata, TYPE_LINEAR, true)
 		local pred = Qspell:GetPrediction(minion,myHero.pos)
 		if  minion.team ~= myHero.team then
 			if  Tocsin.Clear.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(minion.pos) < 1000 then
 				EnableOrb(false)
 				Control.CastSpell(HK_Q, pred.castPos)
-				DelayAction(function() EnableOrb(true) end, 0.3)
+				Grasp = true
+				DelayAction(function() Grasp = false EnableOrb(true) end, 0.2)
 			end
 			if  Tocsin.Clear.E:Value() and Ready(_E) and myHero.pos:DistanceTo(minion.pos) < 150 then
 				self:CastE(minion)
@@ -240,7 +288,7 @@ end
 function DrMundo:Misc()
 	local target = GetTarget(1000)
 	if not target then return end
-		if Tocsin.Misc.Qks:Value() and Ready(_Q) and OnScreen(target) then
+		if Tocsin.Misc.Qks:Value() and Ready(_Q) then
 			local lvl = myHero:GetSpellData(_Q).level
 			local Qdmg = (({80, 130, 180, 230, 280 })[lvl] )
 			if  Qdmg > target.health then
@@ -250,14 +298,15 @@ function DrMundo:Misc()
 end
 
 function DrMundo:CastQ(target)
-	local Qdata = {speed = 1500, delay = 0.25, range = 975 }
-	local Qspell = Prediction:SetSpell(Qdata, TYPE_LINEAR, true)
+	local Qdata = {speed = 1500, delay = 0.25, range = 975, width = 85 }
+	local Qspell = Prediction:SetSpell(Qdata, TYPE_LINE, true)
 	local pred = Qspell:GetPrediction(target,myHero.pos)
 	if  myHero.pos:DistanceTo(target.pos) < 1000 then
-		if pred and pred.hitChance >= Tocsin.Pred.Chance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
+		if pred and pred.hitChance >= Tocsin.Pred.QQChance:Value() and pred:mCollision() == 0 and pred:hCollision() == 0 then
 			EnableOrb(false)
 			Control.CastSpell(HK_Q, pred.castPos)
-			DelayAction(function() EnableOrb(true) end, 0.3)
+			Grasp = true
+			DelayAction(function() Grasp = false EnableOrb(true) end, 0.2)
 		end
 	end
 end
@@ -309,8 +358,8 @@ function DrMundo:LastHit()
 	local level = myHero:GetSpellData(_Q).level
 	for i = 1, Game.MinionCount() do
 	local minion = Game.Minion(i)
-	local Qdata = {speed = 1500, delay = 0.25, range = 975 }
-	local Qspell = Prediction:SetSpell(Qdata, TYPE_LINEAR, true)
+	local Qdata = {speed = 1500, delay = 0.25, range = 975, width = 85 }
+	local Qspell = Prediction:SetSpell(Qdata, TYPE_LINE, true)
 	local pred = Qspell:GetPrediction(minion,myHero.pos)
 		if  minion.team == 200 then
 		local Qdamage = (({80, 130, 180, 230, 280})[level])
@@ -318,7 +367,8 @@ function DrMundo:LastHit()
       			if Qdamage >= self:HpPred(minion, 0.5) then
 					EnableOrb(false)
 					Control.CastSpell(HK_Q, pred.castPos)
-					DelayAction(function() EnableOrb(true) end, 0.3)
+					Grasp = true
+					DelayAction(function() Grasp = false EnableOrb(true) end, 0.3)
 				end
 			end
 		end
