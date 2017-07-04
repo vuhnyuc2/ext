@@ -540,7 +540,7 @@ function Combo()
         end
     end
     if Ready(_R) and ValidTarget(target, R.Range) and Rdmg(target) > target.health then
-        if Ezreal.C.R:Value() then
+        if Ezreal.C.R:Value() and myHero.pos:DistanceTo(target.pos) > 600 then
             local pos = GetPred(target, R.Speed, 1.00 + (Game.Latency()/1000))
 			CustomCast(HK_R, pos, 1000)
         end
