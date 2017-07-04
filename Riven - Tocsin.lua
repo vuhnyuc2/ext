@@ -32,7 +32,7 @@ function Riven:LoadMenu()
 
 --Main Menu
 
-	self.Menu = MenuElement({type = MENU, id = "Riven", name = "Riven", leftIcon = Icons["RivenIcon"]})
+	self.Menu = MenuElement({type = MENU, id = "Riven_Tocsin", name = "Riven_Tocsin", leftIcon = Icons["RivenIcon"]})
 
 --Combo Settings Menu
 
@@ -315,7 +315,7 @@ function Riven:CastQ(target)
                     DelayAction(function()
                     local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
                     Control.Move(Vec)
-                    end, (0.05 + Game.Latency()/1000))
+                    end, (0.25 + Game.Latency()/1000))
                 end
             end
 
@@ -330,7 +330,7 @@ function Riven:CastQ(target)
                     	DelayAction(function()
                     	local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
                     	Control.Move(Vec)
-                    	end, (0.05 + Game.Latency()/1000))
+                    	end, (0.25 + Game.Latency()/1000))
                 	end
             	end
         	end
