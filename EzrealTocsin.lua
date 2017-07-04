@@ -89,7 +89,7 @@
 if myHero.charName ~= "Ezreal" then return end
 
 
-require "DamageLib"
+--require NOTHING!!
 
 
 local Q = { Range = 1100, Delay = 0.25, Speed = 1200, Width = 60}
@@ -540,7 +540,7 @@ function Combo()
         end
     end
     if Ready(_R) and ValidTarget(target, R.Range) and Rdmg(target) > target.health then
-        if Ezreal.C.R:Value() and target:GetCollision(R.Width, R.Speed, R.Delay) == 0 then
+        if Ezreal.C.R:Value() then
             local pos = GetPred(target, R.Speed, 1.00 + (Game.Latency()/1000))
 			CustomCast(HK_R, pos, 1000)
         end
