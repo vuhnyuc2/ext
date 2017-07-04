@@ -206,7 +206,7 @@ local HKITEM = {
 local function Qdmg(target)  --35 / 55 / 75 / 95 / 115 (+ 110% AD) (+ 40% AP)
     local level = myHero:GetSpellData(_Q).level
 	if Ready(_Q) then
-    	return CalcMagicalDamage(myHero, target, (35 + 20 * level + 0.40 * myHero.ap + 1.10 * myHero.totalDamage))
+    	return CalcMagicalDamage(myHero, target, (15 + 20 * level + 0.40 * myHero.ap + 1.10 * myHero.totalDamage))
 	end
 	return 0
 end
@@ -214,7 +214,7 @@ end
 local function Wdmg(target)  --70 / 115 / 160 / 205 / 250 (+ 80% AP)
     local level = myHero:GetSpellData(_W).level
 	if Ready(_W) then
-    	return CalcMagicalDamage(myHero, target, (70 + 45 * level + 0.8 * myHero.ap))
+    	return CalcMagicalDamage(myHero, target, (30 + 45 * level + 0.8 * myHero.ap))
 	end
 	return 0
 end
@@ -222,7 +222,7 @@ end
 local function Edmg(target)   --75 / 125 / 175 / 225 / 275 (+ 50% bonus AD) (+ 75% AP)
     local level = myHero:GetSpellData(_E).level
 	if Ready(_E) then
-        return CalcMagicalDamage(myHero, target, (75 + 50 * level + 0.75 * myHero.ap + 0.50 * myHero.bonusDamage))
+        return CalcMagicalDamage(myHero, target, (25 + 50 * level + 0.75 * myHero.ap + 0.50 * myHero.bonusDamage))
 	end
 	return 0
 end
@@ -230,7 +230,7 @@ end
 local function Rdmg(target)  --min dmg 105 / 150 / 195 (+ 30% bonus AD) (+ 27% AP)    max 350 / 500 / 650 (+ 100% bonus AD) (+ 90% AP) 
     local level = myHero:GetSpellData(_R).level
 	if Ready(_R) then
-    	return CalcMagicalDamage(myHero, target, (350 + 150 * level + 0.5 * myHero.ap + 0.60 * myHero.bonusDamage))
+    	return CalcMagicalDamage(myHero, target, (200 + 150 * level + 0.5 * myHero.ap + 0.60 * myHero.bonusDamage))
 	end
 	return 0
 end
@@ -320,18 +320,18 @@ Ezreal:MenuElement({type = MENU, id = "A", name = "Activator"})
 
 Ezreal.C:MenuElement({id = "Q", name = "Q: Mystic Shot", value = true})
 Ezreal.C:MenuElement({id = "W", name = "W: Essence Flux", value = true})
-Ezreal.C:MenuElement({id = "E", name = "E: Arcane Shift", value = true})
+Ezreal.C:MenuElement({id = "E", name = "E: Arcane Shift", value = false})
 Ezreal.C:MenuElement({id = "R", name = "R: Trueshot Barrage", value = true})
 
 Ezreal.H:MenuElement({id = "Q", name = "Q: Mystic Shot", value = true})
 Ezreal.H:MenuElement({id = "W", name = "W: Essence Flux", value = true})
-Ezreal.H:MenuElement({id = "E", name = "E: Arcane Shift", value = true})
+Ezreal.H:MenuElement({id = "E", name = "E: Arcane Shift", value = false})
 
 Ezreal.LC:MenuElement({id = "Q", name = "Q: Mystic Shot", value = true})
 Ezreal.LC:MenuElement({id = "E", name = "E: Arcane Shift", value = true})
 
 Ezreal.JC:MenuElement({id = "Q", name = "Q: Mystic Shot", value = true})
-Ezreal.JC:MenuElement({id = "E", name = "E: Arcane Shift", value = false})
+Ezreal.JC:MenuElement({id = "E", name = "E: Arcane Shift", value = true})
 
 Ezreal.F:MenuElement({id = "E", name = "E: Arcane Shift", value = true})
 
