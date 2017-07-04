@@ -390,6 +390,7 @@ DelayAction(function()
 	or myHero:GetSpellData(SUMMONER_2).name == "SummonerBoost" then
 		Ezreal.A.S:MenuElement({id = "Cleanse", name = "Auto Cleanse", value = true})
 		Ezreal.A.S:MenuElement({id = "Blind", name = "Blind", value = false})
+		Ezreal.A.S:MenuElement({id = "Charm", name = "Charm", value = true})
 		Ezreal.A.S:MenuElement({id = "Flee", name = "Flee", value = true})
 		Ezreal.A.S:MenuElement({id = "Slow", name = "Slow", value = false})
 		Ezreal.A.S:MenuElement({id = "Root", name = "Root/Snare", value = true})
@@ -606,12 +607,12 @@ function Harass()
 			CustomCast(HK_W, pos, 250)
         end
     end
-    --[[if Ready(_E) and ValidTarget(target, E.Range) then
-        if Ezreal.H.E:Value() and target:GetCollision(E.Width, E.Speed, E.Delay) == 0 then
+    if Ready(_E) and ValidTarget(target, E.Range) then
+        if Ezreal.H.E:Value() then
             local pos = GetPred(target, E.Speed, 0.25 + (Game.Latency()/1000))
 			Control.CastSpell(HK_E)
         end
-    end--]]
+    end
 end
 
 function Flee()
@@ -645,13 +646,13 @@ function Killsteal()
 end
 
 function Summoners()
-	local target = GetTarget(1100)
+	local target = GetTarget(1200)
     if target == nil then return end
 	if GetMode() == "Combo" then
 		if myHero:GetSpellData(SUMMONER_1).name == "SummonerSmite" or myHero:GetSpellData(SUMMONER_1).name == "S5_SummonerSmitePlayerGanker" or myHero:GetSpellData(SUMMONER_1).name == "S5_SummonerSmiteDuel"
 		or myHero:GetSpellData(SUMMONER_2).name == "SummonerSmite" or myHero:GetSpellData(SUMMONER_2).name == "S5_SummonerSmitePlayerGanker" or myHero:GetSpellData(SUMMONER_1).name == "S5_SummonerSmiteDuel" then
 			if Ezreal.A.S.Smite:Value() then
-				local RedDamage = Qdmg(target) + Wdmg(target) + Edmg(target) + Rdmg(target) + RSdmg(target)
+				local RedDamage = Qdmg(target) + Edmg(target) + RSdmg(target)
 				if myHero:GetSpellData(SUMMONER_1).name == "S5_SummonerSmiteDuel" and Ready(SUMMONER_1) and RedDamage > target.health
 				and myHero:GetSpellData(SUMMONER_1).ammo >= Ezreal.A.S.SmiteS:Value() and myHero.pos:DistanceTo(target.pos) < 500 then
 					Control.CastSpell(HK_SUMMONER_1, target)
@@ -659,7 +660,7 @@ function Summoners()
 				and myHero:GetSpellData(SUMMONER_2).ammo >= Ezreal.A.S.SmiteS:Value() and myHero.pos:DistanceTo(target.pos) < 500 then
 					Control.CastSpell(HK_SUMMONER_2, target)
 				end
-				local BlueDamage = Qdmg(target) + Wdmg(target) + Edmg(target) + Rdmg(target) + BSdmg(target)
+				local BlueDamage = Qdmg(target) + Wdmg(target) + BSdmg(target)
 				if myHero:GetSpellData(SUMMONER_1).name == "S5_SummonerSmitePlayerGanker" and Ready(SUMMONER_1) and BlueDamage > target.health
 				and myHero:GetSpellData(SUMMONER_1).ammo >= Ezreal.A.S.SmiteS:Value() and myHero.pos:DistanceTo(target.pos) < 500 then
 					Control.CastSpell(HK_SUMMONER_1, target)
@@ -672,7 +673,7 @@ function Summoners()
 		if myHero:GetSpellData(SUMMONER_1).name == "SummonerDot"
 		or myHero:GetSpellData(SUMMONER_2).name == "SummonerDot" then
 			if Ezreal.A.S.Ignite:Value() then
-				local IgDamage = Qdmg(target) + Wdmg(target) + Edmg(target) + Rdmg(target) + Idmg(target)
+				local IgDamage = Qdmg(target) + Edmg(target) + Idmg(target)
 				if myHero:GetSpellData(SUMMONER_1).name == "SummonerDot" and Ready(SUMMONER_1) and IgDamage > target.health
 				and myHero.pos:DistanceTo(target.pos) < 600 then
 					Control.CastSpell(HK_SUMMONER_1, target)
@@ -685,7 +686,7 @@ function Summoners()
 		if myHero:GetSpellData(SUMMONER_1).name == "SummonerExhaust"
 		or myHero:GetSpellData(SUMMONER_2).name == "SummonerExhaust" then
 			if Ezreal.A.S.Exh:Value() then
-				local Damage = Qdmg(target) + Wdmg(target) + Edmg(target) + Rdmg(target)
+				local Damage = Qdmg(target) + Edmg(target)
 				if myHero:GetSpellData(SUMMONER_1).name == "SummonerExhaust" and Ready(SUMMONER_1) and Damage > target.health
 				and myHero.pos:DistanceTo(target.pos) < 650 then
 					Control.CastSpell(HK_SUMMONER_1, target)
@@ -698,13 +699,13 @@ function Summoners()
 	end
 	if myHero:GetSpellData(SUMMONER_1).name == "SummonerHeal"
 	or myHero:GetSpellData(SUMMONER_2).name == "SummonerHeal" then
-		--if Ezreal.A.S.Heal:Value() then
+		if Ezreal.A.S.Heal:Value() then
 			if myHero:GetSpellData(SUMMONER_1).name == "SummonerHeal" and Ready(SUMMONER_1) and PercentHP(myHero) < Ezreal.A.S.HealHP:Value() then
 				Control.CastSpell(HK_SUMMONER_1)
 			elseif myHero:GetSpellData(SUMMONER_2).name == "SummonerHeal" and Ready(SUMMONER_1) and PercentHP(myHero) < Ezreal.A.S.HealHP:Value() then
 				Control.CastSpell(HK_SUMMONER_2)
 			end
-		--end
+		end
 	end
 	if myHero:GetSpellData(SUMMONER_1).name == "SummonerBarrier"
 	or myHero:GetSpellData(SUMMONER_2).name == "SummonerBarrier" then
@@ -729,6 +730,7 @@ function Summoners()
 					or (buff.type == 10 and  Ezreal.A.S.Slow:Value())
 					or (buff.type == 11 and  Ezreal.A.S.Root:Value())
 					or (buff.type == 21 and  Ezreal.A.S.Flee:Value())
+					or (buff.type == 22 and  Ezreal.A.S.Charm:Value())
 					or (buff.type == 25 and  Ezreal.A.S.Blind:Value())
 					or (buff.type == 28 and  Ezreal.A.S.Flee:Value())) then
 						if myHero:GetSpellData(SUMMONER_1).name == "SummonerBoost" and Ready(SUMMONER_1) then
