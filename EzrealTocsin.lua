@@ -328,10 +328,10 @@ Ezreal.H:MenuElement({id = "W", name = "W: Essence Flux", value = true})
 Ezreal.H:MenuElement({id = "E", name = "E: Arcane Shift", value = false})
 
 Ezreal.LC:MenuElement({id = "Q", name = "Q: Mystic Shot", value = true})
-Ezreal.LC:MenuElement({id = "E", name = "E: Arcane Shift", value = true})
+Ezreal.LC:MenuElement({id = "E", name = "E: Arcane Shift", value = false})
 
 Ezreal.JC:MenuElement({id = "Q", name = "Q: Mystic Shot", value = true})
-Ezreal.JC:MenuElement({id = "E", name = "E: Arcane Shift", value = true})
+Ezreal.JC:MenuElement({id = "E", name = "E: Arcane Shift", value = false})
 
 Ezreal.F:MenuElement({id = "E", name = "E: Arcane Shift", value = true})
 
@@ -499,6 +499,7 @@ local function CustomCast(spell, pos, delay)
 end
 
 function Tick()
+	if myHero.dead then return end
     local Mode = GetMode()
 	if Mode == "Combo" then
 		Combo()
@@ -559,9 +560,11 @@ function Lane()
                 end
             end
             if Ready(_E) and ValidTarget(minion, E.Range) then
-                if MinionsAround(myHero.pos, 700, 200) then
-                    Control.CastSpell(HK_E, BestPos)
-                end
+				if Ezreal.LC.E:Value() then
+                	if MinionsAround(myHero.pos, 300, 200) then
+                    Control.CastSpell(HK_E, minion)
+                	end
+				end
             end
         end
     end
@@ -603,19 +606,19 @@ function Harass()
 			CustomCast(HK_W, pos, 250)
         end
     end
-    if Ready(_E) and ValidTarget(target, E.Range) then
+    --[[if Ready(_E) and ValidTarget(target, E.Range) then
         if Ezreal.H.E:Value() and target:GetCollision(E.Width, E.Speed, E.Delay) == 0 then
             local pos = GetPred(target, E.Speed, 0.25 + (Game.Latency()/1000))
 			Control.CastSpell(HK_E)
         end
-    end
+    end--]]
 end
 
 function Flee()
     if Ezreal.MM.F:Value() > PercentMP(myHero) then return end
     local target = GetTarget(E.Range)
     if target == nil then return end
-    if Ready(_E) and ValidTarget(target, E.Range) then
+    if Ready(_E) then
         if Ezreal.F.E:Value() then
             local pos = GetPred(target, E.Speed, 0.25 + (Game.Latency()/1000))
 			Control.CastSpell(HK_E)
