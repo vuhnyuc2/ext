@@ -308,12 +308,6 @@ function DrMundo:LoadMenu()
 	Tocsin.Misc:MenuElement({id = "Qks", name = "Killsecure [Q]", value = true, leftIcon = Qicon})
 	Tocsin.Misc:MenuElement({id = "AutoW", name = "Auto [W]", value = true, leftIcon = Wicon})
 	
- 	--Eternal Prediction
-
-	Tocsin:MenuElement({type = MENU, id = "Pred", name = "Prediction Settings"})
-	Tocsin.Pred:MenuElement({type = SPACE, id = "Pred Info", name = "If you go too high it wont fire"})
-	Tocsin.Pred:MenuElement({id = "QQChance", name = "Q Prediction Hitchance", value = 0.20, min = 0.05, max = 1, step = 0.01})
-	
 	--Draw
 
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
