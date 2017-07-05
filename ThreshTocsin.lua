@@ -291,6 +291,16 @@ local function EnableOrb(bool)
 	end
 end
 
+local function EnableAttack(bool)
+	if Orb == 1 then
+		EOW:SetAttacks(bool)
+	elseif Orb == 2 then
+		_G.SDK.Orbwalker:SetAttack(bool)
+	else
+		GOS.BlockAttack = not bool
+	end
+end
+
 class "Thresh"
 
 function Thresh:__init()
@@ -324,7 +334,12 @@ function Thresh:LoadMenu()
 	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Qicon})
 	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = Eicon})
 	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0.30, min = 0.05, max = 1, step = 0.01})
-	
+
+	--Flee
+	Tocsin:MenuElement({type = MENU, id = "Flee", name = "Flee or YOLO"})
+	Tocsin.Flee:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = Eicon})
+	Tocsin.Flee:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = Wicon})
+
 	--Draw
 
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
@@ -339,6 +354,8 @@ function Thresh:Tick()
 		self:Combo()
 	elseif Mode == "Harass" then
 		self:Harass()
+	elseif Mode == "Flee" then
+		self:Flee()
 	end
 end
 
@@ -372,6 +389,24 @@ function Thresh:Harass()
 	end
 	if Tocsin.Combo.W:Value() and Ready(_W) and not Ready(_Q) and not Ready(_E) then
 		self:CastW(target)
+	end
+end
+
+function Thresh:Flee()
+	local target = GetTarget(650, "AD")
+	if not target then return end
+	if myHero.pos:DistanceTo(target.pos) < 550 then
+		EnableAttack(false)
+		if Tocsin.Flee.E:Value() and Ready(_E) then
+			if myHero.pos:DistanceTo(target.pos) < 480 then
+				local pos = GetPred(target, E.Speed, 0.25 + (Game.Latency()/1000))
+				CustomCast(HK_E, pos, 250)
+			end
+		end
+		if Tocsin.Flee.W:Value() and Ready(_W) then
+			Control.CastSpell(HK_W)
+		end
+		EnableAttack(true)
 	end
 end
 
