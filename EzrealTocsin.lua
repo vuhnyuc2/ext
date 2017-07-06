@@ -554,7 +554,7 @@ function Lane()
         if minion and minion.team == 200 then
             if Ready(_Q) and ValidTarget(minion, Q.Range) then
                 if Ezreal.LC.Q:Value() then
-                    if minion:GetCollision(Q.Width, Q.Speed) then
+                	if MinionsAround(myHero.pos, 700, 200) then
                         local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
 						CustomCast(HK_Q, pos, 250)
                     end
@@ -562,7 +562,7 @@ function Lane()
             end
             if Ready(_E) and ValidTarget(minion, E.Range) then
 				if Ezreal.LC.E:Value() then
-                	if MinionsAround(myHero.pos, 300, 200) then
+                	if MinionsAround(myHero.pos, 400, 200) then
                     Control.CastSpell(HK_E, minion)
                 	end
 				end
