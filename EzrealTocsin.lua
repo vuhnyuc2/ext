@@ -317,7 +317,7 @@ end
 
 local Ezreal = MenuElement({type = MENU, id = "EzrealTocsin", name = "EzrealTocsin"})
 
-Ezreal:MenuElement({id = "Script", name = "Ezreal by Tocsin", drop = {"v2.2"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/e/ec/Ezreal_OriginalLoading.jpg"})
+Ezreal:MenuElement({id = "Script", name = "Ezreal by Tocsin", drop = {"v2.3"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/e/ec/Ezreal_OriginalLoading.jpg"})
 Ezreal:MenuElement({name = " ", drop = {"Champion Settings"}})
 Ezreal:MenuElement({type = MENU, id = "C", name = "Combo"})
 Ezreal:MenuElement({type = MENU, id = "H", name = "Harass"})
@@ -539,7 +539,7 @@ function Combo()
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb() end, 0.3)
         end
     end
 	if Ready(_W) and ValidTarget(target, 900) then
@@ -547,7 +547,7 @@ function Combo()
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb() end, 0.3)
         end
     end
 	if Ready(_E) and ValidTarget(target, E.Range) then
@@ -561,7 +561,7 @@ function Combo()
             local pos = GetPred(target, R.Speed, 1.00 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_R, pos, 1000)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb() end, 1.02)
         end
     end
 end
@@ -571,21 +571,17 @@ function Lane()
     for i = 1, Game.MinionCount() do
 		local minion = Game.Minion(i)
         if minion and minion.team == 200 then
-            if Ready(_Q) and ValidTarget(minion, Q.Range) then
-                if Ezreal.LC.Q:Value() and myHero.pos:DistanceTo(minion.pos) < 800 then
-                	if MinionsAround(myHero.pos, 100, 100) then
+            if Ready(_Q) and ValidTarget(minion, 900) then
+                if Ezreal.LC.Q:Value() and myHero.pos:DistanceTo(minion.pos) < 900 then
                         local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
 						EnableOrb(false)
 						CustomCast(HK_Q, pos, 250)
-						EnableOrb(true)
-                    end
+						DelayAction(function() EnableOrb() end, 0.3)
                 end
             end
             if Ready(_E) and ValidTarget(minion, E.Range) then
 				if Ezreal.LC.E:Value() then
-                	if MinionsAround(myHero.pos, 400, 200) then
                     Control.CastSpell(HK_E, minion)
-                	end
 				end
             end
         end
@@ -602,7 +598,7 @@ function Jungle()
                     local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
 					EnableOrb(false)
 					CustomCast(HK_Q, pos, 250)
-					EnableOrb(true)
+					DelayAction(function() EnableOrb() end, 0.3)
                 end
             end
             if Ready(_E) and ValidTarget(minion, E.Range) then
@@ -624,7 +620,7 @@ function Harass()
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb() end, 0.3)
         end
     end
     if Ready(_W) and ValidTarget(target, 900) then
@@ -633,7 +629,7 @@ function Harass()
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb() end, 0.3)
         end
     end
     if Ready(_E) and ValidTarget(target, E.Range) then
