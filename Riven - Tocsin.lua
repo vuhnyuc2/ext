@@ -308,8 +308,10 @@ function Riven:CastQ(target)
         if myHero.pos:DistanceTo(qtarg.pos) < 420 and self:HasBuff(myHero, "rivenwindslashready") then    --myHero.range
             if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
                 local pred=qtarg:GetPrediction(Q.speed, .25 + Game.Latency()/1000)
+                DisableOrb()
                 Control.CastSpell(HK_Q,qtarg)
                 Control.Attack(qtarg)
+                DelayAction(function() EnableOrb() end, 0.3)
                 if Game.Timer() - LastCancel > 0.13 then
                 LastCancel = Game.Timer()
                     DelayAction(function()
@@ -318,13 +320,14 @@ function Riven:CastQ(target)
                     end, (0.25 + Game.Latency()/1000))
                 end
             end
-
         else
         	if myHero.pos:DistanceTo(qtarg.pos) < 275 and not self:HasBuff(myHero, "rivenwindslashready") then    --Q without buff less range wont chase with q but aa more reliable
             	if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) and myHero.attackData.state == STATE_WINDDOWN then
                 	local pred=qtarg:GetPrediction(Q.speed, .25 + Game.Latency()/1000)
+                	DisableOrb()
                 	Control.CastSpell(HK_Q,qtarg)
                 	Control.Attack(qtarg)
+                	DelayAction(function() EnableOrb() end, 0.3)
                 	if Game.Timer() - LastCancel > 0.13 then
                 	LastCancel = Game.Timer()
                     	DelayAction(function()
@@ -334,19 +337,6 @@ function Riven:CastQ(target)
                 	end
             	end
         	end
-        --[[else      --chase part of Q disabled to better control qq after each Q
-           if self.Menu.Combo.UseQ:Value() and self:CanCast(_Q) then
-            	local pred=qtarg:GetPrediction(Q.speed,.25 + Game.Latency()/1000)
-                Control.CastSpell(HK_Q,pred)
-                Control.Attack(qtarg)
-                if Game.Timer() - LastCancel > 0.15 then
-               	LastCancel = Game.Timer()
-                    DelayAction(function()
-                    local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
-                    Control.Move(Vec)
-                    end, (0.25 + Game.Latency()/1000))
-                end
-            end--]]
         end
     end
 end
@@ -357,13 +347,6 @@ function Riven:CastW(target)
 		if myHero.pos:DistanceTo(wtarg.pos) < 260 then
 			Control.CastSpell(HK_W)
 			Control.Attack(wtarg)
-			if Game.Timer() - LastCancel > 0.13 then
-                LastCancel = Game.Timer()
-                DelayAction(function()
-                local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
-                Control.Move(Vec)
-                end, (0.25 + Game.Latency()/1000))
-            end
 		end
 	end
 end
@@ -376,13 +359,6 @@ function Riven:CastE(target)
 			local pred=etarg:GetPrediction(E.speed,.25 + Game.Latency()/1000)
 			Control.CastSpell(HK_E,pred)
 			Control.Attack(etarg)
-			if Game.Timer() - LastCancel > 0.13 then
-                LastCancel = Game.Timer()
-                    DelayAction(function()
-                    local Vec = Vector(myHero.pos):Normalized() * - (myHero.boundingRadius*1.1)
-                    Control.Move(Vec)
-                    end, (0.25 + Game.Latency()/1000))
-            end
 		end
 	end
 end
