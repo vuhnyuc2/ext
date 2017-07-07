@@ -513,7 +513,7 @@ local function CustomCast(spell, pos, delay)
 end
 
 function Tick()
-	if myHero.dead then return end
+	if myHero.dead or Game.IsChatOpen() == true then return end
     local Mode = GetMode()
 	if Mode == "Combo" then
 		Combo()
