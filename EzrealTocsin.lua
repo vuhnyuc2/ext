@@ -525,7 +525,7 @@ function Tick()
     elseif Mode == "Flee" then
         Flee()
 	end
-		Killsteal()
+		--Killsteal()
         Summoners()
         Activator()
 end
