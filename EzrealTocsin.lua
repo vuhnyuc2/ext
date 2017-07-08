@@ -539,7 +539,7 @@ function Combo()
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
-			DelayAction(function() EnableOrb() end, 0.3)
+			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 	if Ready(_W) and ValidTarget(target, 900) then
@@ -547,7 +547,7 @@ function Combo()
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
-			DelayAction(function() EnableOrb() end, 0.3)
+			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 	if Ready(_E) and ValidTarget(target, E.Range) then
@@ -561,7 +561,7 @@ function Combo()
             local pos = GetPred(target, R.Speed, 1.00 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_R, pos, 1000)
-			DelayAction(function() EnableOrb() end, 1.02)
+			DelayAction(function() EnableOrb(true) end, 1.02)
         end
     end
 end
@@ -576,7 +576,7 @@ function Lane()
                         local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
 						EnableOrb(false)
 						CustomCast(HK_Q, pos, 250)
-						DelayAction(function() EnableOrb() end, 0.3)
+						DelayAction(function() EnableOrb(true) end, 0.3)
                 end
             end
             if Ready(_E) and ValidTarget(minion, E.Range) then
@@ -598,7 +598,7 @@ function Jungle()
                     local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
 					EnableOrb(false)
 					CustomCast(HK_Q, pos, 250)
-					DelayAction(function() EnableOrb() end, 0.3)
+					DelayAction(function() EnableOrb(true) end, 0.3)
                 end
             end
             if Ready(_E) and ValidTarget(minion, E.Range) then
@@ -620,7 +620,7 @@ function Harass()
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
-			DelayAction(function() EnableOrb() end, 0.3)
+			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
     if Ready(_W) and ValidTarget(target, 900) then
@@ -629,7 +629,7 @@ function Harass()
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
-			DelayAction(function() EnableOrb() end, 0.3)
+			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
     if Ready(_E) and ValidTarget(target, E.Range) then
@@ -661,7 +661,7 @@ function Killsteal()
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
     if Ready(_W) and ValidTarget(target, W.Range) then
@@ -669,7 +669,7 @@ function Killsteal()
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
-			EnableOrb(true)
+			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 end
