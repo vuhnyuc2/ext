@@ -348,7 +348,7 @@ end
 
 local Nidalee = MenuElement({type = MENU, id = "NidaleeTocsin", name = "NidaleeTocsin"})
 
-Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.02"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
+Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.03"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
 Nidalee:MenuElement({name = " ", drop = {"Champion Settings"}})
 Nidalee:MenuElement({type = MENU, id = "C", name = "Combo"})
 Nidalee:MenuElement({type = MENU, id = "H", name = "Harass"})
@@ -880,7 +880,7 @@ function Summoners()
 		or myHero:GetSpellData(SUMMONER_2).name == "SummonerSmite" or myHero:GetSpellData(SUMMONER_2).name == "S5_SummonerSmitePlayerGanker" or myHero:GetSpellData(SUMMONER_1).name == "S5_SummonerSmiteDuel" then
 			
             if Nidalee.A.S.Smite:Value() then
-				local RedDamage = Qdmg(target) + Edmg(target) + RSdmg(target)
+				local RedDamage = Qdmg(target) + EEdmg(target) + RSdmg(target)
 				if myHero:GetSpellData(SUMMONER_1).name == "S5_SummonerSmiteDuel" and Ready(SUMMONER_1) and RedDamage > target.health
 				and myHero:GetSpellData(SUMMONER_1).ammo >= Nidalee.A.S.SmiteS:Value() and myHero.pos:DistanceTo(target.pos) < 500 then
 					Control.CastSpell(HK_SUMMONER_1, target)
@@ -903,7 +903,7 @@ function Summoners()
 		or myHero:GetSpellData(SUMMONER_2).name == "SummonerDot" then
 			
             if Nidalee.A.S.Ignite:Value() then
-				local IgDamage = Qdmg(target) + Edmg(target) + Idmg(target)
+				local IgDamage = Qdmg(target) + EEdmg(target) + Idmg(target)
 				if myHero:GetSpellData(SUMMONER_1).name == "SummonerDot" and Ready(SUMMONER_1) and IgDamage > target.health
 				and myHero.pos:DistanceTo(target.pos) < 600 then
 					Control.CastSpell(HK_SUMMONER_1, target)
@@ -918,7 +918,7 @@ function Summoners()
 		or myHero:GetSpellData(SUMMONER_2).name == "SummonerExhaust" then
 			
             if Nidalee.A.S.Exh:Value() then
-				local Damage = Qdmg(target) + Edmg(target)
+				local Damage = Qdmg(target) + EEdmg(target)
 				if myHero:GetSpellData(SUMMONER_1).name == "SummonerExhaust" and Ready(SUMMONER_1) and Damage > target.health
 				and myHero.pos:DistanceTo(target.pos) < 650 then
 					Control.CastSpell(HK_SUMMONER_1, target)
