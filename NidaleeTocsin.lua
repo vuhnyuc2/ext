@@ -348,7 +348,7 @@ end
 
 local Nidalee = MenuElement({type = MENU, id = "NidaleeTocsin", name = "NidaleeTocsin"})
 
-Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.03"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
+Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.04"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
 Nidalee:MenuElement({name = " ", drop = {"Champion Settings"}})
 Nidalee:MenuElement({type = MENU, id = "C", name = "Combo"})
 Nidalee:MenuElement({type = MENU, id = "H", name = "Harass"})
@@ -708,7 +708,7 @@ function Lane()
             end
 
             if Ready(_R) and ValidTarget(minion, 1150) and myHero:GetSpellData(_Q).name == "JavelinToss" then
-                if Nidalee.JC.R:Value() and myHero.pos:DistanceTo(minion.pos) < 1200 and not Ready(_Q) then
+                if Nidalee.LC.R:Value() and myHero.pos:DistanceTo(minion.pos) < 1200 and not Ready(_Q) then
 			        Control.CastSpell(HK_R)
                 end
             end
@@ -729,14 +729,14 @@ function Jungle()
             end
 
             if Ready(_Q) and ValidTarget(minion, 1400) and myHero:GetSpellData(_Q).name == "JavelinToss" then
-                if Nidalee.LC.Q:Value() and myHero.pos:DistanceTo(minion.pos) < 1400 then
+                if Nidalee.JC.Q:Value() and myHero.pos:DistanceTo(minion.pos) < 1400 then
                     local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
                     Control.CastSpell(HK_Q, minion)
                 end
             end
 
             if Ready(_W) and ValidTarget(minion, 700) and myHero:GetSpellData(_W).name == "Pounce" then
-                if Nidalee.LC.W:Value() and myHero.pos:DistanceTo(minion.pos) < 700 then
+                if Nidalee.JC.W:Value() and myHero.pos:DistanceTo(minion.pos) < 700 then
                     local pos = GetPred(minion, WC.Speed, 0.25 + (Game.Latency()/1000))
 			        EnableOrb(false)
 			        CustomCast(HK_W, pos, 250)
@@ -746,14 +746,14 @@ function Jungle()
             end
 
             if Ready(_Q) and ValidTarget(minion, 300) and myHero:GetSpellData(_Q).name == "Takedown" then
-                if Nidalee.LC.Q:Value() and myHero.pos:DistanceTo(minion.pos) < 300 then
+                if Nidalee.JC.Q:Value() and myHero.pos:DistanceTo(minion.pos) < 300 then
 			        Control.CastSpell(HK_Q)
                     Control.Attack(minion)
                 end
             end
 
             if Ready(_E) and ValidTarget(minion, 300) and myHero:GetSpellData(_E).name == "Swipe" then
-                if Nidalee.LC.E:Value() and myHero.pos:DistanceTo(minion.pos) < 300 then
+                if Nidalee.JC.E:Value() and myHero.pos:DistanceTo(minion.pos) < 300 then
                     EnableOrb(false)
 			        Control.CastSpell(HK_E, minion)
                     Control.Attack(minion)
@@ -776,7 +776,7 @@ function Harass()
     if target == nil then return end 
 
 	if Ready(_Q) and ValidTarget(target, 1450) and myHero:GetSpellData(_Q).name == "JavelinToss" then
-        if Nidalee.C.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
+        if Nidalee.H.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
@@ -785,7 +785,7 @@ function Harass()
     end
 
     if Ready(_W) and ValidTarget(target, 900) and myHero:GetSpellData(_W).name == "Bushwhack" then
-        if Nidalee.C.W:Value() and myHero.pos:DistanceTo(target.pos) < 880 then
+        if Nidalee.H.W:Value() and myHero.pos:DistanceTo(target.pos) < 880 then
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
@@ -796,18 +796,16 @@ end
 
 function Flee()
     if Nidalee.MM.F:Value() > PercentMP(myHero) then return end
-    local target = GetTarget(1500)
-    if target == nil then return end
 
-    if Ready(_R) and ValidTarget(target, 1500) and myHero:GetSpellData(_Q).name == "JavelinToss" then
-        if Nidalee.F.R:Value() and myHero.pos:DistanceTo(target.pos) < 1200 then
+    if Ready(_R) and myHero:GetSpellData(_Q).name == "JavelinToss" then
+        if Nidalee.F.R:Value() then
 			Control.CastSpell(HK_R)
         end
     end
 
-    if Ready(_W) and ValidTarget(target, 700) and myHero:GetSpellData(_W).name == "Pounce" then
-        if Nidalee.F.W:Value() and myHero.pos:DistanceTo(target.pos) < 700 then
-			Control.CastSpell(HK_E)
+    if Ready(_W) and myHero:GetSpellData(_W).name == "Pounce" then
+        if Nidalee.F.W:Value() then
+			Control.CastSpell(HK_W)
         end
     end
 end
