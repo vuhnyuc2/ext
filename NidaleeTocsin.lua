@@ -348,7 +348,7 @@ end
 
 local Nidalee = MenuElement({type = MENU, id = "NidaleeTocsin", name = "NidaleeTocsin"})
 
-Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.01"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
+Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.02"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
 Nidalee:MenuElement({name = " ", drop = {"Champion Settings"}})
 Nidalee:MenuElement({type = MENU, id = "C", name = "Combo"})
 Nidalee:MenuElement({type = MENU, id = "H", name = "Harass"})
@@ -666,7 +666,7 @@ function Lane()
     if Nidalee.MM.LC:Value() > PercentMP(myHero) then return end
     for i = 1, Game.MinionCount() do
 		local minion = Game.Minion(i)
-        if minion and minion.team == 200 then
+        if minion and minion.team ~= myHero.team then
 
             if Ready(_R) and ValidTarget(minion, 1150) and myHero:GetSpellData(_Q).name == "Takedown" then
                 if Nidalee.LC.R:Value() and myHero.pos:DistanceTo(minion.pos) < 1200 and not Ready(_Q) and not Ready(_E) and not Ready(_W) then
@@ -772,7 +772,7 @@ end
 
 function Harass()
     if Nidalee.MM.H:Value() > PercentMP(myHero) then return end
-    local target = GetTarget(1200)
+    local target = GetTarget(1400)
     if target == nil then return end 
 
 	if Ready(_Q) and ValidTarget(target, 1450) and myHero:GetSpellData(_Q).name == "JavelinToss" then
