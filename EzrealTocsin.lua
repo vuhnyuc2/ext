@@ -317,7 +317,7 @@ end
 
 local Ezreal = MenuElement({type = MENU, id = "EzrealTocsin", name = "EzrealTocsin"})
 
-Ezreal:MenuElement({id = "Script", name = "Ezreal by Tocsin", drop = {"v2.3"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/e/ec/Ezreal_OriginalLoading.jpg"})
+Ezreal:MenuElement({id = "Script", name = "Ezreal by Tocsin", drop = {"v2.4"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/e/ec/Ezreal_OriginalLoading.jpg"})
 Ezreal:MenuElement({name = " ", drop = {"Champion Settings"}})
 Ezreal:MenuElement({type = MENU, id = "C", name = "Combo"})
 Ezreal:MenuElement({type = MENU, id = "H", name = "Harass"})
@@ -525,7 +525,7 @@ function Tick()
     elseif Mode == "Flee" then
         Flee()
 	end
-		--Killsteal()
+		Killsteal()
         Summoners()
         Activator()
 end
@@ -567,22 +567,28 @@ function Combo()
 end
 
 function Lane()
-    if Ezreal.MM.LC:Value() > PercentMP(myHero) then return end
     for i = 1, Game.MinionCount() do
-		local minion = Game.Minion(i)
-        if minion and minion.team == 200 then
-            if Ready(_Q) and ValidTarget(minion, 900) then
-                if Ezreal.LC.Q:Value() and myHero.pos:DistanceTo(minion.pos) < 900 then
-                        local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
-						EnableOrb(false)
-						CustomCast(HK_Q, pos, 250)
-						DelayAction(function() EnableOrb(true) end, 0.3)
+        local minion = Game.Minion(i)
+        if minion and minion.team ~= myHero.team then
+            if Ready(_Q) and ValidTarget(minion, Q.Range) then
+                if Ezreal.MM.LC:Value() > PercentMP(myHero) then return end
+                if Ezreal.LC.Q:Value() then
+                    local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
+					EnableOrb(false)
+					CustomCast(HK_Q, pos, 250)
+					DelayAction(function() EnableOrb(true) end, 0.3)
                 end
             end
+        end
+    end
+    for i = 1, Game.MinionCount() do
+        local minion = Game.Minion(i)
+        if minion and minion.team ~= myHero.team then  
             if Ready(_E) and ValidTarget(minion, E.Range) then
-				if Ezreal.LC.E:Value() then
-                    Control.CastSpell(HK_E, minion)
-				end
+                if Ezreal.MM.LC:Value() > PercentMP(myHero) then return end
+                    if Ezreal.LC.E:Value() then
+                        Control.CastSpell(HK_E)  
+                    end
             end
         end
     end
