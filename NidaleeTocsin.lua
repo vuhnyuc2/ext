@@ -981,7 +981,7 @@ function Activator()
 
 	if GetMode() == "Combo" then
 		local HEX = items[3146] or items[3144]
-		if Botrk and myHero:GetSpellData(Botrk).currentCd == 0 and Nidalee.A.I.HEX:Value() and myHero.pos:DistanceTo(target.pos) < 550 then
+		if HEX and myHero:GetSpellData(HEX).currentCd == 0 and Nidalee.A.I.HEX:Value() and myHero.pos:DistanceTo(target.pos) < 550 then
 			Control.CastSpell(HKITEM[HEX], target.pos)
 		end
 	end
