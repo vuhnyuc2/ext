@@ -348,7 +348,7 @@ end
 
 local Nidalee = MenuElement({type = MENU, id = "NidaleeTocsin", name = "NidaleeTocsin"})
 
-Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.0"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
+Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.01"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
 Nidalee:MenuElement({name = " ", drop = {"Champion Settings"}})
 Nidalee:MenuElement({type = MENU, id = "C", name = "Combo"})
 Nidalee:MenuElement({type = MENU, id = "H", name = "Harass"})
@@ -400,7 +400,7 @@ Nidalee.A:MenuElement({type = MENU, id = "P", name = "Potions"})
 Nidalee.A.P:MenuElement({id = "Pot", name = "All Potions", value = true})
 Nidalee.A.P:MenuElement({id = "HP", name = "Health % to Potion", value = 60, min = 0, max = 100})
 Nidalee.A:MenuElement({type = MENU, id = "I", name = "Items"})
-Nidalee.A.I:MenuElement({id = "HEX", name = "Hextech Gunblade", value = true})--Dont think Nidalee uses activation items??
+Nidalee.A.I:MenuElement({id = "HEX", name = "Hextech Gunblade", value = true})--Dont think Nidalee uses activation items?? there if it changes in future
 Nidalee.A:MenuElement({type = MENU, id = "S", name = "Summoner Spells"})
 
 DelayAction(function()
@@ -550,8 +550,28 @@ local function CustomCast(spell, pos, delay)
 	end
 end
 
+function GetBuffs(unit)
+	T = {}
+	for i = 0, unit.buffCount do
+		local Buff = unit:GetBuff(i)
+		if Buff.count > 0 then
+			table.insert(T, Buff)
+		end
+	end
+	return T
+end
+
+function IsRecalling()
+	for K, Buff in pairs(GetBuffs(myHero)) do
+		if Buff.name == "recall" and Buff.duration > 0 then
+			return true
+		end
+	end
+	return false
+end
+
 function Tick()
-	if myHero.dead or Game.IsChatOpen() == true then return end
+	if myHero.dead or Game.IsChatOpen() == true or IsRecalling() == true then return end
     local Mode = GetMode()
 	if Mode == "Combo" then
 		Combo()
