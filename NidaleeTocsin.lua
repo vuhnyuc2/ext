@@ -257,7 +257,7 @@ end
 
 local function QQdmg(target)   -- 
     local level = myHero:GetSpellData(_Q).level
-	if Ready(_Q) and myHero:GetSpellData(_Q).name == "Bushwhack" then
+	if Ready(_Q) and myHero:GetSpellData(_Q).name == "Takedown" then
         return CalcMagicalDamage(myHero, target, (14 + 90 * level + 0.75 * myHero.ap + 2.00 * myHero.totalDamage))
 	end
 	return 0
