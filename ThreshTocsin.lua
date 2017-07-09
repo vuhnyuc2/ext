@@ -81,7 +81,7 @@
 
 
 
-local ScriptVersion = "v2.0"
+local ScriptVersion = "v2.1"
 
 local Q = { Range = 1050, Delay = 0.50, Speed = 1200, Width = 70}
 local W = { Range = 950, Delay = 0.25}
@@ -362,7 +362,7 @@ end
 function Thresh:Combo()
 	local target = GetTarget(1150, "AD")
 	if not target then return end
-	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1075 and myHero.pos:DistanceTo(target.pos) > 300 then
+	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1025 and myHero.pos:DistanceTo(target.pos) > 300 then
 		self:CastQ(target)
 	end
 	if Tocsin.Combo.R:Value() and Ready(_R) and myHero.pos:DistanceTo(target.pos) < 320 then
@@ -411,7 +411,7 @@ function Thresh:Flee()
 end
 
 function Thresh:CastQ(target)
-	if  myHero.pos:DistanceTo(target.pos) < 1075 then
+	if  myHero.pos:DistanceTo(target.pos) < 1025 then
 		if Ready(_Q) and ValidTarget(target, 1050) then
         	if target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
