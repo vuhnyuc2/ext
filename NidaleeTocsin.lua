@@ -404,7 +404,6 @@ Nidalee.F:MenuElement({id = "R", name = "R: Aspect of the Cougar", value = true}
 Nidalee.KS:MenuElement({id = "Q", name = "Q: Javelin Toss", value = true})
 Nidalee.KS:MenuElement({id = "W", name = "W: Bushwhack", value = true})
 Nidalee.KS:MenuElement({id = "E", name = "E: Primal Surge", value = true})
-Nidalee.KS:MenuElement({id = "EH", name = "E: Ally Primal Surge", value = false})
 
 Nidalee.MM:MenuElement({id = "C", name = "Mana % to Combo", value = 0, min = 0, max = 100})
 Nidalee.MM:MenuElement({id = "H", name = "Mana % to Harass", value = 60, min = 0, max = 100})
@@ -668,8 +667,8 @@ function Combo()
         end
     end
 
-	if Ready(_W) and ValidTarget(target, 900) and myHero:GetSpellData(_W).name == "Bushwhack" then
-        if Nidalee.C.W:Value() and myHero.pos:DistanceTo(target.pos) < 880 then
+	if Ready(_W) and ValidTarget(target, 870) and myHero:GetSpellData(_W).name == "Bushwhack" then
+        if Nidalee.C.W:Value() and myHero.pos:DistanceTo(target.pos) < 870 then
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
@@ -879,22 +878,7 @@ function Killsteal()
 			Control.CastSpell(HK_E, myHero)
         end
     end
-	if Ready(_E) and myHero:GetSpellData(_E).name == "PrimalSurge" then
-		for i,ally in pairs(GetAllyHeroes()) do
-			if ValidTarget(ally,500) and myHero.pos:DistanceTo(ally.pos) < 500 then
-				if not ally.isMe then
-					for i = 1, Game.HeroCount() do
-					local hero = Game.Hero(i)
-						if hero.team == myHero.team and not hero.isMe and myHero.pos:DistanceTo(target.pos) > 400 then
-							if Nidalee.KS.EH:Value() and Ready(_E) and not ally.isMe and ally.health/ally.maxHealth < .40 then
-								Control.CastSpell(HK_E,ally)
-							end
-						end
-					end
-				end
-			end
-		end
-	end
+
     if target == nil or myHero.pos:DistanceTo(target.pos) > 1450 then return end
 	if Ready(_Q) and ValidTarget(target, Q.Range) then
         if Nidalee.KS.Q:Value() and Qdmg(target) > target.health then
