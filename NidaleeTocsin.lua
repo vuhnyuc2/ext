@@ -114,12 +114,18 @@ if myHero.charName ~= "Nidalee" then return end
 
 
 local Q = { Range = 1500, Delay = 0.25, Speed = 1300, Width = 60}
-local W = { Range = 900, Delay = 0.25, Speed = 1400, Width = 40}
+local W = { Range = 900, Delay = 0.25, Speed = 1450, Width = 40}
 local E = { Range = 600, Delay = 0.25}
 local QC = { Range = 200, Delay = 0.25}
 local WC = { Range = 700, Delay = 0.25} -- extended prey range aka spear or trap
 local EC = { Range = 300, Delay = 0.25} --180 cone
-
+local TEAM_ALLY = myHero.team
+local TEAM_JUNGLE = 300
+local TEAM_ENEMY = 300 - TEAM_ALLY
+local huge = math.huge 	
+local sqrt = math.sqrt  	
+local abs = math.abs  	
+local insert = table.insert
 
 local _EnemyHeroes
 local function GetEnemyHeroes()
@@ -178,7 +184,7 @@ local function OnScreen(unit)
 	return unit.pos:To2D().onScreen;
 end
 
-local function GetTarget(range)
+--[[local function GetTarget(range)
 	local target = nil
 	if _G.SDK and _G.SDK.Orbwalker then
 		target = _G.SDK.TargetSelector:GetTarget(range)
@@ -186,7 +192,7 @@ local function GetTarget(range)
 		target = GOS:GetTarget(range)
 	end
 	return target
-end
+end]]
 
 local function GetMode()
 	if _G.SDK and _G.SDK.Orbwalker then
@@ -348,14 +354,14 @@ end
 
 local Nidalee = MenuElement({type = MENU, id = "NidaleeTocsin", name = "NidaleeTocsin"})
 
-Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.04"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
+Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.06"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
 Nidalee:MenuElement({name = " ", drop = {"Champion Settings"}})
 Nidalee:MenuElement({type = MENU, id = "C", name = "Combo"})
 Nidalee:MenuElement({type = MENU, id = "H", name = "Harass"})
 Nidalee:MenuElement({type = MENU, id = "LC", name = "LaneClear"})
 Nidalee:MenuElement({type = MENU, id = "JC", name = "JungleClear"})
 Nidalee:MenuElement({type = MENU, id = "F", name = "Flee"})
-Nidalee:MenuElement({type = MENU, id = "KS", name = "KillSteal"})
+Nidalee:MenuElement({type = MENU, id = "KS", name = "KillSteal n Heal"})
 Nidalee:MenuElement({name = " ", drop = {"Champion Utility"}})
 Nidalee:MenuElement({type = MENU, id = "MM", name = "Mana"})
 Nidalee:MenuElement({type = MENU, id = "D", name = "Drawings"})
@@ -365,6 +371,9 @@ Nidalee:MenuElement({type = MENU, id = "A", name = "Activator"})
 Nidalee.C:MenuElement({id = "Q", name = "Q: Javelin Toss", value = true})
 Nidalee.C:MenuElement({id = "W", name = "W: Bushwhack", value = true})
 Nidalee.C:MenuElement({id = "E", name = "E: Primal Surge", value = true})
+Nidalee.C:MenuElement({id = "QQ", name = "Q: Takedown", value = true})
+Nidalee.C:MenuElement({id = "WW", name = "W: Pounce", value = true})
+Nidalee.C:MenuElement({id = "EE", name = "E: Swipe", value = true})
 Nidalee.C:MenuElement({id = "R", name = "R: Aspect of the Cougar", value = true})
 
 Nidalee.H:MenuElement({id = "Q", name = "Q: Javelin Toss", value = true})
@@ -374,11 +383,17 @@ Nidalee.H:MenuElement({id = "E", name = "E: Primal Surge", value = true})
 Nidalee.LC:MenuElement({id = "Q", name = "Q: Javelin Toss", value = true})
 Nidalee.LC:MenuElement({id = "W", name = "W: Bushwhack", value = true})
 Nidalee.LC:MenuElement({id = "E", name = "E: Primal Surge", value = true})
+Nidalee.LC:MenuElement({id = "QQ", name = "Q: Takedown", value = true})
+Nidalee.LC:MenuElement({id = "WW", name = "W: Pounce", value = true})
+Nidalee.LC:MenuElement({id = "EE", name = "E: Swipe", value = true})
 Nidalee.LC:MenuElement({id = "R", name = "R: Aspect of the Cougar", value = true})
 
 Nidalee.JC:MenuElement({id = "Q", name = "Q: Javelin Toss", value = true})
 Nidalee.JC:MenuElement({id = "W", name = "W: Bushwhack", value = true})
 Nidalee.JC:MenuElement({id = "E", name = "E: Primal Surge", value = true})
+Nidalee.JC:MenuElement({id = "QQ", name = "Q: Takedown", value = true})
+Nidalee.JC:MenuElement({id = "WW", name = "W: Pounce", value = true})
+Nidalee.JC:MenuElement({id = "EE", name = "E: Swipe", value = true})
 Nidalee.JC:MenuElement({id = "R", name = "R: Aspect of the Cougar", value = true})
 
 Nidalee.F:MenuElement({id = "Q", name = "Q: Javelin Toss", value = true})
@@ -388,6 +403,8 @@ Nidalee.F:MenuElement({id = "R", name = "R: Aspect of the Cougar", value = true}
 
 Nidalee.KS:MenuElement({id = "Q", name = "Q: Javelin Toss", value = true})
 Nidalee.KS:MenuElement({id = "W", name = "W: Bushwhack", value = true})
+Nidalee.KS:MenuElement({id = "E", name = "E: Primal Surge", value = true})
+Nidalee.KS:MenuElement({id = "EH", name = "E: Ally Primal Surge", value = false})
 
 Nidalee.MM:MenuElement({id = "C", name = "Mana % to Combo", value = 0, min = 0, max = 100})
 Nidalee.MM:MenuElement({id = "H", name = "Mana % to Harass", value = 60, min = 0, max = 100})
@@ -493,28 +510,71 @@ function OnWaypoint(unit)
 	return _OnWaypoint[unit.networkID]
 end
 
-local function GetPred(unit, speed, delay)
-	local speed = speed or math.huge
-	local delay = delay or 0.25
-	local unitSpeed = unit.ms
-	if OnWaypoint(unit).speed > unitSpeed then unitSpeed = OnWaypoint(unit).speed end
-	if OnVision(unit).state == false then
-		local unitPos = unit.pos + Vector(unit.pos,unit.posTo):Normalized() * ((GetTickCount() - OnVision(unit).tick)/1000 * unitSpeed)
-		local predPos = unitPos + Vector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + (GetDistance(myHero.pos,unitPos)/speed)))
-		if GetDistance(unit.pos,predPos) > GetDistance(unit.pos,unit.posTo) then predPos = unit.posTo end
-		return predPos
-	else
-		if unitSpeed > unit.ms then
-			local predPos = unit.pos + Vector(OnWaypoint(unit).startPos,unit.posTo):Normalized() * (unitSpeed * (delay + (GetDistance(myHero.pos,unit.pos)/speed)))
+local function Priority(charName)
+	  local p1 = {"Alistar", "Amumu", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Gnar", "Maokai", "Hecarim", "Jarvan IV", "Leona", "Lulu", "Malphite", "Nasus", "Nautilus", "Nunu", "Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Taric", "TahmKench", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Poppy"}
+	  local p2 = {"Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gragas", "Irelia", "Jax", "Lee Sin", "Morgana", "Janna", "Nocturne", "Pantheon", "Rengar", "Rumble", "Swain", "Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai", "Bard", "Nami", "Sona", "Camille", "Rakan", "Kayn"}
+	  local p3 = {"Akali", "Diana", "Ekko", "FiddleSticks", "Fiora", "Gangplank", "Fizz", "Heimerdinger", "Jayce", "Kassadin", "Kayle", "Kha'Zix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo", "Zilean", "Zyra", "Ryze"}
+	  local p4 = {"Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "Kindred", "Leblanc", "Lucian", "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon", "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "Velkoz", "Viktor", "Xerath", "Zed", "Ziggs", "Jhin", "Soraka", "Xayah"}
+	  if table.contains(p1, charName) then return 1 end
+	  if table.contains(p2, charName) then return 1.25 end
+	  if table.contains(p3, charName) then return 1.75 end
+	  return table.contains(p4, charName) and 2.25 or 1
+	end
+	
+	local function GetTarget(range,t,pos)
+	local t = t or "AD"
+	local pos = pos or myHero.pos
+	local target = {}
+		for i = 1, Game.HeroCount() do
+			local hero = Game.Hero(i)
+			if hero.team == TEAM_ENEMY and hero.dead == false then
+				OnVision(hero)
+			end
+			if hero.team == TEAM_ENEMY and hero.valid and hero.dead == false and (OnVision(hero).state == true or (OnVision(hero).state == false and GetTickCount() - OnVision(hero).tick < 650)) and hero.isTargetable then
+				local heroPos = hero.pos
+				if OnVision(hero).state == false then heroPos = hero.pos + Vector(hero.pos,hero.posTo):Normalized() * ((GetTickCount() - OnVision(hero).tick)/1000 * hero.ms) end
+				if GetDistance(pos,heroPos) <= range then
+					if t == "AD" then
+						target[(CalcPhysicalDamage(myHero,hero,100) / hero.health)*Priority(hero.charName)] = hero
+					elseif t == "AP" then
+						target[(CalcMagicalDamage(myHero,hero,100) / hero.health)*Priority(hero.charName)] = hero
+					elseif t == "HYB" then
+						target[((CalcMagicalDamage(myHero,hero,50) + CalcPhysicalDamage(myHero,hero,50))/ hero.health)*Priority(hero.charName)] = hero
+					end
+				end
+			end
+		end
+		local bT = 0
+		for d,v in pairs(target) do
+			if d > bT then
+				bT = d
+			end
+		end
+		if bT ~= 0 then return target[bT] end
+	end	
+
+	local function GetPred(unit,speed,delay) 
+		local speed = speed or math.huge
+		local delay = delay or 0.25
+		local unitSpeed = unit.ms
+		if OnWaypoint(unit).speed > unitSpeed then unitSpeed = OnWaypoint(unit).speed end
+		if OnVision(unit).state == false then
+			local unitPos = unit.pos + Vector(unit.pos,unit.posTo):Normalized() * ((GetTickCount() - OnVision(unit).tick)/1000 * unitSpeed)
+			local predPos = unitPos + Vector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + (GetDistance(myHero.pos,unitPos)/speed)))
 			if GetDistance(unit.pos,predPos) > GetDistance(unit.pos,unit.posTo) then predPos = unit.posTo end
 			return predPos
-		elseif IsImmobileTarget(unit) then
-			return unit.pos
 		else
-			return unit:GetPrediction(speed,delay)
-		end
-	end
-end
+			if unitSpeed > unit.ms then
+				local predPos = unit.pos + Vector(OnWaypoint(unit).startPos,unit.posTo):Normalized() * (unitSpeed * (delay + (GetDistance(myHero.pos,unit.pos)/speed)))
+				if GetDistance(unit.pos,predPos) > GetDistance(unit.pos,unit.posTo) then predPos = unit.posTo end
+				return predPos
+			elseif IsImmobileTarget(unit) then
+				return unit.pos
+			else
+				return unit:GetPrediction(speed,delay)
+			end
+		end	
+	end	
 
 local castSpell = {state = 0, tick = GetTickCount(), casting = GetTickCount() - 1000, mouse = mousePos}
 
@@ -590,10 +650,10 @@ end
 
 function Combo()
     if Nidalee.MM.C:Value() > PercentMP(myHero) then return end
-    local target = GetTarget(1500)
+    local target = GetTarget(1400)
     if target == nil then return end
 
-    if Ready(_Q) and ValidTarget(target, 1450) and myHero:GetSpellData(_Q).name == "JavelinToss" and myHero.pos:DistanceTo(target.pos) < 1450 then
+    if Ready(_Q) and ValidTarget(target, 1400) and myHero:GetSpellData(_Q).name == "JavelinToss" and myHero.pos:DistanceTo(target.pos) < 1400 then
         if Nidalee.C.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
@@ -624,7 +684,7 @@ function Combo()
     end
 
     if Ready(_W) and ValidTarget(target, 700) and myHero:GetSpellData(_W).name == "Pounce" then
-        if Nidalee.C.W:Value() and myHero.pos:DistanceTo(target.pos) < 700 then
+        if Nidalee.C.WW:Value() and myHero.pos:DistanceTo(target.pos) < 700 then
             local pos = GetPred(target, WC.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
@@ -634,14 +694,14 @@ function Combo()
     end
 
     if Ready(_Q) and ValidTarget(target, 200) and myHero:GetSpellData(_Q).name == "Takedown" then
-        if Nidalee.C.Q:Value() then
+        if Nidalee.C.QQ:Value() then
 			Control.CastSpell(HK_Q)
             Control.Attack(target)
         end
     end
 	
     if Ready(_E) and ValidTarget(target, 300) and myHero:GetSpellData(_E).name == "Swipe" then
-        if Nidalee.C.E:Value() then
+        if Nidalee.C.EE:Value() then
             EnableOrb(false)
 			Control.CastSpell(HK_E, target)
             Control.Attack(target)
@@ -736,7 +796,7 @@ function Jungle()
             end
 
             if Ready(_W) and ValidTarget(minion, 700) and myHero:GetSpellData(_W).name == "Pounce" then
-                if Nidalee.JC.W:Value() and myHero.pos:DistanceTo(minion.pos) < 700 then
+                if Nidalee.JC.WW:Value() and myHero.pos:DistanceTo(minion.pos) < 700 then
                     local pos = GetPred(minion, WC.Speed, 0.25 + (Game.Latency()/1000))
 			        EnableOrb(false)
 			        CustomCast(HK_W, pos, 250)
@@ -746,14 +806,14 @@ function Jungle()
             end
 
             if Ready(_Q) and ValidTarget(minion, 300) and myHero:GetSpellData(_Q).name == "Takedown" then
-                if Nidalee.JC.Q:Value() and myHero.pos:DistanceTo(minion.pos) < 300 then
+                if Nidalee.JC.QQ:Value() and myHero.pos:DistanceTo(minion.pos) < 300 then
 			        Control.CastSpell(HK_Q)
                     Control.Attack(minion)
                 end
             end
 
             if Ready(_E) and ValidTarget(minion, 300) and myHero:GetSpellData(_E).name == "Swipe" then
-                if Nidalee.JC.E:Value() and myHero.pos:DistanceTo(minion.pos) < 300 then
+                if Nidalee.JC.EE:Value() and myHero.pos:DistanceTo(minion.pos) < 300 then
                     EnableOrb(false)
 			        Control.CastSpell(HK_E, minion)
                     Control.Attack(minion)
@@ -815,11 +875,26 @@ function Killsteal()
     local target = GetTarget(Q.Range)
 
     if Ready(_E) and myHero:GetSpellData(_E).name == "PrimalSurge" then
-        if Nidalee.C.E:Value() and myHero.health/myHero.maxHealth < .80 then
+        if Nidalee.KS.E:Value() and myHero.health/myHero.maxHealth < .80 then
 			Control.CastSpell(HK_E, myHero)
         end
     end
-
+	if Ready(_E) and myHero:GetSpellData(_E).name == "PrimalSurge" then
+		for i,ally in pairs(GetAllyHeroes()) do
+			if ValidTarget(ally,500) and myHero.pos:DistanceTo(ally.pos) < 500 then
+				if not ally.isMe then
+					for i = 1, Game.HeroCount() do
+					local hero = Game.Hero(i)
+						if hero.team == myHero.team and not hero.isMe and myHero.pos:DistanceTo(target.pos) > 400 then
+							if Nidalee.KS.EH:Value() and Ready(_E) and not ally.isMe and ally.health/ally.maxHealth < .40 then
+								Control.CastSpell(HK_E,ally)
+							end
+						end
+					end
+				end
+			end
+		end
+	end
     if target == nil or myHero.pos:DistanceTo(target.pos) > 1450 then return end
 	if Ready(_Q) and ValidTarget(target, Q.Range) then
         if Nidalee.KS.Q:Value() and Qdmg(target) > target.health then
@@ -867,6 +942,19 @@ function ForceCat()
 		end
 	end
 	return false
+end
+
+function GetAllyHeroes()
+	local _AllyHeroes
+	if _AllyHeroes then return _AllyHeroes end
+	_AllyHeroes = {}
+	for i = 1, Game.HeroCount() do
+    local unit = Game.Hero(i)
+    if unit.isAlly then
+      table.insert(_AllyHeroes, unit)
+    end
+	end
+	return _AllyHeroes
 end
 
 function Summoners()
