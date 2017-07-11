@@ -86,17 +86,23 @@
 --                                                                                                                                                      
 --
 
-if myHero.charName ~= "Ezreal" then return end
+if myHero.charName ~= "Ezreal" then return end		
 
 
 --require NOTHING!!
 
 
-local Q = { Range = 1100, Delay = 0.25, Speed = 1200, Width = 60}
-local W = { Range = 950, Delay = 0.25, Speed = 1200, Width = 80}
+local Q = { Range = 1000, Delay = 0.25, Speed = 1200, Width = 60}
+local W = { Range = 900, Delay = 0.25, Speed = 1200, Width = 80}
 local E = { Range = 450, Delay = 0.25, Speed = 2000}
 local R = { Range = 20000, Delay = 1.00, Speed = 2000, Width = 160}
-
+local TEAM_ALLY = myHero.team
+local TEAM_JUNGLE = 300
+local TEAM_ENEMY = 300 - TEAM_ALLY
+local huge = math.huge 	
+local sqrt = math.sqrt  	
+local abs = math.abs  	
+local insert = table.insert
 
 local _EnemyHeroes
 local function GetEnemyHeroes()
@@ -155,7 +161,7 @@ local function OnScreen(unit)
 	return unit.pos:To2D().onScreen;
 end
 
-local function GetTarget(range)
+--[[local function GetTarget(range)
 	local target = nil
 	if _G.SDK and _G.SDK.Orbwalker then
 		target = _G.SDK.TargetSelector:GetTarget(range)
@@ -163,7 +169,7 @@ local function GetTarget(range)
 		target = GOS:GetTarget(range)
 	end
 	return target
-end
+end]]
 
 local function GetMode()
 	if _G.SDK and _G.SDK.Orbwalker then
@@ -282,8 +288,6 @@ local function NoPotion()
 	return true
 end
 
-local sqrt = math.sqrt
-
 local function GetDistanceSqr(p1, p2)
     local dx = p1.x - p2.x
     local dz = p1.z - p2.z
@@ -317,7 +321,7 @@ end
 
 local Ezreal = MenuElement({type = MENU, id = "EzrealTocsin", name = "EzrealTocsin"})
 
-Ezreal:MenuElement({id = "Script", name = "Ezreal by Tocsin", drop = {"v2.4"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/e/ec/Ezreal_OriginalLoading.jpg"})
+Ezreal:MenuElement({id = "Script", name = "Ezreal by Tocsin", drop = {"v2.5"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/e/ec/Ezreal_OriginalLoading.jpg"})
 Ezreal:MenuElement({name = " ", drop = {"Champion Settings"}})
 Ezreal:MenuElement({type = MENU, id = "C", name = "Combo"})
 Ezreal:MenuElement({type = MENU, id = "H", name = "Harass"})
@@ -455,28 +459,71 @@ function OnWaypoint(unit)
 	return _OnWaypoint[unit.networkID]
 end
 
-local function GetPred(unit, speed, delay)
-	local speed = speed or math.huge
-	local delay = delay or 0.25
-	local unitSpeed = unit.ms
-	if OnWaypoint(unit).speed > unitSpeed then unitSpeed = OnWaypoint(unit).speed end
-	if OnVision(unit).state == false then
-		local unitPos = unit.pos + Vector(unit.pos,unit.posTo):Normalized() * ((GetTickCount() - OnVision(unit).tick)/1000 * unitSpeed)
-		local predPos = unitPos + Vector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + (GetDistance(myHero.pos,unitPos)/speed)))
-		if GetDistance(unit.pos,predPos) > GetDistance(unit.pos,unit.posTo) then predPos = unit.posTo end
-		return predPos
-	else
-		if unitSpeed > unit.ms then
-			local predPos = unit.pos + Vector(OnWaypoint(unit).startPos,unit.posTo):Normalized() * (unitSpeed * (delay + (GetDistance(myHero.pos,unit.pos)/speed)))
+local function Priority(charName)
+	  local p1 = {"Alistar", "Amumu", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Gnar", "Maokai", "Hecarim", "Jarvan IV", "Leona", "Lulu", "Malphite", "Nasus", "Nautilus", "Nunu", "Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Taric", "TahmKench", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Poppy"}
+	  local p2 = {"Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gragas", "Irelia", "Jax", "Lee Sin", "Morgana", "Janna", "Nocturne", "Pantheon", "Rengar", "Rumble", "Swain", "Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai", "Bard", "Nami", "Sona", "Camille", "Rakan", "Kayn"}
+	  local p3 = {"Akali", "Diana", "Ekko", "FiddleSticks", "Fiora", "Gangplank", "Fizz", "Heimerdinger", "Jayce", "Kassadin", "Kayle", "Kha'Zix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo", "Zilean", "Zyra", "Ryze"}
+	  local p4 = {"Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "Kindred", "Leblanc", "Lucian", "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon", "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "Velkoz", "Viktor", "Xerath", "Zed", "Ziggs", "Jhin", "Soraka", "Xayah"}
+	  if table.contains(p1, charName) then return 1 end
+	  if table.contains(p2, charName) then return 1.25 end
+	  if table.contains(p3, charName) then return 1.75 end
+	  return table.contains(p4, charName) and 2.25 or 1
+	end
+	
+	local function GetTarget(range,t,pos)
+	local t = t or "AD"
+	local pos = pos or myHero.pos
+	local target = {}
+		for i = 1, Game.HeroCount() do
+			local hero = Game.Hero(i)
+			if hero.team == TEAM_ENEMY and hero.dead == false then
+				OnVision(hero)
+			end
+			if hero.team == TEAM_ENEMY and hero.valid and hero.dead == false and (OnVision(hero).state == true or (OnVision(hero).state == false and GetTickCount() - OnVision(hero).tick < 650)) and hero.isTargetable then
+				local heroPos = hero.pos
+				if OnVision(hero).state == false then heroPos = hero.pos + Vector(hero.pos,hero.posTo):Normalized() * ((GetTickCount() - OnVision(hero).tick)/1000 * hero.ms) end
+				if GetDistance(pos,heroPos) <= range then
+					if t == "AD" then
+						target[(CalcPhysicalDamage(myHero,hero,100) / hero.health)*Priority(hero.charName)] = hero
+					elseif t == "AP" then
+						target[(CalcMagicalDamage(myHero,hero,100) / hero.health)*Priority(hero.charName)] = hero
+					elseif t == "HYB" then
+						target[((CalcMagicalDamage(myHero,hero,50) + CalcPhysicalDamage(myHero,hero,50))/ hero.health)*Priority(hero.charName)] = hero
+					end
+				end
+			end
+		end
+		local bT = 0
+		for d,v in pairs(target) do
+			if d > bT then
+				bT = d
+			end
+		end
+		if bT ~= 0 then return target[bT] end
+	end	
+
+	local function GetPred(unit,speed,delay) 
+		local speed = speed or math.huge
+		local delay = delay or 0.25
+		local unitSpeed = unit.ms
+		if OnWaypoint(unit).speed > unitSpeed then unitSpeed = OnWaypoint(unit).speed end
+		if OnVision(unit).state == false then
+			local unitPos = unit.pos + Vector(unit.pos,unit.posTo):Normalized() * ((GetTickCount() - OnVision(unit).tick)/1000 * unitSpeed)
+			local predPos = unitPos + Vector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + (GetDistance(myHero.pos,unitPos)/speed)))
 			if GetDistance(unit.pos,predPos) > GetDistance(unit.pos,unit.posTo) then predPos = unit.posTo end
 			return predPos
-		elseif IsImmobileTarget(unit) then
-			return unit.pos
 		else
-			return unit:GetPrediction(speed,delay)
-		end
-	end
-end
+			if unitSpeed > unit.ms then
+				local predPos = unit.pos + Vector(OnWaypoint(unit).startPos,unit.posTo):Normalized() * (unitSpeed * (delay + (GetDistance(myHero.pos,unit.pos)/speed)))
+				if GetDistance(unit.pos,predPos) > GetDistance(unit.pos,unit.posTo) then predPos = unit.posTo end
+				return predPos
+			elseif IsImmobileTarget(unit) then
+				return unit.pos
+			else
+				return unit:GetPrediction(speed,delay)
+			end
+		end	
+	end	
 
 local castSpell = {state = 0, tick = GetTickCount(), casting = GetTickCount() - 1000, mouse = mousePos}
 
@@ -532,9 +579,9 @@ end
 
 function Combo()
     if Ezreal.MM.C:Value() > PercentMP(myHero) then return end
-    local target = GetTarget(1400)
+    local target = GetTarget(1100)
     if target == nil then return end
-    if Ready(_Q) and ValidTarget(target, 1050) and myHero.pos:DistanceTo(target.pos) < 1000 then
+    if Ready(_Q) and ValidTarget(target, 1000) and myHero.pos:DistanceTo(target.pos) < 1000 then
         if Ezreal.C.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
@@ -543,7 +590,7 @@ function Combo()
         end
     end
 	if Ready(_W) and ValidTarget(target, 900) then
-        if Ezreal.C.W:Value() and myHero.pos:DistanceTo(target.pos) < 880 then
+        if Ezreal.C.W:Value() and myHero.pos:DistanceTo(target.pos) < 850 then
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
@@ -570,7 +617,7 @@ function Lane()
     for i = 1, Game.MinionCount() do
         local minion = Game.Minion(i)
         if minion and minion.team ~= myHero.team then
-            if Ready(_Q) and ValidTarget(minion, Q.Range) then
+            if Ready(_Q) and ValidTarget(minion, 1100) then
                 if Ezreal.MM.LC:Value() > PercentMP(myHero) then return end
                 if Ezreal.LC.Q:Value() then
                     local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
@@ -599,11 +646,12 @@ function Jungle()
     for i = 1, Game.MinionCount() do
 		local minion = Game.Minion(i)
         if minion and minion.team == 300 then
-            if Ready(_Q) and ValidTarget(minion, Q.Range) then
+            if Ready(_Q) and ValidTarget(minion, 1100) then
                 if Ezreal.JC.Q:Value() then
                     local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
 					EnableOrb(false)
-					CustomCast(HK_Q, pos, 250)
+					Control.CastSpell(HK_Q, minion.pos)
+					--CustomCast(HK_Q, pos, 250)
 					DelayAction(function() EnableOrb(true) end, 0.3)
                 end
             end
