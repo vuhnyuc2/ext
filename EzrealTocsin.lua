@@ -321,7 +321,7 @@ end
 
 local Ezreal = MenuElement({type = MENU, id = "EzrealTocsin", name = "EzrealTocsin"})
 
-Ezreal:MenuElement({id = "Script", name = "Ezreal by Tocsin", drop = {"v2.5"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/e/ec/Ezreal_OriginalLoading.jpg"})
+Ezreal:MenuElement({id = "Script", name = "Ezreal by Tocsin", drop = {"v2.6"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/e/ec/Ezreal_OriginalLoading.jpg"})
 Ezreal:MenuElement({name = " ", drop = {"Champion Settings"}})
 Ezreal:MenuElement({type = MENU, id = "C", name = "Combo"})
 Ezreal:MenuElement({type = MENU, id = "H", name = "Harass"})
@@ -580,7 +580,7 @@ end
 function Combo()
     if Ezreal.MM.C:Value() > PercentMP(myHero) then return end
     local target = GetTarget(1100)
-    if target == nil then return end
+    if target == nil or target == myHero.team then return end
     if Ready(_Q) and ValidTarget(target, 1000) and myHero.pos:DistanceTo(target.pos) < 1000 then
         if Ezreal.C.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
@@ -666,8 +666,8 @@ end
 
 function Harass()
     if Ezreal.MM.H:Value() > PercentMP(myHero) then return end
-    local target = GetTarget(1200)
-    if target == nil then return end  
+    local target = GetTarget(1000)
+    if target == nil or target == myHero.team then return end  
 	if Ready(_Q) and ValidTarget(target, 1000) and myHero.pos:DistanceTo(target.pos) < 1000 then
 		if myHero.pos:DistanceTo(target.pos) > 1050 then return end
         if Ezreal.H.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
@@ -677,9 +677,9 @@ function Harass()
 			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
-    if Ready(_W) and ValidTarget(target, 900) then
-    	if myHero.pos:DistanceTo(target.pos) > 900 then return end
-        if Ezreal.H.W:Value() and myHero.pos:DistanceTo(target.pos) < 900 then
+    if Ready(_W) and ValidTarget(target, 880) then
+    	if myHero.pos:DistanceTo(target.pos) > 880 then return end
+        if Ezreal.H.W:Value() then
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
@@ -709,7 +709,7 @@ end
 function Killsteal()
     if Ezreal.MM.KS:Value() > PercentMP(myHero) then return end
     local target = GetTarget(Q.Range)
-    if target == nil or myHero.pos:DistanceTo(target.pos) > 1040 then return end
+    if target == nil or target == myHero.team or myHero.pos:DistanceTo(target.pos) > 1040 then return end
 	if Ready(_Q) and ValidTarget(target, Q.Range) then
         if Ezreal.KS.Q:Value() and Qdmg(target) > target.health then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
@@ -729,8 +729,8 @@ function Killsteal()
 end
 
 function Summoners()
-	local target = GetTarget(1200)
-    if target == nil then return end
+	local target = GetTarget(600)
+    if target == nil or target == myHero.team then return end
 	if GetMode() == "Combo" then
 		if myHero:GetSpellData(SUMMONER_1).name == "SummonerSmite" or myHero:GetSpellData(SUMMONER_1).name == "S5_SummonerSmitePlayerGanker" or myHero:GetSpellData(SUMMONER_1).name == "S5_SummonerSmiteDuel"
 		or myHero:GetSpellData(SUMMONER_2).name == "SummonerSmite" or myHero:GetSpellData(SUMMONER_2).name == "S5_SummonerSmitePlayerGanker" or myHero:GetSpellData(SUMMONER_1).name == "S5_SummonerSmiteDuel" then
@@ -830,7 +830,7 @@ end
 
 function Activator()
 	local target = GetTarget(800)
-    if target == nil then return end
+    if target == nil or target == myHero.team then return end
 	local items = {}
 	for slot = ITEM_1,ITEM_6 do
 		local id = myHero:GetItemData(slot).itemID 
