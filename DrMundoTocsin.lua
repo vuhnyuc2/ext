@@ -70,7 +70,7 @@
 
 
 
-local ScriptVersion = "v2.0"
+local ScriptVersion = "v2.1"
 
 local Q = { Range = 975, Delay = 0.25, Speed = 1500, Width = 85}
 local Qicon = "https://vignette1.wikia.nocookie.net/leagueoflegends/images/f/f2/Infected_Cleaver.png"
@@ -334,6 +334,7 @@ end
 function DrMundo:Combo()
 	local target = GetTarget(1500)
 	if not target then return end
+	if target ~= myHero.team then
 	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1000 then
 		self:CastQ(target)
 	end
@@ -348,11 +349,13 @@ function DrMundo:Combo()
 		    self:CastR(target)
         end
 	end
+	end
 end
 
 function DrMundo:Harass()
 	local target = GetTarget(1100)
 	if not target then return end
+	if target ~= myHero.team then
 	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1000 then
 		self:CastQ(target)
 	end
@@ -361,6 +364,7 @@ function DrMundo:Harass()
 	end
 	if Tocsin.Combo.E:Value() and Ready(_E)and myHero.pos:DistanceTo(target.pos) < 150 then
 		self:CastE(target)
+	end
 	end
 end
 
@@ -395,6 +399,7 @@ end
 function DrMundo:Misc()
 	local target = GetTarget(1000)
 	if not target then return end
+	if target ~= myHero.team then
 		if Tocsin.Misc.Qks:Value() and Ready(_Q) then
 			local lvl = myHero:GetSpellData(_Q).level
 			local Qdmg = (({80, 130, 180, 230, 280 })[lvl] )
@@ -402,6 +407,7 @@ function DrMundo:Misc()
 				self:CastQ(target)
 			end
 		end
+	end
 end
 
 function DrMundo:CastQ(target)
@@ -409,7 +415,9 @@ function DrMundo:CastQ(target)
 		if Ready(_Q) and ValidTarget(target, Q.Range) then
 			if target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
+			--EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
+			--EnableOrb(true)
         	end
 		end
 	end
@@ -462,12 +470,14 @@ function DrMundo:LastHit()
 	local level = myHero:GetSpellData(_Q).level
 	for i = 1, Game.MinionCount() do
 	local minion = Game.Minion(i)
-		if  minion.team == 200 then
+		if minion and minion.team ~= myHero.team then
 		local Qdamage = (({80, 130, 180, 230, 280})[level])
     		if  Tocsin.LastHit.UseQ:Value() and Ready(_Q) and ValidTarget(minion, Q.Range) then
                 if Qdamage >= self:HpPred(minion, 0.3) then
                     local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
+					--EnableOrb(false)
 					CustomCast(HK_Q, pos, 250)
+					--EnableOrb(true)
                 end
 			end
 		end
