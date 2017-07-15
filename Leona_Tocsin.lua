@@ -64,7 +64,7 @@
 
 require 'Eternal Prediction'
 
-local ScriptVersion = "v1.4"
+local ScriptVersion = "v1.5"
 
 local function Ready(spell)
 	return myHero:GetSpellData(spell).currentCd == 0 and myHero:GetSpellData(spell).level > 0 and myHero:GetSpellData(spell).mana <= myHero.mana and Game.CanUseSpell(spell) == 0 
@@ -212,6 +212,7 @@ end
 function Leona:Combo()
 	local target = GetTarget(1100, "AD")
 	if not target then return end
+	if target ~= myHero.team then
 	if Tocsin.Combo.E:Value() and Ready(_E) and myHero.pos:DistanceTo(target.pos) < 875 then
 		self:CastE(target)
 	end
@@ -224,12 +225,14 @@ function Leona:Combo()
 	if Tocsin.Combo.R:Value() and Ready(_R) and myHero.pos:DistanceTo(target.pos) < 500 then
 		self:CastR(target)
 	end
+	end
 end
 
 function Leona:Harass()
 	local target = GetTarget(1100)
 	if myHero.mana/myHero.maxMana < Tocsin.Harass.Mana:Value() then return end
 	if not target then return end
+	if target ~= myHero.team then
 	if Tocsin.Combo.E:Value() and Ready(_E) and myHero.pos:DistanceTo(target.pos) < 875 then
 		self:CastE(target)
 	end
@@ -238,6 +241,7 @@ function Leona:Harass()
 	end
 	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 275 then
 		self:CastQ(target)
+	end
 	end
 end
 
