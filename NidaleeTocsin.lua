@@ -354,7 +354,7 @@ end
 
 local Nidalee = MenuElement({type = MENU, id = "NidaleeTocsin", name = "NidaleeTocsin"})
 
-Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.06"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
+Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.07"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
 Nidalee:MenuElement({name = " ", drop = {"Champion Settings"}})
 Nidalee:MenuElement({type = MENU, id = "C", name = "Combo"})
 Nidalee:MenuElement({type = MENU, id = "H", name = "Harass"})
@@ -650,14 +650,12 @@ end
 function Combo()
     if Nidalee.MM.C:Value() > PercentMP(myHero) then return end
     local target = GetTarget(1400)
-    if target == nil then return end
-
+    if target == nil or target == myHero.team then return end
+	if target ~= myHero.team then
     if Ready(_Q) and ValidTarget(target, 1400) and myHero:GetSpellData(_Q).name == "JavelinToss" and myHero.pos:DistanceTo(target.pos) < 1400 then
-        if Nidalee.C.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
+        if Nidalee.C.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 and target ~= myHero.team then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 
@@ -670,9 +668,7 @@ function Combo()
 	if Ready(_W) and ValidTarget(target, 870) and myHero:GetSpellData(_W).name == "Bushwhack" then
         if Nidalee.C.W:Value() and myHero.pos:DistanceTo(target.pos) < 870 then
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 
@@ -685,10 +681,8 @@ function Combo()
     if Ready(_W) and ValidTarget(target, 700) and myHero:GetSpellData(_W).name == "Pounce" then
         if Nidalee.C.WW:Value() and myHero.pos:DistanceTo(target.pos) < 700 then
             local pos = GetPred(target, WC.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
             Control.Attack(target)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 
@@ -701,10 +695,8 @@ function Combo()
 	
     if Ready(_E) and ValidTarget(target, 300) and myHero:GetSpellData(_E).name == "Swipe" then
         if Nidalee.C.EE:Value() then
-            EnableOrb(false)
 			Control.CastSpell(HK_E, target)
             Control.Attack(target)
-            DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 
@@ -719,6 +711,7 @@ function Combo()
 			Control.CastSpell(HK_R)
         end
     end
+	end
 end
 
 function Lane()
@@ -743,10 +736,8 @@ function Lane()
             if Ready(_W) and ValidTarget(minion, 700) and myHero:GetSpellData(_W).name == "Pounce" then
                 if Nidalee.LC.W:Value() and myHero.pos:DistanceTo(minion.pos) < 700 then
                     local pos = GetPred(minion, WC.Speed, 0.25 + (Game.Latency()/1000))
-			        EnableOrb(false)
 			        CustomCast(HK_W, pos, 250)
                     Control.Attack(minion)
-			        DelayAction(function() EnableOrb(true) end, 0.2)
                 end
             end
 
@@ -759,10 +750,8 @@ function Lane()
 
             if Ready(_E) and ValidTarget(minion, 300) and myHero:GetSpellData(_E).name == "Swipe" then
                 if Nidalee.LC.E:Value() and myHero.pos:DistanceTo(minion.pos) < 300 then
-                    EnableOrb(false)
 			        Control.CastSpell(HK_E, minion)
                     Control.Attack(minion)
-                    DelayAction(function() EnableOrb(true) end, 0.2)
                 end
             end
 
@@ -797,10 +786,8 @@ function Jungle()
             if Ready(_W) and ValidTarget(minion, 700) and myHero:GetSpellData(_W).name == "Pounce" then
                 if Nidalee.JC.WW:Value() and myHero.pos:DistanceTo(minion.pos) < 700 then
                     local pos = GetPred(minion, WC.Speed, 0.25 + (Game.Latency()/1000))
-			        EnableOrb(false)
 			        CustomCast(HK_W, pos, 250)
                     Control.Attack(minion)
-			        DelayAction(function() EnableOrb(true) end, 0.2)
                 end
             end
 
@@ -813,10 +800,8 @@ function Jungle()
 
             if Ready(_E) and ValidTarget(minion, 300) and myHero:GetSpellData(_E).name == "Swipe" then
                 if Nidalee.JC.EE:Value() and myHero.pos:DistanceTo(minion.pos) < 300 then
-                    EnableOrb(false)
 			        Control.CastSpell(HK_E, minion)
                     Control.Attack(minion)
-                    DelayAction(function() EnableOrb(true) end, 0.2)
                 end
             end
 
@@ -835,20 +820,16 @@ function Harass()
     if target == nil then return end 
 
 	if Ready(_Q) and ValidTarget(target, 1450) and myHero:GetSpellData(_Q).name == "JavelinToss" then
-        if Nidalee.H.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
+        if Nidalee.H.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 and target ~= myHero.team then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 
     if Ready(_W) and ValidTarget(target, 900) and myHero:GetSpellData(_W).name == "Bushwhack" then
-        if Nidalee.H.W:Value() and myHero.pos:DistanceTo(target.pos) < 880 then
+        if Nidalee.H.W:Value() and myHero.pos:DistanceTo(target.pos) < 880 and target ~= myHero.team then
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 end
@@ -881,11 +862,9 @@ function Killsteal()
 
     if target == nil or myHero.pos:DistanceTo(target.pos) > 1450 then return end
 	if Ready(_Q) and ValidTarget(target, Q.Range) then
-        if Nidalee.KS.Q:Value() and Qdmg(target) > target.health then
+        if Nidalee.KS.Q:Value() and Qdmg(target) > target.health and target ~= myHero.team then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 
