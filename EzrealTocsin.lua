@@ -319,9 +319,9 @@ local function CircleCircleIntersection(c1, c2, r1, r2)
 end
 
 
-local Ezreal = MenuElement({type = MENU, id = "EzrealTocsin", name = "EzrealTocsin"})
+local Ezreal = MenuElement({type = MENU, id = "EzrealTocsin", name = "EzrealTocsin Use Default Orb it's $$$"})
 
-Ezreal:MenuElement({id = "Script", name = "Ezreal by Tocsin", drop = {"v2.6"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/e/ec/Ezreal_OriginalLoading.jpg"})
+Ezreal:MenuElement({id = "Script", name = "Ezreal by Tocsin", drop = {"v2.7"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/e/ec/Ezreal_OriginalLoading.jpg"})
 Ezreal:MenuElement({name = " ", drop = {"Champion Settings"}})
 Ezreal:MenuElement({type = MENU, id = "C", name = "Combo"})
 Ezreal:MenuElement({type = MENU, id = "H", name = "Harass"})
@@ -582,29 +582,25 @@ function Combo()
     local target = GetTarget(1100)
     if target == nil or target == myHero.team then return end
     if Ready(_Q) and ValidTarget(target, 1000) and myHero.pos:DistanceTo(target.pos) < 1000 then
-        if Ezreal.C.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
+        if Ezreal.C.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 and target ~= myHero.team then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 	if Ready(_W) and ValidTarget(target, 900) then
-        if Ezreal.C.W:Value() and myHero.pos:DistanceTo(target.pos) < 850 then
+        if Ezreal.C.W:Value() and myHero.pos:DistanceTo(target.pos) < 850 and target ~= myHero.team then
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
-	if Ready(_E) and ValidTarget(target, E.Range) then
+	if Ready(_E) and ValidTarget(target, 1100) then
         if Ezreal.C.E:Value() then
             local pos = GetPred(target, E.Speed, 0.25 + (Game.Latency()/1000))
 			Control.CastSpell(HK_E)
         end
     end
     if Ready(_R) and ValidTarget(target, R.Range) and Rdmg(target) > target.health then
-        if Ezreal.C.R:Value() and myHero.pos:DistanceTo(target.pos) > 700 then
+        if Ezreal.C.R:Value() and myHero.pos:DistanceTo(target.pos) > 700 and target ~= myHero.team then
             local pos = GetPred(target, R.Speed, 1.00 + (Game.Latency()/1000))
 			EnableOrb(false)
 			CustomCast(HK_R, pos, 1000)
@@ -621,9 +617,7 @@ function Lane()
                 if Ezreal.MM.LC:Value() > PercentMP(myHero) then return end
                 if Ezreal.LC.Q:Value() then
                     local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
-					EnableOrb(false)
 					CustomCast(HK_Q, pos, 250)
-					DelayAction(function() EnableOrb(true) end, 0.3)
                 end
             end
         end
@@ -649,10 +643,7 @@ function Jungle()
             if Ready(_Q) and ValidTarget(minion, 1100) then
                 if Ezreal.JC.Q:Value() then
                     local pos = GetPred(minion, Q.Speed, 0.25 + (Game.Latency()/1000))
-					EnableOrb(false)
-					Control.CastSpell(HK_Q, minion.pos)
-					--CustomCast(HK_Q, pos, 250)
-					DelayAction(function() EnableOrb(true) end, 0.3)
+					CustomCast(HK_Q, pos, 250)
                 end
             end
             if Ready(_E) and ValidTarget(minion, E.Range) then
@@ -670,20 +661,16 @@ function Harass()
     if target == nil or target == myHero.team then return end  
 	if Ready(_Q) and ValidTarget(target, 1000) and myHero.pos:DistanceTo(target.pos) < 1000 then
 		if myHero.pos:DistanceTo(target.pos) > 1050 then return end
-        if Ezreal.H.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 then
+        if Ezreal.H.Q:Value() and target:GetCollision(Q.Width, Q.Speed, Q.Delay) == 0 and target ~= myHero.team then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
     if Ready(_W) and ValidTarget(target, 880) then
     	if myHero.pos:DistanceTo(target.pos) > 880 then return end
-        if Ezreal.H.W:Value() then
+        if Ezreal.H.W:Value() and target ~= myHero.team then
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
     if Ready(_E) and ValidTarget(target, E.Range) then
@@ -711,19 +698,15 @@ function Killsteal()
     local target = GetTarget(Q.Range)
     if target == nil or target == myHero.team or myHero.pos:DistanceTo(target.pos) > 1040 then return end
 	if Ready(_Q) and ValidTarget(target, Q.Range) then
-        if Ezreal.KS.Q:Value() and Qdmg(target) > target.health then
+        if Ezreal.KS.Q:Value() and Qdmg(target) > target.health and target ~= myHero.team then
             local pos = GetPred(target, Q.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_Q, pos, 250)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
     if Ready(_W) and ValidTarget(target, W.Range) then
-        if Ezreal.KS.W:Value() and Wdmg(target) > target.health then
+        if Ezreal.KS.W:Value() and Wdmg(target) > target.health and target ~= myHero.team then
             local pos = GetPred(target, W.Speed, 0.25 + (Game.Latency()/1000))
-			EnableOrb(false)
 			CustomCast(HK_W, pos, 250)
-			DelayAction(function() EnableOrb(true) end, 0.3)
         end
     end
 end
