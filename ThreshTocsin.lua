@@ -81,7 +81,7 @@
 
 
 
-local ScriptVersion = "v2.1"
+local ScriptVersion = "v2.2"
 
 local Q = { Range = 1050, Delay = 0.50, Speed = 1200, Width = 70}
 local W = { Range = 950, Delay = 0.25}
@@ -362,6 +362,7 @@ end
 function Thresh:Combo()
 	local target = GetTarget(1150, "AD")
 	if not target then return end
+	if target ~= myHero.team then
 	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 1025 and myHero.pos:DistanceTo(target.pos) > 300 then
 		self:CastQ(target)
 	end
@@ -374,13 +375,14 @@ function Thresh:Combo()
 	if Tocsin.Combo.E:Value() and Ready(_E) and myHero.pos:DistanceTo(target.pos) < 420 then
 		self:CastE(target)
 	end
-	
+	end
 end
 
 function Thresh:Harass()
 	local target = GetTarget(950, "AD")
 	if myHero.mana/myHero.maxMana < Tocsin.Harass.Mana:Value() then return end
 	if not target then return end
+	if target ~= myHero.team then
 	if Tocsin.Harass.E:Value() and Ready(_E) and myHero.pos:DistanceTo(target.pos) < 420 then
 		self:CastE(target)
 	end
@@ -389,6 +391,7 @@ function Thresh:Harass()
 	end
 	if Tocsin.Combo.W:Value() and Ready(_W) and not Ready(_Q) and not Ready(_E) then
 		self:CastW(target)
+	end
 	end
 end
 
