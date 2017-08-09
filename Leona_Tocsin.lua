@@ -64,7 +64,7 @@
 
 require 'Eternal Prediction'
 
-local ScriptVersion = "v1.5"
+local ScriptVersion = "v1.6"
 
 local function Ready(spell)
 	return myHero:GetSpellData(spell).currentCd == 0 and myHero:GetSpellData(spell).level > 0 and myHero:GetSpellData(spell).mana <= myHero.mana and Game.CanUseSpell(spell) == 0 
@@ -222,7 +222,7 @@ function Leona:Combo()
 	if Tocsin.Combo.Q:Value() and Ready(_Q) and myHero.pos:DistanceTo(target.pos) < 275 then
 		self:CastQ(target)
 	end
-	if Tocsin.Combo.R:Value() and Ready(_R) and myHero.pos:DistanceTo(target.pos) < 500 then
+	if Tocsin.Combo.R:Value() and Ready(_R) and myHero.pos:DistanceTo(target.pos) < 1150 then
 		self:CastR(target)
 	end
 	end
@@ -315,7 +315,7 @@ function Leona:CastR(target)
 			end
 		end
 	end
-	if  myHero.pos:DistanceTo(target.pos) < 850 and not Ready(_E) and not Ready(_Q) then
+	if  myHero.pos:DistanceTo(target.pos) > 800 and Ready(_E) and Ready(_Q) then
 		if pred and pred.hitChance >= Tocsin.Pred.RChance:Value() then
 			EnableOrb(false)
 			Control.CastSpell(HK_R, pred.castPos)
