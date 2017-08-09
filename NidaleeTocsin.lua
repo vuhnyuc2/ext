@@ -354,7 +354,7 @@ end
 
 local Nidalee = MenuElement({type = MENU, id = "NidaleeTocsin", name = "NidaleeTocsin"})
 
-Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.07"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
+Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.08"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
 Nidalee:MenuElement({name = " ", drop = {"Champion Settings"}})
 Nidalee:MenuElement({type = MENU, id = "C", name = "Combo"})
 Nidalee:MenuElement({type = MENU, id = "H", name = "Harass"})
@@ -783,6 +783,13 @@ function Jungle()
                 end
             end
 
+			if Ready(_W) and ValidTarget(minion, 870) and myHero:GetSpellData(_W).name == "Bushwhack" then
+        		if Nidalee.JC.W:Value() and myHero.pos:DistanceTo(minion.pos) < 870 then
+            		local pos = GetPred(minion, W.Speed, 0.25 + (Game.Latency()/1000))
+					CustomCast(HK_W, pos, 250)
+        		end
+    		end
+
             if Ready(_W) and ValidTarget(minion, 700) and myHero:GetSpellData(_W).name == "Pounce" then
                 if Nidalee.JC.WW:Value() and myHero.pos:DistanceTo(minion.pos) < 700 then
                     local pos = GetPred(minion, WC.Speed, 0.25 + (Game.Latency()/1000))
@@ -806,7 +813,7 @@ function Jungle()
             end
 
             if Ready(_R) and ValidTarget(minion, 1150) and myHero:GetSpellData(_Q).name == "JavelinToss" then
-                if Nidalee.JC.R:Value() and myHero.pos:DistanceTo(minion.pos) < 1200 and not Ready(_Q) then
+                if Nidalee.JC.R:Value() and myHero.pos:DistanceTo(minion.pos) < 1200 and not Ready(_Q) and not Ready(_W) then
 			        Control.CastSpell(HK_R)
                 end
             end
