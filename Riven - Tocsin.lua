@@ -11,14 +11,6 @@ Callback.Add("Tick", function() self:Tick() end)
 Callback.Add("Draw", function() self:Draw() end)
 end
 
-local Icons = {
-["RivenIcon"] = "https://vignette3.wikia.nocookie.net/leagueoflegends/images/3/30/Riven_OriginalLoading.jpg",
-["Q"] = "https://vignette3.wikia.nocookie.net/leagueoflegends/images/c/c3/Broken_Wings.png",
-["W"] = "https://vignette3.wikia.nocookie.net/leagueoflegends/images/9/97/Ki_Burst.png",
-["E"] = "https://vignette1.wikia.nocookie.net/leagueoflegends/images/e/e9/Valor.png",
-["R"] = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/5/58/Blade_of_the_Exile.png",
-["EXH"] = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/4a/Exhaust.png"
-}
 
 function Riven.LoadSpells()
 
@@ -32,41 +24,41 @@ function Riven:LoadMenu()
 
 --Main Menu
 
-	self.Menu = MenuElement({type = MENU, id = "Riven_Tocsin", name = "Riven_Tocsin", leftIcon = Icons["RivenIcon"]})
+	self.Menu = MenuElement({type = MENU, id = "Riven_Tocsin", name = "Riven_Tocsin"})
 
 --Combo Settings Menu
 
 	self.Menu:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
-	self.Menu.Combo:MenuElement({id = "UseQ", name = "Use Q", value = true, leftIcon = Icons.Q})
-	self.Menu.Combo:MenuElement({id = "UseW", name = "Use W", value = true, leftIcon = Icons.W})
-	self.Menu.Combo:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = Icons.E})
-	self.Menu.Combo:MenuElement({id = "UseR", name = "Use R", value = true, leftIcon = Icons.R})
+	self.Menu.Combo:MenuElement({id = "UseQ", name = "Use Q", value = true})
+	self.Menu.Combo:MenuElement({id = "UseW", name = "Use W", value = true})
+	self.Menu.Combo:MenuElement({id = "UseE", name = "Use E", value = true})
+	self.Menu.Combo:MenuElement({id = "UseR", name = "Use R", value = true})
 	self.Menu.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
-	self.Menu.Combo:MenuElement({id = "Exhaust", name = "Use Exhaust", value = false, leftIcon = Icons.EXH})
+	self.Menu.Combo:MenuElement({id = "Exhaust", name = "Use Exhaust", value = false})
 --Harass Settings Menu
 
 	self.Menu:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
-	self.Menu.Harass:MenuElement({id = "UseQ", name = "Use Q", value = true, leftIcon = Icons.Q})
-	self.Menu.Harass:MenuElement({id = "UseW", name = "Use W", value = true, leftIcon = Icons.W})
-	self.Menu.Harass:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = Icons.E})
-	self.Menu.Harass:MenuElement({id = "UseR", name = "Use R", value = true, leftIcon = Icons.R})
+	self.Menu.Harass:MenuElement({id = "UseQ", name = "Use Q", value = true})
+	self.Menu.Harass:MenuElement({id = "UseW", name = "Use W", value = true})
+	self.Menu.Harass:MenuElement({id = "UseE", name = "Use E", value = true})
+	self.Menu.Harass:MenuElement({id = "UseR", name = "Use R", value = true})
 	self.Menu.Harass:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
 
 --KS
 	self.Menu:MenuElement({type = MENU, id = "Killsteal", name = "Killsteal"})
-	self.Menu.Killsteal:MenuElement({id = "UseR", name = "Use R", value = true, leftIcon = Icons.R})
+	self.Menu.Killsteal:MenuElement({id = "UseR", name = "Use R", value = true})
 
 --JungleClear
 	self.Menu:MenuElement({type = MENU, id = "JungleClear", name = "Jungle Clear"})
-  	self.Menu.JungleClear:MenuElement({id = "Q", name = "Use Q", value = true, leftIcon = Icons.Q})
-  	self.Menu.JungleClear:MenuElement({id = "W", name = "Use W", value = true, leftIcon = Icons.W})
-  	self.Menu.JungleClear:MenuElement({id = "E", name = "Use E", value = true, leftIcon = Icons.E})
+  	self.Menu.JungleClear:MenuElement({id = "Q", name = "Use Q", value = true})
+  	self.Menu.JungleClear:MenuElement({id = "W", name = "Use W", value = true})
+  	self.Menu.JungleClear:MenuElement({id = "E", name = "Use E", value = true})
  
 --Flee oR Chase
 	self.Menu:MenuElement({type = MENU, id = "Flee", name = "Flee"})
-	self.Menu.Flee:MenuElement({id = "UseQ", name = "Use Q", value = true, leftIcon = Icons.Q})
-	self.Menu.Flee:MenuElement({id = "UseW", name = "Use W", value = false, leftIcon = Icons.W})
-	self.Menu.Flee:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = Icons.E})
+	self.Menu.Flee:MenuElement({id = "UseQ", name = "Use Q", value = true})
+	self.Menu.Flee:MenuElement({id = "UseW", name = "Use W", value = false})
+	self.Menu.Flee:MenuElement({id = "UseE", name = "Use E", value = true})
 
 --misc
 	self.Menu:MenuElement({type = MENU, id = "Misc", name = "Misc"})
