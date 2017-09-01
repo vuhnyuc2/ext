@@ -160,31 +160,31 @@ function Leona:__init()
 end
 
 function Leona:LoadSpells()
-	Q = { range = myHero:GetSpellData(_Q).range, delay = myHero:GetSpellData(_Q).delay, speed = myHero:GetSpellData(_Q).speed, width = myHero:GetSpellData(_Q).width, icon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/c/c6/Shield_of_Daybreak.png" }
-	W = { range = myHero:GetSpellData(_W).range, delay = myHero:GetSpellData(_W).delay, speed = myHero:GetSpellData(_W).speed, width = myHero:GetSpellData(_W).width, icon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/c/c5/Eclipse.png" }
-	E = { range = myHero:GetSpellData(_E).range, delay = myHero:GetSpellData(_E).delay, speed = myHero:GetSpellData(_E).speed, width = myHero:GetSpellData(_E).width, icon = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/9/91/Zenith_Blade.png" }
-	R = { range = myHero:GetSpellData(_R).range, delay = myHero:GetSpellData(_R).delay, speed = myHero:GetSpellData(_R).speed, width = myHero:GetSpellData(_R).width, icon = "https://vignette1.wikia.nocookie.net/leagueoflegends/images/5/5c/Solar_Flare.png" }
+	Q = { range = myHero:GetSpellData(_Q).range, delay = myHero:GetSpellData(_Q).delay, speed = myHero:GetSpellData(_Q).speed, width = myHero:GetSpellData(_Q).width}
+	W = { range = myHero:GetSpellData(_W).range, delay = myHero:GetSpellData(_W).delay, speed = myHero:GetSpellData(_W).speed, width = myHero:GetSpellData(_W).width}
+	E = { range = myHero:GetSpellData(_E).range, delay = myHero:GetSpellData(_E).delay, speed = myHero:GetSpellData(_E).speed, width = myHero:GetSpellData(_E).width}
+	R = { range = myHero:GetSpellData(_R).range, delay = myHero:GetSpellData(_R).delay, speed = myHero:GetSpellData(_R).speed, width = myHero:GetSpellData(_R).width}
 end
 
 function Leona:LoadMenu()
 	Tocsin = MenuElement({type = MENU, id = "Leona_Tocsin", name = "Leona_Tocsin"})
-	Tocsin:MenuElement({name = "Leona", drop = {ScriptVersion}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/7/74/Leona_OriginalLoading.jpg"})
+	Tocsin:MenuElement({name = "Leona", drop = {ScriptVersion}})
 	
 	--Combo
 
 	Tocsin:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
-	Tocsin.Combo:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
-	Tocsin.Combo:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = W.icon})
-	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
-	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true, leftIcon = R.icon})
+	Tocsin.Combo:MenuElement({id = "Q", name = "Use [Q]", value = true})
+	Tocsin.Combo:MenuElement({id = "W", name = "Use [W]", value = true})
+	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true})
+	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true})
 	Tocsin.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
 	
 	--Harass
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
-	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Q.icon})
-    Tocsin.Harass:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = W.icon})
-	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = E.icon})
+	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = true})
+    Tocsin.Harass:MenuElement({id = "W", name = "Use [W]", value = true})
+	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true})
 	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0.30, min = 0.05, max = 1, step = 0.01})
 
 	--Eternal Prediction
@@ -195,7 +195,7 @@ function Leona:LoadMenu()
 	--Draw
 
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
-	Tocsin.Draw:MenuElement({id = "E", name = "Draw [E] Range", value = true, leftIcon = E.icon})
+	Tocsin.Draw:MenuElement({id = "E", name = "Draw [E] Range", value = true})
 
 end
 
