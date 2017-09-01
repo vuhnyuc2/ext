@@ -87,10 +87,10 @@ local Q = { Range = 1050, Delay = 0.50, Speed = 1200, Width = 70}
 local W = { Range = 950, Delay = 0.25}
 local E = { Range = 400, Delay = 0.25, Speed = 1100}
 local R = { Range = 320, Delay = 0.25}
-local Qicon = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/d/d5/Death_Sentence.png"
-local Wicon = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/4/44/Dark_Passage.png"
-local Eicon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/7/71/Flay.png"
-local Ricon = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/c/c1/The_Box.png"
+--local Qicon = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/d/d5/Death_Sentence.png"
+--local Wicon = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/4/44/Dark_Passage.png"
+--local Eicon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/7/71/Flay.png"
+--local Ricon = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/c/c1/The_Box.png"
 
 local function Ready(spell)
 	return myHero:GetSpellData(spell).currentCd == 0 and myHero:GetSpellData(spell).level > 0 and myHero:GetSpellData(spell).mana <= myHero.mana and Game.CanUseSpell(spell) == 0 
@@ -316,34 +316,34 @@ end
 
 function Thresh:LoadMenu()
 	Tocsin = MenuElement({type = MENU, id = "ThreshTocsin", name = "ThreshTocsin"})
-	Tocsin:MenuElement({name = "Thresh", drop = {ScriptVersion}, leftIcon = "https://vignette3.wikia.nocookie.net/leagueoflegends/images/b/b5/Thresh_OriginalLoading.jpg"})
+	Tocsin:MenuElement({name = "Thresh", drop = {ScriptVersion}})
 	
 	--Combo
 
 	Tocsin:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
-	Tocsin.Combo:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Qicon})
-	Tocsin.Combo:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = Wicon})
-	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = Eicon})
+	Tocsin.Combo:MenuElement({id = "Q", name = "Use [Q]", value = true})
+	Tocsin.Combo:MenuElement({id = "W", name = "Use [W]", value = true})
+	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true})
 	Tocsin.Combo:MenuElement({id = "Key", name = "Toggle: E Push-Pull Key", key = string.byte("T"), toggle = true})
-	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true, leftIcon = Ricon})
+	Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true})
 	Tocsin.Combo:MenuElement({id = "ER", name = "Min enemies to use R", value = 1, min = 1, max = 5})
 
 	--Harass
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
-	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Qicon})
-	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = Eicon})
+	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = true})
+	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true})
 	Tocsin.Harass:MenuElement({id = "Mana", name = "Min Mana to Harass [%]", value = 0.30, min = 0.05, max = 1, step = 0.01})
 
 	--Flee
 	Tocsin:MenuElement({type = MENU, id = "Flee", name = "Flee or YOLO"})
-	Tocsin.Flee:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = Eicon})
-	Tocsin.Flee:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = Wicon})
+	Tocsin.Flee:MenuElement({id = "E", name = "Use [E]", value = true})
+	Tocsin.Flee:MenuElement({id = "W", name = "Use [W]", value = true})
 
 	--Draw
 
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
-	Tocsin.Draw:MenuElement({id = "Q", name = "Draw [Q] Range", value = true, leftIcon = Qicon})
+	Tocsin.Draw:MenuElement({id = "Q", name = "Draw [Q] Range", value = true})
 	Tocsin.Draw:MenuElement({id = "Push", name = "Push Toggle", value = true})
 end
 
