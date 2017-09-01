@@ -73,10 +73,7 @@
 local ScriptVersion = "v2.1"
 
 local Q = { Range = 975, Delay = 0.25, Speed = 1500, Width = 85}
-local Qicon = "https://vignette1.wikia.nocookie.net/leagueoflegends/images/f/f2/Infected_Cleaver.png"
-local Wicon = "https://vignette1.wikia.nocookie.net/leagueoflegends/images/5/5d/Burning_Agony.png"
-local Eicon = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/9/95/Masochism.png"
-local Ricon = "https://vignette1.wikia.nocookie.net/leagueoflegends/images/8/81/Sadism.png"
+
 
 
 local function Ready(spell)
@@ -271,47 +268,47 @@ end
 
 function DrMundo:LoadMenu()
 	Tocsin = MenuElement({type = MENU, id = "DrMundo by Tocsin", name = "DrMundoTocsin"})
-	Tocsin:MenuElement({name = "DrMundo", drop = {ScriptVersion}, leftIcon = "https://vignette3.wikia.nocookie.net/leagueoflegends/images/9/93/Dr._Mundo_OriginalLoading.jpg"})
+	Tocsin:MenuElement({name = "DrMundo", drop = {ScriptVersion}})
 	
 	--Combo
 
 	Tocsin:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
-	Tocsin.Combo:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Qicon})
-	Tocsin.Combo:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = Wicon})
-	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = Eicon})
-    Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true, leftIcon = Ricon})
+	Tocsin.Combo:MenuElement({id = "Q", name = "Use [Q]", value = true})
+	Tocsin.Combo:MenuElement({id = "W", name = "Use [W]", value = true})
+	Tocsin.Combo:MenuElement({id = "E", name = "Use [E]", value = true})
+    Tocsin.Combo:MenuElement({id = "R", name = "Use [R]", value = true})
     Tocsin.Combo:MenuElement({id = "Health", name = "Health %", value = 0.25, min = 0.1, max = 1, step = 0.05})
 	
 	--Clear
 
 	Tocsin:MenuElement({type = MENU, id = "Clear", name = "Clear Settings"})
-	Tocsin.Clear:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Qicon})
-	Tocsin.Clear:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = Wicon})
-    Tocsin.Clear:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = Eicon})
+	Tocsin.Clear:MenuElement({id = "Q", name = "Use [Q]", value = true})
+	Tocsin.Clear:MenuElement({id = "W", name = "Use [W]", value = true})
+    Tocsin.Clear:MenuElement({id = "E", name = "Use [E]", value = true})
     Tocsin.Clear:MenuElement({id = "Health", name = "Health %", value = 0.25, min = 0.1, max = 1, step = 0.05})
 	
 	--Harass
 
 	Tocsin:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
-	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = true, leftIcon = Qicon})
-	Tocsin.Harass:MenuElement({id = "W", name = "Use [W]", value = true, leftIcon = Wicon})
-	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true, leftIcon = Eicon})
+	Tocsin.Harass:MenuElement({id = "Q", name = "Use [Q]", value = true})
+	Tocsin.Harass:MenuElement({id = "W", name = "Use [W]", value = true})
+	Tocsin.Harass:MenuElement({id = "E", name = "Use [E]", value = true})
 
 	--LastHit 
 
 	Tocsin:MenuElement({type = MENU, id = "LastHit", name = "Last Hit"})
-	Tocsin.LastHit:MenuElement({id = "UseQ", name = "Use Q", value = true, leftIcon = Qicon})
+	Tocsin.LastHit:MenuElement({id = "UseQ", name = "Use Q", value = true})
 
 	--Misc
 
 	Tocsin:MenuElement({type = MENU, id = "Misc", name = "Misc Settings"})
-	Tocsin.Misc:MenuElement({id = "Qks", name = "Killsecure [Q]", value = true, leftIcon = Qicon})
-	Tocsin.Misc:MenuElement({id = "AutoW", name = "Auto [W]", value = true, leftIcon = Wicon})
+	Tocsin.Misc:MenuElement({id = "Qks", name = "Killsecure [Q]", value = true})
+	Tocsin.Misc:MenuElement({id = "AutoW", name = "Auto [W]", value = true})
 	
 	--Draw
 
 	Tocsin:MenuElement({type = MENU, id = "Draw", name = "Draw Settings"})
-	Tocsin.Draw:MenuElement({id = "Q", name = "Draw [Q] Range", value = true, leftIcon = Wicon})
+	Tocsin.Draw:MenuElement({id = "Q", name = "Draw [Q] Range", value = true})
 
 end
 
