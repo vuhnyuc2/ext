@@ -354,7 +354,7 @@ end
 
 local Nidalee = MenuElement({type = MENU, id = "NidaleeTocsin", name = "NidaleeTocsin"})
 
-Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.08"}, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/4/44/Nidalee_OriginalLoading.jpg"})
+Nidalee:MenuElement({id = "Script", name = "Nidalee by Tocsin", drop = {"v1.08"}})
 Nidalee:MenuElement({name = " ", drop = {"Champion Settings"}})
 Nidalee:MenuElement({type = MENU, id = "C", name = "Combo"})
 Nidalee:MenuElement({type = MENU, id = "H", name = "Harass"})
