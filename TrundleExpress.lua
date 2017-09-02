@@ -308,7 +308,7 @@ function LeftClick(pos)
 	DelayAction(ReturnCursor,0.05,{pos})
 end
 function Trundle:Draw()
-    if self:CanCast(_Q) then Draw.Circle(myHero.pos, 1500, 3,  Draw.Color(255, 000, 222, 255)) end
+    if self:CanCast(_E) then Draw.Circle(myHero.pos, 980, 3,  Draw.Color(255, 000, 222, 255)) end
 	if self.Menu.ComboMode.DrawDamage:Value() then
 		for i, hero in pairs(self:GetEnemyHeroes()) do
 			local barPos = hero.hpBar
