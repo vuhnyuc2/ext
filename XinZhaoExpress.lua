@@ -265,7 +265,7 @@ function LeftClick(pos)
 end
 
 function XinZhao:Draw()
-    if self:CanCast(_Q) then Draw.Circle(myHero.pos, 1500, 3,  Draw.Color(255, 000, 222, 255)) end
+    if self:CanCast(_E) then Draw.Circle(myHero.pos, 650, 3,  Draw.Color(255, 000, 222, 255)) end
 	if self.Menu.ComboMode.DrawDamage:Value() then
 		for i, hero in pairs(self:GetEnemyHeroes()) do
 			local barPos = hero.hpBar
