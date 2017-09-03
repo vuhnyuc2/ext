@@ -177,7 +177,7 @@ function SetMovement(bool)
 end
 
 class "Trundle"
-local Scriptname,Version,Author,LVersion = "TrundleExpress","v1.0","Tocsin","7.17"
+local Scriptname,Version,Author,LVersion = "TrundleExpress","v1.1","Tocsin","7.17"
 
 function CurrentTarget(range)
 	if _G.SDK then
@@ -357,9 +357,9 @@ end
 
 function Trundle:Combo()
 	if self:CanCast(_Q) then 
-		local QTarget = CurrentTarget(175)
+		local QTarget = CurrentTarget(375)
 		if self.Menu.ComboMode.UseQ:Value() and QTarget and myHero.attackData.state == STATE_WINDDOWN then
-            if ValidTarget(QTarget, 175) then
+            if ValidTarget(QTarget, 375) then
 				Control.CastSpell(HK_Q)
                 Control.Attack(QTarget)
             end
@@ -369,7 +369,7 @@ function Trundle:Combo()
 	if self:CanCast(_E) then 
 		local ETarget = CurrentTarget(E.Range)
 		if self.Menu.ComboMode.UseE:Value() and ETarget then
-			if ValidTarget(ETarget, 980) and myHero.pos:DistanceTo(ETarget.pos) > 200 then
+			if ValidTarget(ETarget, 980) and myHero.pos:DistanceTo(ETarget.pos) > 250 then
                 local block = Vector(myHero.pos) + Vector(Vector(ETarget.pos) - Vector(myHero.pos)):Normalized() * (myHero.pos:DistanceTo(ETarget.pos) + 92)
 				castPos = ETarget:GetPrediction(E.Speed,E.Delay)
 				self:CastSpell(HK_E, block)
@@ -417,9 +417,9 @@ end
 
 function Trundle:Harass()
     if self:CanCast(_Q) then 
-		local QTarget = CurrentTarget(175)
+		local QTarget = CurrentTarget(375)
 		if self.Menu.HarassMode.UseQ:Value() and QTarget and myHero.attackData.state == STATE_WINDDOWN then
-            if ValidTarget(QTarget, 175) then
+            if ValidTarget(QTarget, 375) then
 				Control.CastSpell(HK_Q)
                 Control.Attack(QTarget)
             end
@@ -453,7 +453,7 @@ function Trundle:Jungle()
     if minion and minion.team == 300 or minion.team ~= myHero.team then
 		if self:CanCast(_Q) then 
 		    if self.Menu.ClearMode.UseQ:Value() and minion and myHero.attackData.state == STATE_WINDDOWN then
-                if ValidTarget(minion, 175) then
+                if ValidTarget(minion, 375) then
 				    Control.CastSpell(HK_Q)
                     Control.Attack(minion)
                 end
