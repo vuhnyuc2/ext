@@ -189,7 +189,7 @@ function SetMovement(bool)
 end
 
 class "Blitzcrank"
-local Scriptname,Version,Author,LVersion = "BlitzcrankExpress","v1.0","Tocsin","7.17"
+local Scriptname,Version,Author,LVersion = "BlitzcrankExpress","v1.1","Tocsin","7.17"
 
 function CurrentTarget(range)
 	if _G.SDK then
@@ -375,9 +375,9 @@ function Blitzcrank:Combo()
 	end
 
 	if self:CanCast(_E) then 
-		local ETarget = CurrentTarget(175)
+		local ETarget = CurrentTarget(375)
 		if self.Menu.ComboMode.UseE:Value() and ETarget and myHero.attackData.state == STATE_WINDDOWN then
-			if ValidTarget(ETarget, 170) then
+			if ValidTarget(ETarget, 370) then
 				Control.CastSpell(HK_E, ETarget)
                 Control.Attack(ETarget)
 			end
@@ -427,9 +427,9 @@ end
 
 function Blitzcrank:Harass()
 	if self:CanCast(_E) then 
-		local ETarget = CurrentTarget(170)
+		local ETarget = CurrentTarget(270)
 		if self.Menu.HarassMode.UseE:Value() and ETarget then
-			if ValidTarget(ETarget, 170) then
+			if ValidTarget(ETarget, 270) then
 				Control.CastSpell(HK_E, ETarget)
                 Control.Attack(ETarget)
 			end
