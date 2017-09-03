@@ -133,7 +133,7 @@ function SetMovement(bool)
 end
 
 class "XinZhao"
-local Scriptname,Version,Author,LVersion = "XinZhaoExpress","v1.0","Tocsin","7.17"
+local Scriptname,Version,Author,LVersion = "XinZhaoExpress","v1.1","Tocsin","7.17"
 
 function CurrentTarget(range)
 	if _G.SDK then
@@ -177,21 +177,21 @@ function XinZhao:LoadMenu()
 	self.Menu:MenuElement({id = "ComboMode", name = "Combo", type = MENU})
 	self.Menu.ComboMode:MenuElement({id = "UseQ", name = "Q: Three Talon Strike", value = true})
 	self.Menu.ComboMode:MenuElement({id = "UseW", name = "W: Battle Cry", value = true})
-    self.Menu.ComboMode:MenuElement({id = "UseE", name = "E: Audacious Charge", value = true})
+	self.Menu.ComboMode:MenuElement({id = "UseE", name = "E: Audacious Charge", value = true})
 	self.Menu.ComboMode:MenuElement({id = "UseR", name = "R: Crescent Sweep", value = true})
 	self.Menu.ComboMode:MenuElement({id = "comboActive", name = "Combo key", key = string.byte(" ")})
 	self.Menu.ComboMode:MenuElement({id = "DrawDamage", name = "Draw damage on HPbar", value = true})
 		
 	self.Menu:MenuElement({id = "HarassMode", name = "Harass", type = MENU})
 	self.Menu.HarassMode:MenuElement({id = "UseQ", name = "Q: Three Talon Strike", value = true})
-    self.Menu.HarassMode:MenuElement({id = "UseW", name = "W: Battle Cry", value = true})
-    self.Menu.HarassMode:MenuElement({id = "UseE", name = "E: Audacious Charge", value = true})
+	self.Menu.HarassMode:MenuElement({id = "UseW", name = "W: Battle Cry", value = true})
+	self.Menu.HarassMode:MenuElement({id = "UseE", name = "E: Audacious Charge", value = true})
 	self.Menu.HarassMode:MenuElement({id = "harassActive", name = "Harass key", key = string.byte("C")})
 
 	self.Menu:MenuElement({id = "ClearMode", name = "Clear", type = MENU})
 	self.Menu.ClearMode:MenuElement({id = "UseQ", name = "Q: Three Talon Strike", value = true})
 	self.Menu.ClearMode:MenuElement({id = "UseW", name = "W: Battle Cry", value = true})
-    self.Menu.ClearMode:MenuElement({id = "UseE", name = "E: Audacious Charge", value = true})
+	self.Menu.ClearMode:MenuElement({id = "UseE", name = "E: Audacious Charge", value = true})
 	self.Menu.ClearMode:MenuElement({id = "clearActive", name = "Clear key", key = string.byte("V")})
 
 	self.Menu:MenuElement({id = "blank", type = SPACE , name = ""})
@@ -322,26 +322,26 @@ function XinZhao:Combo()
 		end
 	end
     if self:CanCast(_W) then 
-		local WTarget = CurrentTarget(175)
+		local WTarget = CurrentTarget(375)
 		if self.Menu.ComboMode.UseW:Value() and WTarget then
-			if ValidTarget(WTarget, 175) then
+			if ValidTarget(WTarget, 275) then
 				Control.CastSpell(HK_W)
 			end
 		end
 	end
 	if self:CanCast(_Q) then
-		local QTarget = CurrentTarget(175)
+		local QTarget = CurrentTarget(375)
 		if self.Menu.ComboMode.UseQ:Value() and QTarget and myHero.attackData.state == STATE_WINDDOWN then
-            if ValidTarget(QTarget, 175) and not self:CanCast(_E) and not self:CanCast(_W) then
+            if ValidTarget(QTarget, 275) and not self:CanCast(_E) and not self:CanCast(_W) then
 				Control.CastSpell(HK_Q)
             end
 		end
 	end
 
     if self:CanCast(_R) then
-        local RCTarget = CurrentTarget(170)
+        local RCTarget = CurrentTarget(270)
         if self.Menu.ComboMode.UseR:Value() and RCTarget and not self:CanCast(_E) then
-            if myHero.pos:DistanceTo(RCTarget.pos) < 170 and not self:CanCast(_Q) then
+            if myHero.pos:DistanceTo(RCTarget.pos) < 180 and not self:CanCast(_Q) then
 			    Control.CastSpell(HK_R)
             end
         end
@@ -380,17 +380,17 @@ function XinZhao:Harass()
 		end
 	end
     if self:CanCast(_W) then 
-		local WTarget = CurrentTarget(175)
+		local WTarget = CurrentTarget(275)
 		if self.Menu.HarassMode.UseW:Value() and WTarget then
-			if ValidTarget(WTarget, 175) then
+			if ValidTarget(WTarget, 275) then
 				Control.CastSpell(HK_W)
 			end
 		end
 	end
 	if self:CanCast(_Q) then 
-		local QTarget = CurrentTarget(175)
+		local QTarget = CurrentTarget(275)
 		if self.Menu.HarassMode.UseQ:Value() and QTarget and myHero.attackData.state == STATE_WINDDOWN then
-            if ValidTarget(QTarget, 175) and not self:CanCast(_E) and not self:CanCast(_W) then
+            if ValidTarget(QTarget, 275) and not self:CanCast(_E) and not self:CanCast(_W) then
 				Control.CastSpell(HK_Q)
             end
 		end
@@ -408,14 +408,14 @@ function XinZhao:Jungle()
 		end
         if self:CanCast(_W) then 
 			if self.Menu.ClearMode.UseW:Value() and minion then
-				if ValidTarget(minion, 175) then
+				if ValidTarget(minion, 275) then
 					Control.CastSpell(HK_W)
 				end
 			end
 		end
 		if self:CanCast(_Q) then 
 			if self.Menu.ClearMode.UseQ:Value() and minion and myHero.attackData.state == STATE_WINDDOWN then
-            	if ValidTarget(minion, 175) and not self:CanCast(_E) and not self:CanCast(_W) then
+            	if ValidTarget(minion, 275) and not self:CanCast(_E) and not self:CanCast(_W) then
 					Control.CastSpell(HK_Q)
             	end
 			end
