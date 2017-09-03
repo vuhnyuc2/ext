@@ -174,7 +174,7 @@ function SetMovement(bool)
 end
 
 class "Nidalee"
-local Scriptname,Version,Author,LVersion = "NidaleeExpress","v1.1","Tocsin","7.17"
+local Scriptname,Version,Author,LVersion = "NidaleeExpress","v1.2","Tocsin","7.17"
 
 function CurrentTarget(range)
 	if _G.SDK then
@@ -266,10 +266,10 @@ end
 
 function Nidalee:Tick()
     if myHero.dead or Game.IsChatOpen() == true or IsRecalling() == true then return end
-	if self.Menu.HarassMode.harassActive:Value() then
+	if self.Menu.HarassMode.harassActive:Value() and self:EnemyInRange(1550) then
 		self:Harass()
 	end
-	if self.Menu.ComboMode.comboActive:Value() then
+	if self.Menu.ComboMode.comboActive:Value() and self:EnemyInRange(1550) then
 		self:Combo()
 	end
 	if self.Menu.ClearMode.clearActive:Value() then
@@ -363,18 +363,17 @@ function Nidalee:CastSpell(spell,pos)
 end
 
 function Nidalee:Combo()
-	if self:CanCast(_Q) then 
+	if self:CanCast(_Q) and self:EnemyInRange(1550) then 
 		local QTarget = CurrentTarget(1500)
 		if self.Menu.ComboMode.UseQ:Value() and QTarget and QTarget:GetCollision(Q.Radius,Q.Speed,Q.Delay) == 0 then
-            if myHero:GetSpellData(_Q).name == "JavelinToss" and ValidTarget(QTarget, 1500) then
+            if myHero:GetSpellData(_Q).name == "JavelinToss" and self:EnemyInRange(1500) then
 				castPos = QTarget:GetPrediction(Q.Speed,Q.Delay)
-				local newpos = myHero.pos:Extended(castPos,math.random(100,300))
-				self:CastSpell(HK_Q, newpos)
+				self:CastSpell(HK_Q, castPos)
             end
 		end
 	end
 	
-    if self:CanCast(_R) then
+    if self:CanCast(_R) and self:EnemyInRange(850) then
         local RCTarget = CurrentTarget(850)
         if self.Menu.ComboMode.UseR:Value() and RCTarget and myHero:GetSpellData(_Q).name == "JavelinToss" then
             if myHero.pos:DistanceTo(RCTarget.pos) < 800 and ForceCat() then
@@ -383,10 +382,10 @@ function Nidalee:Combo()
         end
     end
 
-	if self:CanCast(_W) then 
+	if self:CanCast(_W) and self:EnemyInRange(800) then 
 		local WTarget = CurrentTarget(W.Range)
 		if self.Menu.ComboMode.UseW:Value() and WTarget and myHero:GetSpellData(_W).name == "Bushwhack" then
-			if ValidTarget(WTarget, 800) then
+			if self:EnemyInRange(800) then
 				castPos = WTarget:GetPrediction(W.Speed,W.Delay)
 				self:CastSpell(HK_W, castPos)
 			end
@@ -399,19 +398,19 @@ function Nidalee:Combo()
 		end
 	end
 
-    if self:CanCast(_W) then 
+    if self:CanCast(_W) and self:EnemyInRange(700) then 
 		local WTarget = CurrentTarget(700)
 		if self.Menu.ComboMode.UseWW:Value() and WTarget and myHero:GetSpellData(_W).name == "Pounce" then
-			if ValidTarget(WTarget, 700) then
+			if self:EnemyInRange(700) then
 				castPos = WTarget:GetPrediction(WC.Speed,WC.Delay)
 				self:CastSpell(HK_W, castPos)
 			end
 		end
 	end
 
-    if self:CanCast(_Q) then 
+    if self:CanCast(_Q) and self:EnemyInRange(275) then 
 		local QQTarget = CurrentTarget(275)
-		if self.Menu.ComboMode.UseQQ:Value() and QQTarget and ValidTarget(QQTarget, 275) then
+		if self.Menu.ComboMode.UseQQ:Value() and QQTarget and self:EnemyInRange(275) then
             if myHero:GetSpellData(_Q).name == "Takedown" then
 				Control.CastSpell(HK_Q)
                 Control.Attack(QQTarget)
@@ -419,16 +418,16 @@ function Nidalee:Combo()
 		end
 	end
 
-    if self:CanCast(_E) then 
+    if self:CanCast(_E) and self:EnemyInRange(375) then 
 		local ETarget = CurrentTarget(375)
 		if self.Menu.ComboMode.UseEE:Value() and ETarget and myHero:GetSpellData(_E).name == "Swipe" then
-			if ValidTarget(ETarget, 350) then
+			if self:EnemyInRange(350) then
 				Control.CastSpell(HK_E, ETarget)
 			end
 		end
 	end
 
-    if self:CanCast(_R) then 
+    if self:CanCast(_R) and self:EnemyInRange(140) then 
         local RRTarget = CurrentTarget(1400)
         if self.Menu.ComboMode.UseR:Value() and RRTarget and myHero:GetSpellData(_E).name == "Swipe" then
             if not self:CanCast(_Q) and not self:CanCast(_E) and not self:CanCast(_W) then
@@ -439,7 +438,7 @@ function Nidalee:Combo()
         end
     end
 
-    if self:CanCast(_R) then 
+    if self:CanCast(_R) and self:EnemyInRange(1400) then 
         local RHTarget = CurrentTarget(1400)
         if self.Menu.ComboMode.UseR:Value() and RHTarget and myHero:GetSpellData(_E).name == "Swipe" then
             if myHero.health/myHero.maxHealth < .50 and myHero.pos:DistanceTo(RHTarget.pos) > 700 then
@@ -498,10 +497,10 @@ function ForceCat()
 end
 
 function Nidalee:Harass()
-    if self:CanCast(_Q) then 
+    if self:CanCast(_Q) and self:EnemyInRange(1550) then 
 		local QTarget = CurrentTarget(1550)
 		if self.Menu.HarassMode.UseQ:Value() and QTarget and QTarget:GetCollision(Q.Radius,Q.Speed,Q.Delay) == 0 then
-            if myHero:GetSpellData(_Q).name == "JavelinToss" and ValidTarget(QTarget, 1550) then
+            if myHero:GetSpellData(_Q).name == "JavelinToss" then
 				castPos = QTarget:GetPrediction(Q.Speed,Q.Delay)
 				local newpos = myHero.pos:Extended(castPos,math.random(100,300))
 				self:CastSpell(HK_Q, newpos)
