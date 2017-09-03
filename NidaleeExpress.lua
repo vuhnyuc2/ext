@@ -174,7 +174,7 @@ function SetMovement(bool)
 end
 
 class "Nidalee"
-local Scriptname,Version,Author,LVersion = "NidaleeExpress","v1.0","Tocsin","7.17"
+local Scriptname,Version,Author,LVersion = "NidaleeExpress","v1.1","Tocsin","7.17"
 
 function CurrentTarget(range)
 	if _G.SDK then
@@ -220,10 +220,10 @@ function Nidalee:LoadMenu()
 	self.Menu:MenuElement({id = "ComboMode", name = "Combo", type = MENU})
 	self.Menu.ComboMode:MenuElement({id = "UseQ", name = "Q: Javelin Toss", value = true})
 	self.Menu.ComboMode:MenuElement({id = "UseW", name = "W: Bushwhack", value = true})
-    self.Menu.ComboMode:MenuElement({id = "UseE", name = "E: Primal Surge", value = true})
-    self.Menu.ComboMode:MenuElement({id = "UseQQ", name = "Q: Takedown", value = true})
+	self.Menu.ComboMode:MenuElement({id = "UseE", name = "E: Primal Surge", value = true})
+	self.Menu.ComboMode:MenuElement({id = "UseQQ", name = "Q: Takedown", value = true})
 	self.Menu.ComboMode:MenuElement({id = "UseWW", name = "W: Pounce", value = true})
-    self.Menu.ComboMode:MenuElement({id = "UseEE", name = "E: Swipe", value = true})
+	self.Menu.ComboMode:MenuElement({id = "UseEE", name = "E: Swipe", value = true})
 	self.Menu.ComboMode:MenuElement({id = "UseR", name = "R: Aspect of the Cougar", value = true})
 	self.Menu.ComboMode:MenuElement({id = "comboActive", name = "Combo key", key = string.byte(" ")})
 	self.Menu.ComboMode:MenuElement({id = "DrawDamage", name = "Draw damage on HPbar", value = true})
@@ -235,8 +235,8 @@ function Nidalee:LoadMenu()
 	self.Menu:MenuElement({id = "ClearMode", name = "Clear", type = MENU})
 	self.Menu.ClearMode:MenuElement({id = "UseQ", name = "Q: Javelin Toss", value = true})
 	self.Menu.ClearMode:MenuElement({id = "UseW", name = "W: Bushwhack", value = true})
-    self.Menu.ClearMode:MenuElement({id = "UseE", name = "E: Primal Surge", value = true})
-    self.Menu.ClearMode:MenuElement({id = "UseQQ", name = "Q: Takedown", value = true})
+	self.Menu.ClearMode:MenuElement({id = "UseE", name = "E: Primal Surge", value = true})
+	self.Menu.ClearMode:MenuElement({id = "UseQQ", name = "Q: Takedown", value = true})
 	self.Menu.ClearMode:MenuElement({id = "UseWW", name = "W: Pounce", value = true})
     self.Menu.ClearMode:MenuElement({id = "UseEE", name = "E: Swipe", value = true})
 	self.Menu.ClearMode:MenuElement({id = "UseR", name = "R: Aspect of the Cougar", value = true})
@@ -410,8 +410,8 @@ function Nidalee:Combo()
 	end
 
     if self:CanCast(_Q) then 
-		local QQTarget = CurrentTarget(200)
-		if self.Menu.ComboMode.UseQQ:Value() and QQTarget and ValidTarget(QQTarget, 200) then
+		local QQTarget = CurrentTarget(275)
+		if self.Menu.ComboMode.UseQQ:Value() and QQTarget and ValidTarget(QQTarget, 275) then
             if myHero:GetSpellData(_Q).name == "Takedown" then
 				Control.CastSpell(HK_Q)
                 Control.Attack(QQTarget)
@@ -420,9 +420,9 @@ function Nidalee:Combo()
 	end
 
     if self:CanCast(_E) then 
-		local ETarget = CurrentTarget(300)
+		local ETarget = CurrentTarget(375)
 		if self.Menu.ComboMode.UseEE:Value() and ETarget and myHero:GetSpellData(_E).name == "Swipe" then
-			if ValidTarget(ETarget, 300) then
+			if ValidTarget(ETarget, 350) then
 				Control.CastSpell(HK_E, ETarget)
 			end
 		end
@@ -556,7 +556,7 @@ function Nidalee:Jungle()
 		end
 
     	if self:CanCast(_Q) then 
-			if self.Menu.ClearMode.UseQQ:Value() and minion and ValidTarget(minion, 200) then
+			if self.Menu.ClearMode.UseQQ:Value() and minion and ValidTarget(minion, 275) then
             	if myHero:GetSpellData(_Q).name == "Takedown" then
 					Control.CastSpell(HK_Q)
                 	Control.Attack(minion)
@@ -566,7 +566,7 @@ function Nidalee:Jungle()
 
     	if self:CanCast(_E) then 
 			if self.Menu.ClearMode.UseEE:Value() and minion and myHero:GetSpellData(_E).name == "Swipe" then
-				if ValidTarget(minion, 300) then
+				if ValidTarget(minion, 350) then
 					Control.CastSpell(HK_E, minion)
 				end
 			end
