@@ -139,7 +139,7 @@ function SetMovement(bool)
 end
 
 class "Jarvan"
-local Scriptname,Version,Author,LVersion = "JarvanExpress","v1.0","Tocsin","7.17"
+local Scriptname,Version,Author,LVersion = "JarvanExpress","v1.1","Tocsin","7.17"
 
 function CurrentTarget(range)
 	if _G.SDK then
@@ -171,7 +171,7 @@ function Jarvan:__init()
 end
 
 function Jarvan:LoadSpells()
-	Q = { range = myHero:GetSpellData(_Q).range, delay = myHero:GetSpellData(_Q).delay, speed = myHero:GetSpellData(_Q).speed, width = myHero:GetSpellData(_Q).width }
+	Q = { range = 770, delay = 0.25, speed = 1400, width = 70 }
 	W = { range = myHero:GetSpellData(_W).range, delay = myHero:GetSpellData(_W).delay, speed = myHero:GetSpellData(_W).speed, width = myHero:GetSpellData(_W).width }
 	E = {Range = 860, width = 40, Delay = 0.35, Radius = 40, Speed = 1450, Collision = false, aoe = true}
 	R = { range = myHero:GetSpellData(_R).range, delay = myHero:GetSpellData(_R).delay, speed = myHero:GetSpellData(_R).speed, width = myHero:GetSpellData(_R).width }
@@ -182,6 +182,8 @@ function Jarvan:LoadMenu()
 	self.Menu = MenuElement({type = MENU, id = "JarvanExpress", name = Scriptname})
 	self.Menu:MenuElement({id = "ComboMode", name = "Combo", type = MENU})
 	self.Menu.ComboMode:MenuElement({id = "UseQ", name = "Q: Dragon Strike", value = true})
+	self.Menu.ComboMode:MenuElement({id = "UseQS", name = "Q: Use if flag not near target", value = true})
+	self.Menu.ComboMode:MenuElement({id = "UseQA", name = "Q: Use ALWAYS on cooldown", value = true})	
 	self.Menu.ComboMode:MenuElement({id = "UseW", name = "W: Golden Aegis", value = true})
     self.Menu.ComboMode:MenuElement({id = "UseE", name = "E: Demacian Standard", value = true})
 	self.Menu.ComboMode:MenuElement({id = "UseR", name = "R: Cataclysm", value = true})
@@ -348,7 +350,13 @@ function Jarvan:Combo()
                         if Game.Timer() - LastQ > 10 then
 				        self:CastSpell(HK_Q, castPos)
                         end
-                    end
+                    --end
+					elseif self.Menu.ComboMode.UseQS:Value() and QTarget ~= myHero.team then
+						if self:EnemyInRange(770) and QTarget.pos:DistanceTo(particle.pos) > 280 then
+							castPos = QTarget:GetPrediction(Q.Speed,Q.Delay)
+							self:CastSpell(HK_Q, castPos)
+						end
+					end		
                 end
             end
         end    
@@ -369,6 +377,17 @@ function Jarvan:Combo()
         local WTarget = CurrentTarget(1200)
 		if self.Menu.ComboMode.UseW:Value() and self:EnemyInRange(625) and not self:CanCast(_Q) and WTarget ~= myHero.team then
 			Control.CastSpell(HK_W)
+		end
+	end
+
+	if self:CanCast(_Q) then 
+        local QSTarget = CurrentTarget(1200)
+        if self:EnemyInRange(1200) == 0 then return end
+		if self.Menu.ComboMode.UseQA:Value() and QSTarget ~= myHero.team and self:CanCast(_Q) then
+			if self:EnemyInRange(760) then
+				castPos = QSTarget:GetPrediction(Q.Speed,Q.Delay)
+				self:CastSpell(HK_Q, castPos)
+			end
 		end
 	end
 
