@@ -174,7 +174,7 @@ function SetMovement(bool)
 end
 
 class "Nidalee"
-local Scriptname,Version,Author,LVersion = "NidaleeExpress","v1.2","Tocsin","7.17"
+local Scriptname,Version,Author,LVersion = "NidaleeExpress","v1.3","Tocsin","7.17"
 
 function CurrentTarget(range)
 	if _G.SDK then
@@ -363,7 +363,7 @@ function Nidalee:CastSpell(spell,pos)
 end
 
 function Nidalee:Combo()
-	if self:CanCast(_Q) and self:EnemyInRange(1550) then 
+	if self:CanCast(_Q) and self:EnemyInRange(1500) then 
 		local QTarget = CurrentTarget(1500)
 		if self.Menu.ComboMode.UseQ:Value() and QTarget and QTarget:GetCollision(Q.Radius,Q.Speed,Q.Delay) == 0 then
             if myHero:GetSpellData(_Q).name == "JavelinToss" and self:EnemyInRange(1500) then
@@ -497,13 +497,13 @@ function ForceCat()
 end
 
 function Nidalee:Harass()
-    if self:CanCast(_Q) and self:EnemyInRange(1550) then 
-		local QTarget = CurrentTarget(1550)
+    if self:CanCast(_Q) and self:EnemyInRange(1500) then 
+		local QTarget = CurrentTarget(1500)
 		if self.Menu.HarassMode.UseQ:Value() and QTarget and QTarget:GetCollision(Q.Radius,Q.Speed,Q.Delay) == 0 then
-            if myHero:GetSpellData(_Q).name == "JavelinToss" then
+            if myHero:GetSpellData(_Q).name == "JavelinToss" and self:EnemyInRange(1500) then
 				castPos = QTarget:GetPrediction(Q.Speed,Q.Delay)
 				local newpos = myHero.pos:Extended(castPos,math.random(100,300))
-				self:CastSpell(HK_Q, newpos)
+				self:CastSpell(HK_Q, castPos)
             end
 		end
 	end
@@ -519,7 +519,7 @@ function Nidalee:Jungle()
             	if myHero:GetSpellData(_Q).name == "JavelinToss" and ValidTarget(minion, 1550) then
 					castPos = minion:GetPrediction(Q.Speed,Q.Delay)
 					local newpos = myHero.pos:Extended(castPos,math.random(100,300))
-					self:CastSpell(HK_Q, newpos)
+					Control.CastSpell(HK_Q, minion)
             	end
 			end
 		end
@@ -527,7 +527,7 @@ function Nidalee:Jungle()
 			if self.Menu.ClearMode.UseW:Value() and minion and myHero:GetSpellData(_W).name == "Bushwhack" then
 				if ValidTarget(minion, 800) then
 					castPos = minion:GetPrediction(W.Speed,W.Delay)
-					self:CastSpell(HK_W, castPos)
+					Control.CastSpell(HK_W, minion)
 				end
 			end
 		end
@@ -549,7 +549,7 @@ function Nidalee:Jungle()
     	if self:CanCast(_W) then
 			if self.Menu.ClearMode.UseWW:Value() and minion and myHero:GetSpellData(_W).name == "Pounce" then
 				if ValidTarget(minion, 700) then
-					self:CastSpell(HK_W, minion)
+					Control.CastSpell(HK_W, minion)
 				end
 			end
 		end
