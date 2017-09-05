@@ -174,7 +174,7 @@ function SetMovement(bool)
 end
 
 class "Nidalee"
-local Scriptname,Version,Author,LVersion = "NidaleeExpress","v1.3","Tocsin","7.17"
+local Scriptname,Version,Author,LVersion = "NidaleeExpress","v1.4","Tocsin","7.17"
 
 function CurrentTarget(range)
 	if _G.SDK then
@@ -367,7 +367,7 @@ function Nidalee:Combo()
 		local QTarget = CurrentTarget(1500)
 		if self.Menu.ComboMode.UseQ:Value() and QTarget and QTarget:GetCollision(Q.Radius,Q.Speed,Q.Delay) == 0 then
             if myHero:GetSpellData(_Q).name == "JavelinToss" and self:EnemyInRange(1500) then
-				castPos = QTarget:GetPrediction(Q.Speed,Q.Delay)
+				castPos = QTarget:GetPrediction(1300, 0.25)
 				self:CastSpell(HK_Q, castPos)
             end
 		end
@@ -501,7 +501,7 @@ function Nidalee:Harass()
 		local QTarget = CurrentTarget(1500)
 		if self.Menu.HarassMode.UseQ:Value() and QTarget and QTarget:GetCollision(Q.Radius,Q.Speed,Q.Delay) == 0 then
             if myHero:GetSpellData(_Q).name == "JavelinToss" and self:EnemyInRange(1500) then
-				castPos = QTarget:GetPrediction(Q.Speed,Q.Delay)
+				castPos = QTarget:GetPrediction(1300, 0.25)
 				local newpos = myHero.pos:Extended(castPos,math.random(100,300))
 				self:CastSpell(HK_Q, castPos)
             end
