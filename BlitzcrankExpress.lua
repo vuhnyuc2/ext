@@ -189,7 +189,7 @@ function SetMovement(bool)
 end
 
 class "Blitzcrank"
-local Scriptname,Version,Author,LVersion = "BlitzcrankExpress","v1.1","Tocsin","7.17"
+local Scriptname,Version,Author,LVersion = "BlitzcrankExpress","v1.2","Tocsin","7.17"
 
 function CurrentTarget(range)
 	if _G.SDK then
@@ -221,7 +221,7 @@ function Blitzcrank:__init()
 end
 
 function Blitzcrank:LoadSpells() 
-	Q = { range = 925, delay = 0.25, speed = 1800, width = 70, Collision = true, aoe = false, type = "linear" }
+	Q = { range = 925, delay = 0.25, Radius = 70, speed = 1800, width = 70, Collision = true, aoe = false, type = "linear" }
 	W = { range = myHero:GetSpellData(_W).range, delay = myHero:GetSpellData(_W).delay, speed = myHero:GetSpellData(_W).speed, width = myHero:GetSpellData(_W).width }
 	E = { range = myHero:GetSpellData(_E).range, delay = myHero:GetSpellData(_E).delay, speed = myHero:GetSpellData(_E).speed, width = myHero:GetSpellData(_E).width }
 	R = { range = myHero:GetSpellData(_R).range, delay = myHero:GetSpellData(_R).delay, speed = myHero:GetSpellData(_R).speed, width = myHero:GetSpellData(_R).width }
@@ -364,35 +364,35 @@ function Blitzcrank:CastSpell(spell,pos)
 end
 
 function Blitzcrank:Combo()
-	if self:CanCast(_Q) then 
-		local QTarget = CurrentTarget(925)
-		if self.Menu.ComboMode.UseQ:Value() and QTarget then
+	if self:CanCast(_Q) and self:EnemyInRange(900) then 
+		local QTarget = CurrentTarget(900)
+		if self.Menu.ComboMode.UseQ:Value() and QTarget and QTarget:GetCollision(Q.Radius,Q.Speed,Q.Delay) == 0 then
             if ValidTarget(QTarget, 900) and QTarget:GetCollision(Q.Radius, Q.Speed, Q.Delay) == 0 then
-                castPos = QTarget:GetPrediction(Q.Speed, Q.Delay)
+                castPos = QTarget:GetPrediction(1800, 0.25)
 				self:CastSpell(HK_Q, castPos)
             end
 		end
 	end
 
-	if self:CanCast(_E) then 
-		local ETarget = CurrentTarget(375)
+	if self:CanCast(_E) and self:EnemyInRange(270) then 
+		local ETarget = CurrentTarget(270)
 		if self.Menu.ComboMode.UseE:Value() and ETarget and myHero.attackData.state == STATE_WINDDOWN then
-			if ValidTarget(ETarget, 370) then
+			if ValidTarget(ETarget, 270) then
 				Control.CastSpell(HK_E, ETarget)
                 Control.Attack(ETarget)
 			end
 		end
 	end
 
-    if self:CanCast(_W) then 
-        local WTarget = CurrentTarget(925)
+    if self:CanCast(_W) and self:EnemyInRange(900) then 
+        local WTarget = CurrentTarget(900)
 		if self.Menu.ComboMode.UseW:Value() and ValidTarget(WTarget, 900) and not self:CanCast(_Q) then
 			Control.CastSpell(HK_W)
 		end
 	end
 
-    if self:CanCast(_R) then 
-        local RTarget = CurrentTarget(600)
+    if self:CanCast(_R) and self:EnemyInRange(580) then 
+        local RTarget = CurrentTarget(580)
         if self.Menu.ComboMode.UseR:Value() and RTarget and ValidTarget(RTarget, 580) then
 			local lvl = myHero:GetSpellData(_R).level
 			local Rdmg = (({250, 375, 500})[lvl] + 0.9 * myHero.ap)         
@@ -426,7 +426,7 @@ function Blitzcrank:EnemyInRange(range)
 end   
 
 function Blitzcrank:Harass()
-	if self:CanCast(_E) then 
+	if self:CanCast(_E) and self:EnemyInRange(270) then 
 		local ETarget = CurrentTarget(270)
 		if self.Menu.HarassMode.UseE:Value() and ETarget then
 			if ValidTarget(ETarget, 270) then
@@ -436,18 +436,18 @@ function Blitzcrank:Harass()
 		end
 	end
 
-	if self:CanCast(_Q) then 
-		local QTarget = CurrentTarget(925)
+	if self:CanCast(_Q) and self:EnemyInRange(900) then 
+		local QTarget = CurrentTarget(900)
 		if self.Menu.HarassMode.UseQ:Value() and QTarget and not self:CanCast(_E) then
-            if ValidTarget(QTarget, 925) and QTarget.pos:DistanceTo(myHero.pos) > 380 and QTarget:GetCollision(Q.Radius, Q.Speed, Q.Delay) == 0 then
+            if ValidTarget(QTarget, 900) and QTarget.pos:DistanceTo(myHero.pos) > 380 and QTarget:GetCollision(Q.Radius, Q.Speed, Q.Delay) == 0 then
                 castPos = QTarget:GetPrediction(Q.Speed, Q.Delay)
 				self:CastSpell(HK_Q, castPos)
             end
 		end
 	end
 
-    if self:CanCast(_W) then 
-        local WTarget = CurrentTarget(925)
+    if self:CanCast(_W) and self:EnemyInRange(900) then 
+        local WTarget = CurrentTarget(900)
 		if self.Menu.HarassMode.UseW:Value() and ValidTarget(WTarget, 900) then
 			Control.CastSpell(HK_W)
 		end
