@@ -160,7 +160,7 @@ function Jax:__init()
 end
 
 function Jax:LoadSpells()
-    Q = { range = myHero:GetSpellData(_Q).range, delay = myHero:GetSpellData(_Q).delay, speed = myHero:GetSpellData(_Q).speed, width = myHero:GetSpellData(_Q).width }
+	Q = { range = myHero:GetSpellData(_Q).range, delay = myHero:GetSpellData(_Q).delay, speed = myHero:GetSpellData(_Q).speed, width = myHero:GetSpellData(_Q).width }
 	W = { range = myHero:GetSpellData(_W).range, delay = myHero:GetSpellData(_W).delay, speed = myHero:GetSpellData(_W).speed, width = myHero:GetSpellData(_W).width }
 	E = { range = myHero:GetSpellData(_E).range, delay = myHero:GetSpellData(_E).delay, speed = myHero:GetSpellData(_E).speed, width = myHero:GetSpellData(_E).width }
 	R = { range = myHero:GetSpellData(_R).range, delay = myHero:GetSpellData(_R).delay, speed = myHero:GetSpellData(_R).speed, width = myHero:GetSpellData(_R).width }
@@ -173,26 +173,22 @@ function Jax:LoadMenu()
 	self.Menu.ComboMode:MenuElement({id = "UseQ", name = "Q: Leap Strike", value = true})
 	self.Menu.ComboMode:MenuElement({id = "UseW", name = "W: Empower", value = true})
 	self.Menu.ComboMode:MenuElement({id = "UseE", name = "E: Counter Strike", value = true})
-    self.Menu.ComboMode:MenuElement({id = "Key", name = "Toggle: E Insta -- Delay Key", key = string.byte("T"), toggle = true})
+	self.Menu.ComboMode:MenuElement({id = "Key", name = "Toggle: E Insta -- Delay Key", key = string.byte("T"), toggle = true})
 	self.Menu.ComboMode:MenuElement({id = "UseR", name = "R: Grandmaster's Might", value = true})
 	self.Menu.ComboMode:MenuElement({id = "comboActive", name = "Combo key", key = string.byte(" ")})
-    self.Menu.ComboMode:MenuElement({id = "UseHYDRA", name = "Use hydra", value = true})
+	self.Menu.ComboMode:MenuElement({id = "UseHYDRA", name = "Use hydra", value = true})
 	self.Menu.ComboMode:MenuElement({id = "DrawDamage", name = "Draw damage on HPbar", value = true})
 		
 	self.Menu:MenuElement({id = "HarassMode", name = "Harass", type = MENU})
 	self.Menu.HarassMode:MenuElement({id = "UseQ", name = "Q: Leap Strike", value = true})
-    self.Menu.HarassMode:MenuElement({id = "UseW", name = "W: Empower", value = true})
-    self.Menu.HarassMode:MenuElement({id = "UseE", name = "E: Counter Strike", value = true})
+	self.Menu.HarassMode:MenuElement({id = "UseW", name = "W: Empower", value = true})
+	self.Menu.HarassMode:MenuElement({id = "UseE", name = "E: Counter Strike", value = true})
 	self.Menu.HarassMode:MenuElement({id = "harassActive", name = "Harass key", key = string.byte("C")})
 
 	self.Menu:MenuElement({id = "ClearMode", name = "Clear", type = MENU})
 	self.Menu.ClearMode:MenuElement({id = "UseQ", name = "Q: Leap Strike", value = true})
 	self.Menu.ClearMode:MenuElement({id = "UseW", name = "W: Empower", value = true})
 	self.Menu.ClearMode:MenuElement({id = "UseE", name = "E: Counter Strike", value = true})
-	self.Menu.ClearMode:MenuElement({id = "UseQQ", name = "Q: Takedown", value = true})
-	self.Menu.ClearMode:MenuElement({id = "UseWW", name = "W: Pounce", value = true})
-    self.Menu.ClearMode:MenuElement({id = "UseEE", name = "E: Swipe", value = true})
-	self.Menu.ClearMode:MenuElement({id = "UseR", name = "R: Grandmaster's Might", value = true})
 	self.Menu.ClearMode:MenuElement({id = "clearActive", name = "Clear key", key = string.byte("V")})
 
 	self.Menu:MenuElement({id = "CustomSpellCast", name = "Use custom spellcast", tooltip = "Can fix some casting problems with wrong directions and so", value = true})
