@@ -416,8 +416,8 @@ function Ezreal:Combo()
         end
     end
 
-    if self:CanCast(_E) and self:EnemyInRange(1100) then
-        local ETarget = CurrentTarget(1100) 
+    if self:CanCast(_E) and self:EnemyInRange(1500) then
+        local ETarget = CurrentTarget(1500) 
 		if self.Menu.ComboMode.UseE:Value() and ETarget then
 			if myHero.pos:DistanceTo(ETarget.pos) > 850 and self:CanCast(_Q) then
 				Control.CastSpell(HK_E, ETarget)
@@ -426,7 +426,7 @@ function Ezreal:Combo()
 				local O1, O2 = CircleCircleIntersection(c1, c2, r1, r2) 
 				if O1 or O2 then
 					local pos = c1:Extended(Vector(ClosestToMouse(O1, O2)), 425)
-					Control.CastSpell(HK_R, pos) 
+					Control.CastSpell(HK_E, pos) 
 				end
 			end
 		end
