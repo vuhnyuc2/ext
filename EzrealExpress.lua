@@ -131,7 +131,7 @@
 --                                                          :.     i: u.vi:LJi.r:7.i: :IS:SrB:J..Bi IQ.d:5UrBBr7BQBgB7jr2vB:2:              
 --                                                                                                    .  v   :. . .                          
 ----New series of simple scripts that just work..nothing fancy 
--- Possible better EZ...who knows cause of the WTF R at times
+-- Possible better EZ...who knows.... WTF R at times
 if myHero.charName ~= "Ezreal" then return end
 require "DamageLib"
 keybindings = { [ITEM_1] = HK_ITEM_1, [ITEM_2] = HK_ITEM_2, [ITEM_3] = HK_ITEM_3, [ITEM_4] = HK_ITEM_4, [ITEM_5] = HK_ITEM_5, [ITEM_6] = HK_ITEM_6}
@@ -221,7 +221,7 @@ function Ezreal:LoadSpells()
 	Q = {Range = 1100, width = 60, Delay = 0.25, Speed = 1200, Collision = true, aoe = false, type = "linear"}
 	W = {Range = 900, width = 80, Delay = 0.25, Speed = 1200, Collision = false, aoe = false, type = "linear"}
 	E = {Range = 450, Delay = 0.25}
-    R = {Range = 20000, width = 160, Delay = 1.00, Speed = 2000, Collision = false, aoe = false, type = "linear"}
+	R = {Range = 20000, width = 160, Delay = 1.00, Speed = 2000, Collision = false, aoe = false, type = "linear"}
 
 end
 
@@ -388,11 +388,11 @@ function Ezreal:Combo()
 	if self:CanCast(_Q) and self:EnemyInRange(1050) then 
 		local QTarget = CurrentTarget(1050)
 		if self.Menu.ComboMode.UseQ:Value() and QTarget then
-            if self:EnemyInRange(1100) and myHero.pos:DistanceTo(QTarget.pos) < 1050 and QTarget:GetCollision(60, 1200, 0.25) == 0 then
+			if self:EnemyInRange(1100) and myHero.pos:DistanceTo(QTarget.pos) < 1050 and QTarget:GetCollision(60, 1200, 0.25) == 0 then
 				castPos = QTarget:GetPrediction(1200, 0.25)
 				local newpos = myHero.pos:Extended(castPos,math.random(100,300))
-			    self:CastSpell(HK_Q, newpos)
-            end
+				self:CastSpell(HK_Q, newpos)
+			end
 		end
 	end
 
@@ -402,7 +402,7 @@ function Ezreal:Combo()
 			if self:EnemyInRange(880) and myHero.pos:DistanceTo(WTarget.pos) < 880 then
 				castPos = WTarget:GetPrediction(1200, 0.25)
 				local newpos = myHero.pos:Extended(castPos,math.random(100,300))
-			    self:CastSpell(HK_W, newpos)
+				self:CastSpell(HK_W, castPos)
 			end
 		end
 	end
@@ -433,16 +433,16 @@ function Ezreal:Combo()
 	end
 
     if self:CanCast(_R) and self:EnemyInRange(2000) then 
-        local RTarget = CurrentTarget(2000)
-        if self.Menu.ComboMode.UseR:Value() and RTarget then
+		local RTarget = CurrentTarget(2000)
+		if self.Menu.ComboMode.UseR:Value() and RTarget then
 			local RDamage = (self:CanCast(_R) and getdmg("R",RTarget,myHero) or 0)
 			if RDamage > RTarget.health and myHero.pos:DistanceTo(RTarget.pos) > 650 then
-                castPos = RTarget:GetPrediction(2000, 1.00)
-                local newpos = myHero.pos:Extended(castPos,math.random(100,300))
+				castPos = RTarget:GetPrediction(2000, 1.00)
+				local newpos = myHero.pos:Extended(castPos,math.random(100,300))
 				self:CastSpell(HK_R, newpos)
 			end
-        end
-    end
+		end
+	end
 end
 
 function Ezreal:GetEnemyHeroes()
@@ -470,7 +470,7 @@ function Ezreal:Harass()
     if self:CanCast(_Q) and self:EnemyInRange(1100) then 
 		local QTarget = CurrentTarget(1100)
 		if self.Menu.HarassMode.UseQ:Value() and QTarget and QTarget:GetCollision(70, 1200, 0.25) == 0 then
-            if self:EnemyInRange(1100) and myHero.pos:DistanceTo(QTarget.pos) > 550 then
+			if self:EnemyInRange(1100) and myHero.pos:DistanceTo(QTarget.pos) > 550 then
 				castPos = QTarget:GetPrediction(1100, 0.25)
 				local newpos = myHero.pos:Extended(castPos,math.random(100,300))
 			    self:CastSpell(HK_Q, newpos)
@@ -483,12 +483,12 @@ end
 function Ezreal:Jungle()
 	for i = 1, Game.MinionCount() do
 	local minion = Game.Minion(i)
-    if minion and minion.team == 300 or minion.team ~= myHero.team then
+	if minion and minion.team == 300 or minion.team ~= myHero.team then
 		if self:CanCast(_Q) then 
 			if self.Menu.ClearMode.UseQ:Value() and minion then
-            	if ValidTarget(minion, 1100) and myHero.pos:DistanceTo(minion.pos) < 1100 then
+				if ValidTarget(minion, 1100) and myHero.pos:DistanceTo(minion.pos) < 1100 then
 					Control.CastSpell(HK_Q, minion)
-            	end
+				end
 			end
 		end
 
