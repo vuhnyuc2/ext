@@ -406,10 +406,10 @@ function Darius:Combo()
         end
     end
 
-    if self:CanCast(_E) and self:EnemyInRange(535) then 
-		local ETarget = CurrentTarget(535)
+    if self:CanCast(_E) and self:EnemyInRange(500) then 
+		local ETarget = CurrentTarget(500)
 		if self.Menu.ComboMode.UseE:Value() and ETarget and not self:CanCast(_Q) then
-			if self:EnemyInRange(535) and myHero.pos:DistanceTo(ETarget.pos) < 535 and myHero.pos:DistanceTo(ETarget.pos) > 190 then
+			if self:EnemyInRange(500) and myHero.pos:DistanceTo(ETarget.pos) < 500 and myHero.pos:DistanceTo(ETarget.pos) > 190 then
                 castPos = ETarget:GetPrediction(1500, 0.25)
 				self:CastSpell(HK_E, castPos)
 			end
@@ -464,10 +464,10 @@ function Darius:Harass()
             UseHydra()
         end
     end
-    if self:CanCast(_E) and self:EnemyInRange(535) then 
-		local ETarget = CurrentTarget(535)
+    if self:CanCast(_E) and self:EnemyInRange(500) then 
+		local ETarget = CurrentTarget(500)
 		if self.Menu.HarassMode.UseE:Value() and ETarget and not self:CanCast(_Q) then
-			if self:EnemyInRange(535) and myHero.pos:DistanceTo(ETarget.pos) < 535 and myHero.pos:DistanceTo(ETarget.pos) > 190 then
+			if self:EnemyInRange(500) and myHero.pos:DistanceTo(ETarget.pos) < 500 and myHero.pos:DistanceTo(ETarget.pos) > 190 then
                 castPos = ETarget:GetPrediction(1500, 0.25)
 				self:CastSpell(HK_E, castPos)
 			end
