@@ -740,7 +740,7 @@ end
 
 function ShadySkarner:Clear()
 	local mp = GetPercentMP(myHero)
-	if mp > LazyMenu.Harass.manaQ:Value() and Game.CanUseSpell(_Q) == 0 then
+	if Game.CanUseSpell(_Q) == 0 then
 		for i, jminion in pairs(GetJungleMinions()) do
 			if ValidTarget(jminion, self.Q.range) then
 				self:useQ(jminion)
