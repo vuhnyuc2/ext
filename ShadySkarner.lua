@@ -628,7 +628,7 @@ end
 class "ShadySkarner"
 
 function ShadySkarner:__init()
-	print("Noddy's | ShadySkarner loaded!")
+	print("Shady Skarner loaded!")
 	self.spellIcons = { Q = "https://vignette.wikia.nocookie.net/leagueoflegends/images/3/31/Crystal_Slash.png",
 						W = "https://vignette.wikia.nocookie.net/leagueoflegends/images/8/86/Crystalline_Exoskeleton.png",
 						E = "https://vignette.wikia.nocookie.net/leagueoflegends/images/e/ed/Fracture.png",
